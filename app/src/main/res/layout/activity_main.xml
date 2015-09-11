@@ -1,0 +1,67 @@
+<LinearLayout
+    android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.dinghu.ui.widget.MainTabViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray_dddddd"/>
+
+    <cn.common.ui.widgt.TabRadioGroup
+        android:id="@+id/rg_menu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_bottom_menu_height"
+        android:background="@color/white_f9f9f9"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RadioButton
+                android:id="@+id/rb_work_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:drawablePadding="3dp"
+                android:drawableTop="@drawable/rb_selector_work_list"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="30dp"
+                android:text="@string/tab_main_work_list"
+                android:textColor="@drawable/text_selector_main_menu"
+                android:textSize="@dimen/text_litter"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RadioButton
+                android:id="@+id/rb_user_center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:button="@null"
+                android:drawableTop="@drawable/rb_selector_user_center"
+                android:gravity="right|center_vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="15dp"
+                android:text="@string/tab_main_user_center"
+                android:textColor="@drawable/text_selector_main_menu"
+                android:textSize="@dimen/text_litter"/>
+        </RelativeLayout>
+    </cn.common.ui.widgt.TabRadioGroup>
+</LinearLayout>

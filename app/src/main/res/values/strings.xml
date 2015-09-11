@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">鼎湖山泉</string>
+    <string name="login_account_hint">请输入手机号</string>
+    <string name="login_pw_hint">请输入密码</string>
+    <string name="login_now">立即登录</string>
+    <string name="forget_pw">忘记密码？</string>
+    <string name="tab_main_work_list">我的工单</string>
+    <string name="tab_main_user_center">个人中心</string>
+    <string name="modify_pw">修改密码</string>
+    <string name="history_work_list">历史工单</string>
+    <string name="my_account_book">我的账本</string>
+    <string name="exit">退出</string>
+</resources>
