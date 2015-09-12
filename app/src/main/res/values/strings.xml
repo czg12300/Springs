@@ -1,4 +1,8 @@
 <resources>
+    <!--title-->
+    <string name="title_modify_pw">修改密码</string>
+    <string name="title_my_account_book">我的账本</string>
+    <!--other-->
     <string name="app_name">鼎湖山泉</string>
     <string name="login_account_hint">请输入手机号</string>
     <string name="login_pw_hint">请输入密码</string>
@@ -10,4 +14,20 @@
     <string name="history_work_list">历史工单</string>
     <string name="my_account_book">我的账本</string>
     <string name="exit">退出</string>
+    <string name="ok">确定</string>
+    <string name="pw_old_hint">请输入原始密码</string>
+    <string name="pw_new_hint">请输入新密码</string>
+    <string name="pw_again_hint">请再次输入新密码</string>
+    <string name="statistics_month">统计月份：</string>
+    <string name="account_title1">配送工单统计</string>
+    <string name="work_list_count">工单总数（张）：</string>
+    <string name="send_count">送水数量（桶）：</string>
+    <string name="null_count">空桶数量（桶）：</string>
+    <string name="long_count">长途次数（次）：</string>
+    <string name="height_count">高层次数（次）：</string>
+    <string name="account_title2">套餐工单统计</string>
+    <string name="receive_count">收款金额（元）：</string>
+    <string name="pay_count">交款金额（元）：</string>
+
+
 </resources>

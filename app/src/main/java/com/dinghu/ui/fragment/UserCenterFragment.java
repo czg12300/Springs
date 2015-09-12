@@ -33,7 +33,7 @@ public class UserCenterFragment extends BaseWorkerFragment implements View.OnCli
     public void initView() {
         setContentView(R.layout.fragment_user_center);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
-        ChangeThemeUtils.adjustStatusBar(mTvTitle, getActivity());
+        ChangeThemeUtils.adjustStatusBar(findViewById(R.id.rl_title), getActivity());
         mVModifyPw = findViewById(R.id.ll_modify_pw);
         mVHistoryWorkList = findViewById(R.id.ll_history_work_list);
         mVMyAccountBook = findViewById(R.id.ll_my_account_book);

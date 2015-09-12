@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -17,56 +18,40 @@ import java.util.List;
  * 登录页面
  */
 public class MyAccountBookActivity extends CommonTitleActivity
-        implements TextWatcher, View.OnClickListener {
+        implements View.OnClickListener {
+    private TextView mTvWorkListCount;
+    private TextView mTvSendCount;
+    private TextView mTvNullCount;
+    private TextView mTvLongCount;
+    private TextView mTvHeightCount;
+    private TextView mTvWorkListCount1;
+    private TextView mTvReceiveCount;
+    private TextView mTvPayCount;
 
     @Override
     protected void initView() {
-        mVTitle.setVisibility(View.GONE);
-        setSwipeBackEnable(false);
-        setContentView(R.layout.activity_login);
-        // 设置点击页面其他地方隐藏软键盘
-        setHideInputView(R.id.root);
-        goActivity(MainActivity.class);
+        setContentView(R.layout.activity_my_account);
+        setTitle(R.string.title_my_account_book);
+        mTvWorkListCount = (TextView) findViewById(R.id.tv_work_list_count);
+        mTvSendCount = (TextView) findViewById(R.id.tv_send_count);
+        mTvNullCount = (TextView) findViewById(R.id.tv_null_count);
+        mTvLongCount = (TextView) findViewById(R.id.tv_long_count);
+        mTvHeightCount = (TextView) findViewById(R.id.tv_height_count);
+        mTvWorkListCount1 = (TextView) findViewById(R.id.tv_work_list_count2);
+        mTvReceiveCount = (TextView) findViewById(R.id.tv_receive_count);
+        mTvPayCount = (TextView) findViewById(R.id.tv_pay_count);
     }
 
     @Override
     protected void initEvent() {
+        findViewById(R.id.fl_date).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_ok) {
-            goActivity(MainActivity.class);
-            finish();
-        } else if (v.getId() == R.id.tv_forget_pw) {
-            // TODO 忘记密码
-        }
-    }
-
-    @Override
-    public void setupBroadcastActions(List<String> actions) {
-        super.setupBroadcastActions(actions);
-        actions.add(BroadcastActions.ACTION_FINISH_ACITIVTY_BEFORE_MAIN);
-    }
-
-    @Override
-    public void handleBroadcast(Context context, Intent intent) {
-        super.handleBroadcast(context, intent);
-        String action = intent.getAction();
-        if (TextUtils.equals(action, BroadcastActions.ACTION_FINISH_ACITIVTY_BEFORE_MAIN)) {
+        if (v.getId() == R.id.fl_date) {
             finish();
         }
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-    }
 }

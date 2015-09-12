@@ -1,18 +1,23 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_title"
+    <RelativeLayout
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
         android:background="@color/green_00cd92"
-        android:gravity="center"
-        android:text="@string/tab_main_user_center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_title"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"
+            android:gravity="center"
+            android:text="@string/tab_main_user_center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_title" />
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -35,7 +40,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ico_user_key"/>
+                    android:src="@drawable/ico_user_key" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -44,18 +49,18 @@
                     android:layout_weight="1"
                     android:text="@string/modify_pw"
                     android:textColor="@color/black_333333"
-                    android:textSize="@dimen/text_content"/>
+                    android:textSize="@dimen/text_content" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ico_right"/>
+                    android:src="@drawable/ico_right" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray_dddddd"/>
+                android:background="@color/gray_dddddd" />
 
             <LinearLayout
                 android:id="@+id/ll_history_work_list"
@@ -69,7 +74,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ico_user_clock"/>
+                    android:src="@drawable/ico_user_clock" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -78,18 +83,18 @@
                     android:layout_weight="1"
                     android:text="@string/history_work_list"
                     android:textColor="@color/black_333333"
-                    android:textSize="@dimen/text_content"/>
+                    android:textSize="@dimen/text_content" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ico_right"/>
+                    android:src="@drawable/ico_right" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray_dddddd"/>
+                android:background="@color/gray_dddddd" />
 
             <LinearLayout
                 android:id="@+id/ll_my_account_book"
@@ -103,7 +108,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ico_user_edit"/>
+                    android:src="@drawable/ico_user_edit" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -112,18 +117,18 @@
                     android:layout_weight="1"
                     android:text="@string/my_account_book"
                     android:textColor="@color/black_333333"
-                    android:textSize="@dimen/text_content"/>
+                    android:textSize="@dimen/text_content" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ico_right"/>
+                    android:src="@drawable/ico_right" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray_dddddd"/>
+                android:background="@color/gray_dddddd" />
         </LinearLayout>
 
 
@@ -138,6 +143,6 @@
             android:background="@drawable/btn_selector_exit"
             android:text="@string/exit"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_content"/>
+            android:textSize="@dimen/text_content" />
     </FrameLayout>
 </LinearLayout>

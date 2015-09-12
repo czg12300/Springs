@@ -1,19 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        debug {
-            keyAlias 'springs'
-            keyPassword 'springs'
-            storeFile file('F:/git/github/dhsqappandroid/Springs/springs.keystore')
-            storePassword 'springs'
-        }
-    }
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
+
     defaultConfig {
-        applicationId 'com.dinghu.springs'
-        minSdkVersion 13
+        applicationId "com.dinghu.springs"
+        minSdkVersion 8
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -23,8 +16,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    productFlavors {
     }
 }
 
