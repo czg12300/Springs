@@ -1,6 +1,6 @@
 <LinearLayout
-    android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,12 +9,12 @@
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/gray_dddddd"/>
+        android:background="@color/gray_dddddd" />
 
     <cn.common.ui.widgt.TabRadioGroup
         android:id="@+id/rg_menu"
@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@null"
+                android:checked="true"
                 android:drawablePadding="3dp"
                 android:drawableTop="@drawable/rb_selector_work_list"
                 android:gravity="left|center_vertical"
@@ -40,7 +41,7 @@
                 android:paddingRight="30dp"
                 android:text="@string/tab_main_work_list"
                 android:textColor="@drawable/text_selector_main_menu"
-                android:textSize="@dimen/text_litter"/>
+                android:textSize="@dimen/text_litter" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -61,7 +62,7 @@
                 android:paddingRight="15dp"
                 android:text="@string/tab_main_user_center"
                 android:textColor="@drawable/text_selector_main_menu"
-                android:textSize="@dimen/text_litter"/>
+                android:textSize="@dimen/text_litter" />
         </RelativeLayout>
     </cn.common.ui.widgt.TabRadioGroup>
 </LinearLayout>
