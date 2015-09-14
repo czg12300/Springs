@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -57,9 +58,27 @@ public class MainActivity extends BaseWorkerFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clearFragment();
         initView();
         initEvent();
         sendEmptyUiMessage(MSG_UI_INIT_DATA);
+    }
+
+    /**
+     * 清除当前activity中的所有fragment,用于被回收时再次调用onCreate，避免多个fragment
+     */
+    private void clearFragment() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null && fragments.size() > 0) {
+            FragmentTransaction removeFt = getSupportFragmentManager().beginTransaction();
+            for (int i = 0; i < fragments.size(); i++) {
+                Fragment fragment = fragments.get(i);
+                if (fragment != null) {
+                    removeFt.remove(fragments.get(i));
+                }
+            }
+            removeFt.commit();
+        }
     }
 
     private void initView() {

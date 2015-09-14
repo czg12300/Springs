@@ -40,7 +40,6 @@ public class LoginActivity extends CommonTitleActivity
         mTvForgetPw = (TextView) findViewById(R.id.tv_forget_pw);
         // 设置点击页面其他地方隐藏软键盘
         setHideInputView(R.id.root);
-        goActivity(MainActivity.class);
     }
 
     @Override

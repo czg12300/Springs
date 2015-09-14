@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -30,6 +31,7 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
         setTitle(R.string.title_modify_pw);
         // 设置点击页面其他地方隐藏软键盘
         setHideInputView(R.id.root);
+
     }
 
     @Override
