@@ -1,15 +1,15 @@
-package com.dinghu.ui.fragment;
 
-import android.widget.ListView;
+package com.dinghu.ui.fragment;
 
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.ui.adapter.WorkListAdapter;
+import com.dinghu.ui.widget.pulltorefresh.PullListView;
+
+import cn.common.ui.fragment.BaseWorkerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.common.ui.fragment.BaseWorkerFragment;
 
 /**
  * 描述：
@@ -22,15 +22,18 @@ public class TodoListFragment extends BaseWorkerFragment {
         return new TodoListFragment();
     }
 
-    private ListView mLvList;
+    private PullListView mLvList;
+
     private WorkListAdapter mAdapter;
 
     @Override
     protected void initView() {
         setContentView(R.layout.fragment_list_todo);
-        mLvList = (ListView) findViewById(R.id.lv_list);
+        mLvList = (PullListView) findViewById(R.id.lv_list);
         mAdapter = new WorkListAdapter(getActivity());
-        mLvList.setAdapter(mAdapter);
+        mLvList.setCanPullUp(true);
+        mLvList.setCanPullDown(true);
+        mLvList.mListView.setAdapter(mAdapter);
     }
 
     @Override

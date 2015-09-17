@@ -1,11 +1,12 @@
+
 package com.dinghu.ui.fragment;
 
 import android.view.View;
-import android.widget.ListView;
 
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.ui.adapter.WorkListAdapter;
+import com.dinghu.ui.widget.pulltorefresh.PullListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +24,20 @@ public class HistoryListFragment extends BaseWorkerFragment {
         return new HistoryListFragment();
     }
 
-    private ListView mLvList;
+    private PullListView mLvList;
+
     private WorkListAdapter mAdapter;
 
     @Override
     protected void initView() {
         setContentView(R.layout.fragment_list_todo);
-        mLvList = (ListView) findViewById(R.id.lv_list);
+        mLvList = (PullListView) findViewById(R.id.lv_list);
         View header = inflate(R.layout.header_list_history);
-        mLvList.addHeaderView(header);
+        mLvList.mListView.addHeaderView(header);
         mAdapter = new WorkListAdapter(getActivity());
-        mLvList.setAdapter(mAdapter);
+        mLvList.setCanPullUp(true);
+        mLvList.setCanPullDown(true);
+        mLvList.mListView.setAdapter(mAdapter);
     }
 
     @Override

@@ -1,10 +1,10 @@
-package com.dinghu.ui.fragment;
 
-import android.widget.ListView;
+package com.dinghu.ui.fragment;
 
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.ui.adapter.WorkListAdapter;
+import com.dinghu.ui.widget.pulltorefresh.PullListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +22,18 @@ public class TodayListFragment extends BaseWorkerFragment {
         return new TodayListFragment();
     }
 
-    private ListView mLvList;
+    private PullListView mLvList;
+
     private WorkListAdapter mAdapter;
 
     @Override
     protected void initView() {
         setContentView(R.layout.fragment_list_todo);
-        mLvList = (ListView) findViewById(R.id.lv_list);
+        mLvList = (PullListView) findViewById(R.id.lv_list);
         mAdapter = new WorkListAdapter(getActivity());
-        mLvList.setAdapter(mAdapter);
+        mLvList.setCanPullUp(true);
+        mLvList.setCanPullDown(true);
+        mLvList.mListView.setAdapter(mAdapter);
     }
 
     @Override
