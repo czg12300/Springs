@@ -57,7 +57,7 @@ public abstract class BasePullListView extends BasePullLayoutView {
 
         @Override
         public boolean canPullUp() {
-            return getLastVisiblePosition() == getChildCount() - 1 && canPullUp;
+            return getLastVisiblePosition() == getCount() - 1 && canPullUp;
         }
 
         @Override
