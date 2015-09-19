@@ -3,6 +3,8 @@ package com.dinghu.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,6 +15,12 @@ import android.widget.TextView;
 
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
+import com.dinghu.data.InitShareData;
+import com.dinghu.logic.URLConfig;
+import com.dinghu.logic.http.response.UserResponse;
+import com.dinghu.logic.http.HttpRequestManager;
+import com.dinghu.utils.MD5Util;
+import com.dinghu.utils.ToastUtil;
 
 import java.util.List;
 
@@ -21,6 +29,8 @@ import java.util.List;
  */
 public class LoginActivity extends CommonTitleActivity
         implements TextWatcher, View.OnClickListener {
+    private static final int MSG_BACK_LOGIN = 0;
+    private static final int MSG_UI_LOGIN = 1;
     private EditText mEvMobile;
 
     private EditText mEvPw;
@@ -54,10 +64,56 @@ public class LoginActivity extends CommonTitleActivity
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_ok) {
-            goActivity(MainActivity.class);
-            finish();
+            sendEmptyBackgroundMessage(MSG_BACK_LOGIN);
         } else if (v.getId() == R.id.tv_forget_pw) {
-            // TODO 忘记密码
+            //  忘记密码
+        }
+    }
+
+    @Override
+    public void handleBackgroundMessage(Message msg) {
+        super.handleBackgroundMessage(msg);
+        if (msg.what == MSG_BACK_LOGIN) {
+            HttpRequestManager<UserResponse> request = new HttpRequestManager<UserResponse>(URLConfig.LOGIN, UserResponse.class);
+            String mobile = mEvMobile.getText().toString();
+            InitShareData.setMobile(mobile);
+            request.addParam("tel", mobile);
+            request.addParam("pwd", MD5Util.md5(mEvPw.getText().toString()));
+            Message message = obtainUiMessage();
+            message.what = MSG_UI_LOGIN;
+            message.obj = request.sendRequest();
+            message.sendToTarget();
+        }
+    }
+
+    @Override
+    public void handleUiMessage(Message msg) {
+        super.handleUiMessage(msg);
+        if (msg.what == MSG_UI_LOGIN) {
+            if (msg.obj != null && msg.obj instanceof UserResponse) {
+                UserResponse info = (UserResponse) msg.obj;
+                if (info != null) {
+                    switch (info.getCode()) {
+                        case UserResponse.CODE_FAIL:
+                            break;
+                        case UserResponse.CODE_SUCCESS:
+                            InitShareData.setUserId(info.getUserId());
+                            goActivity(MainActivity.class);
+                            finish();
+                            break;
+                        case UserResponse.CODE_SUCCESS_MPW:
+                            InitShareData.setUserId(info.getUserId());
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("isLoginJump", true);
+                            goActivity(ModifyPwActivity.class, bundle);
+                            finish();
+                            break;
+                    }
+                    ToastUtil.show(info.getMsg());
+                }
+            } else {
+                ToastUtil.show("网络异常");
+            }
         }
     }
 

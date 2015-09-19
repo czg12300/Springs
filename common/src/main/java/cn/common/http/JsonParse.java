@@ -1,4 +1,6 @@
-package com.dinghu.logic.entity;
+package cn.common.http;
+
+import org.json.JSONException;
 
 import java.io.Serializable;
 
@@ -8,5 +10,5 @@ import java.io.Serializable;
  * @author Created by Administrator on 2015/9/4.
  */
 public interface JsonParse extends Serializable {
-    void parse(String json);
+    Object parse(String json);
 }

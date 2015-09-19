@@ -16,7 +16,7 @@ import cn.common.ui.widgt.indicator.IndicatorViewPager;
 import cn.common.utils.DisplayUtil;
 
 /**
- * 描述：
+ * 描述：列表模式
  *
  * @author jake
  * @since 2015/9/12 12:11

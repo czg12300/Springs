@@ -2,6 +2,7 @@
 package com.dinghu.ui.activity;
 
 import com.dinghu.R;
+import com.dinghu.data.InitShareData;
 
 import android.os.Bundle;
 import android.os.Message;
@@ -42,7 +43,12 @@ public class SplashActivity extends BaseWorkerFragmentActivity {
         mIvSplash.setImageResource(R.drawable.splash);
         mIvSplash.setScaleType(ImageView.ScaleType.FIT_XY);
         setContentView(mIvSplash);
-        sendEmptyUiMessageDelayed(MSG_MAIN, DELAYED_TIME);
+        if (InitShareData.isLogin()) {
+            sendEmptyUiMessageDelayed(MSG_MAIN, DELAYED_TIME);
+        } else {
+            sendEmptyUiMessageDelayed(MSG_LOGIN, DELAYED_TIME);
+        }
+
     }
 
     @Override

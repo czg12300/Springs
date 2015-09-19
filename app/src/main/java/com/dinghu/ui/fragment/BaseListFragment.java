@@ -41,6 +41,10 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment implements 
         return mPageIndex;
     }
 
+    protected int getPageSize() {
+        return mPageSize;
+    }
+
     private StatusView mStatusView;
 
     @Override

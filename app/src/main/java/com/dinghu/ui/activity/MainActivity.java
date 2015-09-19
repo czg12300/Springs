@@ -29,7 +29,6 @@ import cn.common.ui.widgt.TabRadioGroup;
 
 public class MainActivity extends BaseWorkerFragmentActivity
         implements ViewPager.OnPageChangeListener, TabRadioGroup.OnCheckedChangeListener {
-    private static final int MSG_UI_INIT_DATA = 0;
 
     private MainTabViewPager mVpContent;
 
@@ -58,10 +57,19 @@ public class MainActivity extends BaseWorkerFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        clearFragment();
-        initView();
-        initEvent();
-        sendEmptyUiMessage(MSG_UI_INIT_DATA);
+//        clearFragment();
+        setContentView(R.layout.activity_main);
+        mVpContent = (MainTabViewPager) findViewById(R.id.vp_content);
+        mRgMenu = (TabRadioGroup) findViewById(R.id.rg_menu);
+        mRbWorkList = (RadioButton) findViewById(R.id.rb_work_list);
+        mRbUserCenter = (RadioButton) findViewById(R.id.rb_user_center);
+        mVpContent.setOnPageChangeListener(this);
+        mRgMenu.setOnCheckedChangeListener(this);
+        ArrayList<Fragment> list = new ArrayList<Fragment>();
+        list.add(WorkListFragment.newInstance());
+        list.add(UserCenterFragment.newInstance());
+        mVpContent.setAdapter(
+                new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
     }
 
     /**
@@ -81,41 +89,6 @@ public class MainActivity extends BaseWorkerFragmentActivity
         }
     }
 
-    private void initView() {
-        setContentView(R.layout.activity_main);
-        mVpContent = (MainTabViewPager) findViewById(R.id.vp_content);
-        mRgMenu = (TabRadioGroup) findViewById(R.id.rg_menu);
-        mRbWorkList = (RadioButton) findViewById(R.id.rb_work_list);
-        mRbUserCenter = (RadioButton) findViewById(R.id.rb_user_center);
-        mVpContent.setOffscreenPageLimit(2);
-    }
-
-    private void initEvent() {
-        mVpContent.setOnPageChangeListener(this);
-        mRgMenu.setOnCheckedChangeListener(this);
-    }
-
-    private void initData() {
-        mVpContent.setAdapter(
-                new CommonFragmentPagerAdapter(getSupportFragmentManager(), getFragments()));
-    }
-
-    @Override
-    public void handleUiMessage(Message msg) {
-        super.handleUiMessage(msg);
-        switch (msg.what) {
-            case MSG_UI_INIT_DATA:
-                initData();
-                break;
-        }
-    }
-
-    private ArrayList<Fragment> getFragments() {
-        ArrayList<Fragment> list = new ArrayList<Fragment>();
-        list.add(WorkListFragment.newInstance());
-        list.add(UserCenterFragment.newInstance());
-        return list;
-    }
 
     @Override
     public void onPageScrollStateChanged(int status) {

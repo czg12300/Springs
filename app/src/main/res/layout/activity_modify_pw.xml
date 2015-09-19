@@ -86,9 +86,9 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="25dp"
             android:background="@drawable/btn_selector_exit"
-            android:onClick="onClick"
             android:text="@string/ok"
             android:textColor="@color/white"
+            android:enabled="false"
             android:textSize="@dimen/text_content" />
     </LinearLayout>
 </ScrollView>
