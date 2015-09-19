@@ -6,11 +6,12 @@ import android.view.View;
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.ui.adapter.WorkListAdapter;
-import com.dinghu.ui.widget.pulltorefresh.PullListView;
+import com.dinghu.ui.widget.xlistview.XListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.common.ui.adapter.BaseListAdapter;
 import cn.common.ui.fragment.BaseWorkerFragment;
 
 /**
@@ -19,32 +20,11 @@ import cn.common.ui.fragment.BaseWorkerFragment;
  * @author jake
  * @since 2015/9/12 13:57
  */
-public class HistoryListFragment extends BaseWorkerFragment {
+public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
     public static HistoryListFragment newInstance() {
         return new HistoryListFragment();
     }
 
-    private PullListView mLvList;
-
-    private WorkListAdapter mAdapter;
-
-    @Override
-    protected void initView() {
-        setContentView(R.layout.fragment_list_todo);
-        mLvList = (PullListView) findViewById(R.id.lv_list);
-        View header = inflate(R.layout.header_list_history);
-        mLvList.mListView.addHeaderView(header);
-        mAdapter = new WorkListAdapter(getActivity());
-        mLvList.setCanPullUp(true);
-        mLvList.setCanPullDown(true);
-        mLvList.mListView.setAdapter(mAdapter);
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-        mAdapter.setData(getTest());
-    }
 
     private List<WorkListInfo> getTest() {
         List<WorkListInfo> list = new ArrayList<WorkListInfo>();
@@ -59,5 +39,26 @@ public class HistoryListFragment extends BaseWorkerFragment {
         }
 
         return list;
+    }
+
+    @Override
+    protected List<WorkListInfo> loadData() {
+        return null;
+    }
+
+    @Override
+    protected void addFooter(XListView mLvList) {
+
+    }
+
+    @Override
+    protected void addHeader(XListView mLvList) {
+        View header = inflate(R.layout.header_list_history);
+        mLvList.addHeaderView(header);
+    }
+
+    @Override
+    protected BaseListAdapter<WorkListInfo> createAdapter() {
+        return new WorkListAdapter(getActivity());
     }
 }

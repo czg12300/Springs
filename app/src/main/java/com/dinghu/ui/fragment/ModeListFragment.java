@@ -40,6 +40,7 @@ public class ModeListFragment extends BaseWorkerFragment {
         mIndicatorViewPager.setTabTextSize(getDimension(R.dimen.text_content));
         mIndicatorViewPager.setTabLineHeight(DisplayUtil.dip(4));
         mIndicatorViewPager.setAverage(false);
+        mIndicatorViewPager.setOffscreenPageLimit(2);
     }
 
     @Override

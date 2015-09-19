@@ -8,9 +8,11 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,7 +23,7 @@ import java.util.TimerTask;
  * @author jakechen
  * @since 2015/9/16 18:11
  */
-public abstract class BasePullLayoutView extends LinearLayout implements Handler.Callback {
+public abstract class BasePullLayoutView extends RelativeLayout implements Handler.Callback {
     private final static float OFFSET_RADIO = 1.8f;
 
     private static final int MSG_HEADER = 0;
@@ -35,6 +37,7 @@ public abstract class BasePullLayoutView extends LinearLayout implements Handler
     private FrameLayout mFlHeader;
 
     private FrameLayout mFlFooter;
+    private View mVContent;
 
     private PullEnable mPullEnable;
 
@@ -57,25 +60,36 @@ public abstract class BasePullLayoutView extends LinearLayout implements Handler
     public BasePullLayoutView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mTimer = new Timer();
-        setOrientation(VERTICAL);
         mFlHeader = new FrameLayout(context);
+        mFlHeader.setId(1234);
         mFlFooter = new FrameLayout(context);
-        addView(mFlHeader);
-        View view = getContentView();
-        if (view instanceof PullEnable) {
-            mPullEnable = (PullEnable) view;
+        mFlFooter.setId(1235);
+        LayoutParams rl = new LayoutParams(-1, -2);
+        rl.addRule(ALIGN_PARENT_TOP);
+        addView(mFlHeader, rl);
+        mVContent = getContentView();
+        if (mVContent instanceof PullEnable) {
+            mPullEnable = (PullEnable) mVContent;
         } else {
             throw new IllegalArgumentException("content view is not instance of PullEnable");
         }
-        addView(view, new LinearLayout.LayoutParams(-1, -1));
-        addView(mFlFooter);
+        rl = new LayoutParams(-1, -2);
+        rl.addRule(ALIGN_PARENT_BOTTOM);
+        addView(mFlFooter, rl);
+        rl = new LayoutParams(-1, -1);
+        rl.addRule(BELOW, mFlHeader.getId());
+        rl.addRule(ABOVE, mFlFooter.getId());
+        addView(mVContent, rl);
         getViewTreeObserver()
                 .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
                     @Override
                     public void onGlobalLayout() {
                         setPadding(getPaddingLeft(), -mFlHeader.getHeight(), getPaddingRight(),
-                                -mFlFooter.getHeight());
+                                0);
+                        LayoutParams lp = (LayoutParams) mFlFooter.getLayoutParams();
+                        lp.bottomMargin = -mFlFooter.getHeight();
+                        mFlFooter.setLayoutParams(lp);
                         ViewTreeObserver observer = getViewTreeObserver();
                         if (null != observer) {
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
@@ -122,8 +136,15 @@ public abstract class BasePullLayoutView extends LinearLayout implements Handler
                     pullDownY = (int) (deltaY / OFFSET_RADIO) - mFlHeader.getHeight();
                     setPadding(getPaddingLeft(), pullDownY, getPaddingRight(), getPaddingBottom());
                 } else if (deltaY < 0 && mPullEnable.canPullUp()) {
-                    pullUpY = (int) (deltaY / OFFSET_RADIO) - mFlFooter.getHeight();
-                    setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), pullUpY);
+                    int offset = -(int) (deltaY / OFFSET_RADIO);
+                    pullUpY = offset - mFlFooter.getHeight();
+                    LayoutParams lp = (LayoutParams) mFlFooter.getLayoutParams();
+                    lp.bottomMargin = pullUpY;
+                    mFlFooter.setLayoutParams(lp);
+//                    setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), pullUpY);
+//                    LayoutParams lp = new LayoutParams(-1, -1);
+//                    lp.bottomMargin = offset;
+//                    mVContent.setLayoutParams(lp);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -205,8 +226,8 @@ public abstract class BasePullLayoutView extends LinearLayout implements Handler
         mFlHeader.addView(header);
     }
 
-    public void setFooterView(View header) {
-        mFlHeader.addView(header);
+    public void setFooterView(View footer) {
+        mFlFooter.addView(footer);
     }
 
     protected abstract View getContentView();

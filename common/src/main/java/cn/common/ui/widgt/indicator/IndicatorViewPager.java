@@ -179,6 +179,15 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
 
     }
 
+    /**
+     * 设置换成页面
+     *
+     * @param page
+     */
+    public void setOffscreenPageLimit(int page) {
+        mViewPager.setOffscreenPageLimit(page);
+    }
+
     public class ViewPagerCompat extends ViewPager {
 
         public ViewPagerCompat(Context context) {
@@ -190,42 +199,11 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
         }
 
 
-        private int abc = 1;
-
-        private float mLastMotionX;
-
-
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
             if (!isLeftMost() && !isRightMost()) {
                 requestDisallowInterceptTouchEvent(false);
             }
-//        }
-//            final float x = ev.getX();
-//            switch (ev.getAction()) {
-//                case MotionEvent.ACTION_DOWN:
-//                    requestDisallowInterceptTouchEvent(true);
-//                    abc = 1;
-//                    mLastMotionX = x;
-//                    break;
-//                case MotionEvent.ACTION_MOVE:
-//                    if (abc == 1) {
-//                        if (x - mLastMotionX > 5 && getCurrentItem() == 0) {
-//                            abc = 0;
-//                            requestDisallowInterceptTouchEvent(false);
-//                        }
-//
-//                        if (x - mLastMotionX < -5 && getCurrentItem() == getAdapter().getCount() - 1) {
-//                            abc = 0;
-//                            requestDisallowInterceptTouchEvent(false);
-//                        }
-//                    }
-//                    break;
-//                case MotionEvent.ACTION_UP:
-//                case MotionEvent.ACTION_CANCEL:
-//                    requestDisallowInterceptTouchEvent(false);
-//                    break;
-//            }
             return super.dispatchTouchEvent(ev);
         }
     }

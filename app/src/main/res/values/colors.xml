@@ -1,6 +1,7 @@
 <resources>
 
     <color name="title_background">@color/green_00cd92</color>
+    <color name="background">@color/white_f9f9f9</color>
     <color name="green_00cd92">#00cd92</color>
     <color name="gray_9a9a9a">#9a9a9a</color>
     <color name="gray_dddddd">#dddddd</color>
