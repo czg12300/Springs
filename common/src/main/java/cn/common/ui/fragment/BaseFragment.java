@@ -270,4 +270,8 @@ public abstract class BaseFragment extends Fragment implements IUi {
     public void sendBroadcast(Intent it) {
         getActivity().sendBroadcast(it);
     }
+
+    public boolean canShowDialog() {
+        return getActivity() != null || !getActivity().isFinishing();
+    }
 }

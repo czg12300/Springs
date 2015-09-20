@@ -1,6 +1,11 @@
 
 package com.dinghu.ui.fragment;
 
+import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
+
+import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
 import com.dinghu.logic.entity.WorkListInfo;
@@ -23,6 +28,21 @@ import cn.common.ui.adapter.BaseListAdapter;
 public class TodayListFragment extends BaseListFragment<WorkListInfo> {
     public static TodayListFragment newInstance() {
         return new TodayListFragment();
+    }
+
+    @Override
+    public void setupBroadcastActions(List<String> actions) {
+        super.setupBroadcastActions(actions);
+        actions.add(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
+    }
+
+    @Override
+    public void handleBroadcast(Context context, Intent intent) {
+        super.handleBroadcast(context, intent);
+        String action = intent.getAction();
+        if (TextUtils.equals(action, BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST)) {
+            onRefresh();
+        }
     }
 
     @Override

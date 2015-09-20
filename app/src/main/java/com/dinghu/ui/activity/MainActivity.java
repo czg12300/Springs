@@ -41,18 +41,16 @@ public class MainActivity extends BaseWorkerFragmentActivity
     private long lastClickTime;
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            long now = System.currentTimeMillis();
-            if (now - lastClickTime > 2000) {
-                ToastUtil.show("再按一次退出");
-                lastClickTime = now;
-            } else {
-                SpringApplication.getInstance().exitApp();
-            }
+    public void onBackPressed() {
+        long now = System.currentTimeMillis();
+        if (now - lastClickTime > 2000) {
+            ToastUtil.show("再按一次退出");
+            lastClickTime = now;
+        } else {
+            SpringApplication.getInstance().exitApp();
         }
-        return true;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +113,7 @@ public class MainActivity extends BaseWorkerFragmentActivity
     public void setupBroadcastActions(List<String> actionList) {
         super.setupBroadcastActions(actionList);
         actionList.add(BroadcastActions.ACTION_MAIN_ACTIVITY_SELECT_TAB_LOCATE);
+        actionList.add(BroadcastActions.ACTION_EXIT_TO_LOGIN);
     }
 
     @Override
@@ -125,6 +124,8 @@ public class MainActivity extends BaseWorkerFragmentActivity
             if (mVpContent != null) {
                 mVpContent.setCurrentItem(0, false);
             }
+        } else if (TextUtils.equals(action, BroadcastActions.ACTION_EXIT_TO_LOGIN)) {
+            SpringApplication.getInstance().exitApp();
         }
     }
 

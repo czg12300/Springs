@@ -25,4 +25,7 @@ public class URLConfig {
     public static final String WORK_LIST_TODO = SERVER + "outForm/unFinish";
     public static final String WORK_LIST_TODAY = SERVER + "outForm/todayFinish";
     public static final String WORK_LIST_HISTORY = SERVER + "outForm/history";
+    public static final String WORK_LIST_DETAIL = SERVER + "outForm/detail";
+    public static final String DETAIL_SENDGOODS = SERVER + "outForm/sendGoods";
+    public static final String DETAIL_GAINGOODS = SERVER + "outForm/gainGoods";
 }

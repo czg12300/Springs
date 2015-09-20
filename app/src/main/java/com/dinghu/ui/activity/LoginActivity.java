@@ -64,6 +64,8 @@ public class LoginActivity extends CommonTitleActivity
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_ok) {
+            mBtnOk.setText("登录中...");
+            mBtnOk.setEnabled(false);
             sendEmptyBackgroundMessage(MSG_BACK_LOGIN);
         } else if (v.getId() == R.id.tv_forget_pw) {
             //  忘记密码
@@ -79,10 +81,10 @@ public class LoginActivity extends CommonTitleActivity
             InitShareData.setMobile(mobile);
             request.addParam("tel", mobile);
             request.addParam("pwd", MD5Util.md5(mEvPw.getText().toString()));
-            Message message = obtainUiMessage();
+            Message message = new Message();
             message.what = MSG_UI_LOGIN;
             message.obj = request.sendRequest();
-            message.sendToTarget();
+            sendUiMessageDelayed(message, 500);
         }
     }
 
@@ -112,8 +114,10 @@ public class LoginActivity extends CommonTitleActivity
                     ToastUtil.show(info.getMsg());
                 }
             } else {
-                ToastUtil.show("网络异常");
+                ToastUtil.show(R.string.load_error);
             }
+            mBtnOk.setText(R.string.login_now);
+            mBtnOk.setEnabled(true);
         }
     }
 

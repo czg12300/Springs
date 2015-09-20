@@ -4,6 +4,8 @@
     <string name="title_my_account_book">我的账本</string>
     <string name="title_mode_map">地图模式</string>
     <string name="title_mode_list">列表模式</string>
+    <string name="title_work_list_detail">工单详情 </string>
+    <string name="title_work_list_history">历史工单</string>
     <!--other-->
     <string name="app_name">鼎湖山泉</string>
     <string name="login_account_hint">请输入手机号</string>
@@ -33,8 +35,10 @@
     <string name="tab_todo_work_list">未完工工单</string>
     <string name="tab_today_work_list">今日已完工单</string>
     <string name="tab_history_work_list">历史完工单</string>
-    <string name="date_start">其实日期：</string>
-    <string name="date_end">结束日期</string>
+    <string name="date_start">起初日期：</string>
+    <string name="date_end">结束日期：</string>
+    <!--网络-->
+    <string name="load_error">网络异常</string>
     <string name="load_fail">加载失败\n请点击重试</string>
     <!--xlistview-->
     <string name="xlistview_header_hint_normal">下拉刷新</string>

@@ -4,6 +4,8 @@
     <color name="background">@color/gray_eeeeee</color>
     <color name="green_00cd92">#00cd92</color>
     <color name="green_00cd79">#00cd79</color>
+    <color name="green_5fa17a">#5fa17a</color>
+    <color name="gray_777777">#777777</color>
     <color name="gray_eeeeee">#eeeeee</color>
     <color name="gray_9a9a9a">#9a9a9a</color>
     <color name="gray_dddddd">#dddddd</color>

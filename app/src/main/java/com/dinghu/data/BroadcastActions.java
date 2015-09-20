@@ -6,6 +6,11 @@ package com.dinghu.data;
  */
 public interface BroadcastActions {
     /**
+     * 更新todo的列表
+     */
+    String ACTION_UPDATE_TODO_WORK_LIST = "com.dinghu.data.BroadcastActions.action_update_todo_work_list";
+    String ACTION_EXIT_TO_LOGIN = "com.dinghu.data.BroadcastActions.action_exit_to_login";
+    /**
      * 修改头像
      */
     String ACTION_FINISH_USER_INFO_AVATOR = "cn.protector.data.BroadcastActions.action_finish_user_info_avator";

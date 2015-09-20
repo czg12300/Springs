@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -44,7 +46,9 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
             if (mActivityReference.get() != null) {
                 mActivityReference.get().handleUiMessage(msg);
             }
-        };
+        }
+
+        ;
     }
 
     private ArrayList<String> mActions;
@@ -194,5 +198,18 @@ public abstract class BaseFragmentActivity extends FragmentActivity implements I
             it.putExtras(bundle);
         }
         startActivityForResult(it, requestCode);
+
+    }
+
+    public void sendBroadcast(String action) {
+        sendBroadcast(new Intent(action));
+    }
+
+    public View inflate(int layoutId) {
+        return inflate(layoutId, null);
+    }
+
+    public View inflate(int layoutId, ViewGroup viewGroup) {
+        return getLayoutInflater().inflate(layoutId, viewGroup);
     }
 }

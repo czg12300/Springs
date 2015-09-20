@@ -91,7 +91,7 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
                     ToastUtil.show(info.getMsg());
                 }
             } else {
-                ToastUtil.show("网络异常");
+                ToastUtil.show(R.string.load_error);
             }
         }
     }

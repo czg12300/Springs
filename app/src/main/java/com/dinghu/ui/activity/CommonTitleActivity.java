@@ -18,6 +18,7 @@ public abstract class CommonTitleActivity extends BaseTitleActivity {
 
     protected View mVTitle;
 
+
     @Override
     protected View getTitleLayoutView() {
         mVTitle = getLayoutInflater().inflate(R.layout.title_common_back, null);
@@ -33,6 +34,7 @@ public abstract class CommonTitleActivity extends BaseTitleActivity {
                 onBack();
             }
         });
+        setBackgroundColor(getColor(R.color.background));
         return mVTitle;
     }
 

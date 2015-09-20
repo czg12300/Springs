@@ -1,6 +1,7 @@
 package com.dinghu.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.logic.http.response.WorkListResponse;
+import com.dinghu.ui.activity.WorkListDetailActivity;
 
 import cn.common.ui.adapter.BaseListAdapter;
 
@@ -70,6 +72,8 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
                         holder.tvTitle.setTextColor(getColor(R.color.red_fa5e51));
                         break;
                 }
+            } else {
+                convertView.setEnabled(false);
             }
             if (position < 100) {
                 holder.tvIndex.setVisibility(View.VISIBLE);
@@ -117,8 +121,12 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
 
     @Override
     public void onClick(View v) {
-        //TODO 进入详情页
-        WorkListResponse info = (WorkListResponse) v.getTag();
+        if (isTodo) {
+            WorkListInfo info = (WorkListInfo) v.getTag();
+            Intent it = new Intent(getContext(), WorkListDetailActivity.class);
+            it.putExtra("WorkListId", info.getId());
+            getContext().startActivity(it);
+        }
     }
 
     final class ViewHolder {

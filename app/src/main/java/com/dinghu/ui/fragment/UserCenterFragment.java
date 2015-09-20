@@ -2,10 +2,14 @@
 package com.dinghu.ui.fragment;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dinghu.R;
+import com.dinghu.data.BroadcastActions;
+import com.dinghu.data.InitShareData;
 import com.dinghu.ui.activity.HistoryWorkListActivity;
+import com.dinghu.ui.activity.LoginActivity;
 import com.dinghu.ui.activity.ModifyPwActivity;
 import com.dinghu.ui.activity.MyAccountBookActivity;
 
@@ -22,6 +26,7 @@ public class UserCenterFragment extends BaseWorkerFragment implements View.OnCli
     }
 
     private TextView mTvTitle;
+    private Button mBtnExit;
 
     private View mVModifyPw;
 
@@ -32,6 +37,7 @@ public class UserCenterFragment extends BaseWorkerFragment implements View.OnCli
     @Override
     public void initView() {
         setContentView(R.layout.fragment_user_center);
+        mBtnExit = (Button) findViewById(R.id.btn_exit);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
         ChangeThemeUtils.adjustStatusBar(findViewById(R.id.rl_title), getActivity());
         mVModifyPw = findViewById(R.id.ll_modify_pw);
@@ -44,6 +50,7 @@ public class UserCenterFragment extends BaseWorkerFragment implements View.OnCli
         mVModifyPw.setOnClickListener(this);
         mVHistoryWorkList.setOnClickListener(this);
         mVMyAccountBook.setOnClickListener(this);
+        mBtnExit.setOnClickListener(this);
     }
 
     @Override
@@ -55,6 +62,10 @@ public class UserCenterFragment extends BaseWorkerFragment implements View.OnCli
             goActivity(HistoryWorkListActivity.class);
         } else if (id == R.id.ll_my_account_book) {
             goActivity(MyAccountBookActivity.class);
+        } else if (id == R.id.btn_exit) {
+            InitShareData.setUserId(-1);
+            sendBroadcast(BroadcastActions.ACTION_EXIT_TO_LOGIN);
+            goActivity(LoginActivity.class);
         }
     }
 }

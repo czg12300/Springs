@@ -3,6 +3,7 @@ package com.dinghu.ui.activity;
 
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
+import com.dinghu.utils.ToastUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +51,7 @@ public class MyAccountBookActivity extends CommonTitleActivity
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fl_date) {
-            finish();
+            ToastUtil.show("正在努力开发中");
         }
     }
 
