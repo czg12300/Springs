@@ -1,14 +1,10 @@
+
 package com.dinghu.logic.http.response;
 
-import com.dinghu.logic.entity.WorkListInfo;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.common.http.base.BaseResponse;
 
 /**
  * 描述：
@@ -17,18 +13,30 @@ import java.util.List;
  * @since 2015/9/12 10:35
  */
 public class WorkListDetailResponse extends BaseResponse {
-    public static final int STATUS_QUHUO=1;
-    public static final int STATUS_WANGONG=2;
-    public static final int STATUS_WAIT=3;
+    public static final int STATUS_QUHUO = 1;
+
+    public static final int STATUS_WANGONG = 2;
+
+    public static final int STATUS_WAIT = 3;
+
     private long id;
+
     private String address;
+
     private String tel;
+
     private String name;
+
     private int moneyOrCount;
+
     private String goods;
+
     private String time;
+
     private String type;
+
     private String btnMsg;
+
     private int status;
 
     public long getId() {

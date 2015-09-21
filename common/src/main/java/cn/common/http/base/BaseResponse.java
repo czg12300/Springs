@@ -1,6 +1,6 @@
-package com.dinghu.logic.http.response;
 
-import cn.common.bitmap.utils.L;
+package cn.common.http.base;
+
 import cn.common.http.JsonParse;
 
 /**

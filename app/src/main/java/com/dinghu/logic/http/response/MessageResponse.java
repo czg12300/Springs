@@ -7,12 +7,12 @@ import org.json.JSONObject;
 import cn.common.http.base.BaseResponse;
 
 /**
- * 描述：
+ * 描述:消息推送，返回数据
  *
- * @author jake
- * @since 2015/9/20 11:58
+ * @author jakechen
+ * @since 2015/9/21 11:51
  */
-public class FinishWorkResponse extends BaseResponse {
+public class MessageResponse extends BaseResponse {
     public static final int CODE_FAIL = 0;
 
     public static final int CODE_SUCCESS = 1;

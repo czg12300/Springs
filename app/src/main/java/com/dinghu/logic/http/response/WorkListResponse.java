@@ -1,7 +1,7 @@
+
 package com.dinghu.logic.http.response;
 
 import com.dinghu.logic.entity.WorkListInfo;
-import com.dinghu.utils.L;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.common.http.base.BaseResponse;
 
 /**
  * 描述：
@@ -27,7 +28,6 @@ public class WorkListResponse extends BaseResponse {
     public void setList(List<WorkListInfo> list) {
         this.list = list;
     }
-
 
     @Override
     public WorkListResponse parse(String json) {

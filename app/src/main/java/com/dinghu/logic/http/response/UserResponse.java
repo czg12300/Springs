@@ -1,7 +1,10 @@
+
 package com.dinghu.logic.http.response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import cn.common.http.base.BaseResponse;
 
 /**
  * 描述：
@@ -11,12 +14,15 @@ import org.json.JSONObject;
  */
 public class UserResponse extends BaseResponse {
     public static final int CODE_FAIL = 0;
+
     public static final int CODE_SUCCESS = 1;
+
     public static final int CODE_SUCCESS_MPW = 2;
 
-
     private long userId;
+
     private String msg;
+
     private int code;
 
     public long getUserId() {

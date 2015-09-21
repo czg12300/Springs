@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dinghu">
+<manifest
+    package="com.dinghu"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8"/>
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
      
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <application
         android:name="com.dinghu.SpringApplication"
         android:allowBackup="true"
@@ -33,36 +34,58 @@
         <!--高德地图地位需要的key-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="21a76566f433ab41e3837e93926f4f57" />
+            android:value="21a76566f433ab41e3837e93926f4f57"/>
 
         <activity
             android:name="com.dinghu.ui.activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/activity_style">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name="com.dinghu.ui.activity.LoginActivity"
-            android:theme="@style/activity_style" />
+            android:theme="@style/activity_style"/>
         <activity
             android:name="com.dinghu.ui.activity.MainActivity"
-            android:theme="@style/activity_style_main" />
+            android:theme="@style/activity_style_main"/>
         <activity
             android:name="com.dinghu.ui.activity.ModifyPwActivity"
-            android:theme="@style/swipe_activity_style" />
+            android:theme="@style/swipe_activity_style"/>
         <activity
             android:name="com.dinghu.ui.activity.MyAccountBookActivity"
-            android:theme="@style/swipe_activity_style" />
+            android:theme="@style/swipe_activity_style"/>
         <activity
             android:name="com.dinghu.ui.activity.WorkListDetailActivity"
-            android:theme="@style/swipe_activity_style" />
+            android:theme="@style/swipe_activity_style"/>
         <activity
             android:name="com.dinghu.ui.activity.HistoryWorkListActivity"
-            android:theme="@style/swipe_activity_style" />
+            android:theme="@style/swipe_activity_style"/>
+
+        <service
+            android:name=".MessageService"
+            android:label="消息推送"
+            android:process="com.dinghu.message"/>
+
+        <receiver
+            android:name=".MessageReceive"
+            android:label="启动消息推送"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".MessageHandleReceive"
+            android:label="启动消息推送">
+            <intent-filter>
+                <action android:name="com.dinghu.MessageHandleReceive.ACTION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

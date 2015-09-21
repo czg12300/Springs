@@ -2,7 +2,6 @@
 package com.dinghu.ui.fragment;
 
 import android.os.Message;
-import android.widget.ListAdapter;
 
 import com.dinghu.R;
 import com.dinghu.ui.widget.StatusView;
@@ -21,16 +20,25 @@ import cn.common.ui.fragment.BaseWorkerFragment;
  * @author jake
  * @since 2015/9/12 13:57
  */
-public abstract class BaseListFragment<T> extends BaseWorkerFragment implements XListView.IXListViewListener {
+public abstract class BaseListFragment<T> extends BaseWorkerFragment
+        implements XListView.IXListViewListener {
 
     private static final int START_PAGE_INDEX = 1;
+
     private static final int MSG_BACK_LOAD = 1000;
+
     private static final int MSG_UI_LOAD_FAIL = 1001;
+
     private static final int MSG_UI_LOAD_SUCCESS = 1002;
+
     private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
+
     protected XListView mLvList;
+
     private int mPageIndex = START_PAGE_INDEX;
+
     private int mPageSize = 10;
+
     private BaseListAdapter<T> mAdapter;
 
     protected void setPageSize(int pageSize) {
@@ -46,6 +54,8 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment implements 
     }
 
     private StatusView mStatusView;
+
+    private boolean isInit = false;
 
     @Override
     protected void initView() {
@@ -65,13 +75,24 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment implements 
                 sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
             }
         });
+        mStatusView.showLoadingView();
+        sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        mStatusView.showLoadingView();
-        sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !isInit) {
+            if (mStatusView != null) {
+
+                isInit = true;
+            }
+        }
     }
 
     @Override
@@ -124,10 +145,9 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment implements 
 
     private String getCurrentTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日    HH:mm:ss     ");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
     }
-
 
     @Override
     public void handleBackgroundMessage(Message msg) {
@@ -138,7 +158,8 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment implements 
             message.what = MSG_UI_LOAD_SUCCESS;
             message.obj = list;
             message.sendToTarget();
-        } else if (mPageIndex > START_PAGE_INDEX && list == null || list != null && list.size() < mPageSize) {
+        } else if (mPageIndex > START_PAGE_INDEX && list == null
+                || list != null && list.size() < mPageSize) {
             Message message = obtainUiMessage();
             message.what = MSG_UI_FINISH_LOAD_ALL;
             message.obj = list;

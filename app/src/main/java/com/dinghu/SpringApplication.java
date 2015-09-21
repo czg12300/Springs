@@ -1,6 +1,8 @@
 
 package com.dinghu;
 
+import android.content.Intent;
+
 import cn.common.ui.activity.BaseApplication;
 
 /**
@@ -10,8 +12,7 @@ public class SpringApplication extends BaseApplication {
 
     @Override
     protected void onConfig() {
-
-
+        startService(new Intent(this, MessageService.class));
     }
 
     @Override
