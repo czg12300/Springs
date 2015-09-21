@@ -18,4 +18,9 @@ public class SpringApplication extends BaseApplication {
     @Override
     protected void onRelease() {
     }
+
+    @Override
+    protected BaseApplication getChildInstance() {
+        return this;
+    }
 }
