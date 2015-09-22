@@ -4,12 +4,10 @@ package com.dinghu.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.widget.RadioButton;
 
 import com.dinghu.R;
@@ -51,11 +49,10 @@ public class MainActivity extends BaseWorkerFragmentActivity
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        clearFragment();
+        // clearFragment();
         setContentView(R.layout.activity_main);
         mVpContent = (MainTabViewPager) findViewById(R.id.vp_content);
         mRgMenu = (TabRadioGroup) findViewById(R.id.rg_menu);
@@ -66,8 +63,7 @@ public class MainActivity extends BaseWorkerFragmentActivity
         ArrayList<Fragment> list = new ArrayList<Fragment>();
         list.add(WorkListFragment.newInstance());
         list.add(UserCenterFragment.newInstance());
-        mVpContent.setAdapter(
-                new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
+        mVpContent.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
     }
 
     /**
@@ -86,7 +82,6 @@ public class MainActivity extends BaseWorkerFragmentActivity
             removeFt.commit();
         }
     }
-
 
     @Override
     public void onPageScrollStateChanged(int status) {
@@ -125,7 +120,7 @@ public class MainActivity extends BaseWorkerFragmentActivity
                 mVpContent.setCurrentItem(0, false);
             }
         } else if (TextUtils.equals(action, BroadcastActions.ACTION_EXIT_TO_LOGIN)) {
-            SpringApplication.getInstance().exitApp();
+            finish();
         }
     }
 
