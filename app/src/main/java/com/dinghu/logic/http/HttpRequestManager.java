@@ -7,7 +7,7 @@ import com.dinghu.utils.MD5Util;
 import cn.common.http.base.BaseRequest;
 import cn.common.utils.CommonUtil;
 
-public class HttpRequestManager<T> extends BaseRequest {
+public class HttpRequestManager<T> extends BaseRequest<T> {
 
     public HttpRequestManager(String svc, Class<?> clazz) {
         super(svc, clazz);

@@ -1,6 +1,8 @@
+
 package com.dinghu.ui.fragment;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 
@@ -44,6 +46,11 @@ public class ModeListFragment extends BaseWorkerFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void initData() {
         super.initData();
         mIndicatorViewPager.setIndicator(new IIndicator() {
@@ -62,7 +69,8 @@ public class ModeListFragment extends BaseWorkerFragment {
                 list.add(TodoListFragment.newInstance());
                 list.add(TodayListFragment.newInstance());
                 list.add(HistoryListFragment.newInstance());
-                return new CommonFragmentPagerAdapter(getFragmentManager(), list);
+                return new CommonFragmentPagerAdapter(getActivity().getSupportFragmentManager(),
+                        list);
             }
         });
     }
