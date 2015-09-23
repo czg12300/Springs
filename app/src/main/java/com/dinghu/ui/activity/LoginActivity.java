@@ -1,6 +1,16 @@
 
 package com.dinghu.ui.activity;
 
+import com.dinghu.MessageService;
+import com.dinghu.R;
+import com.dinghu.data.BroadcastActions;
+import com.dinghu.data.InitShareData;
+import com.dinghu.logic.URLConfig;
+import com.dinghu.logic.http.HttpRequestManager;
+import com.dinghu.logic.http.response.UserResponse;
+import com.dinghu.utils.MD5Util;
+import com.dinghu.utils.ToastUtil;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,15 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.dinghu.R;
-import com.dinghu.data.BroadcastActions;
-import com.dinghu.data.InitShareData;
-import com.dinghu.logic.URLConfig;
-import com.dinghu.logic.http.response.UserResponse;
-import com.dinghu.logic.http.HttpRequestManager;
-import com.dinghu.utils.MD5Util;
-import com.dinghu.utils.ToastUtil;
-
 import java.util.List;
 
 /**
@@ -30,7 +31,9 @@ import java.util.List;
 public class LoginActivity extends CommonTitleActivity
         implements TextWatcher, View.OnClickListener {
     private static final int MSG_BACK_LOGIN = 0;
+
     private static final int MSG_UI_LOGIN = 1;
+
     private EditText mEvMobile;
 
     private EditText mEvPw;
@@ -68,7 +71,7 @@ public class LoginActivity extends CommonTitleActivity
             mBtnOk.setEnabled(false);
             sendEmptyBackgroundMessage(MSG_BACK_LOGIN);
         } else if (v.getId() == R.id.tv_forget_pw) {
-            //  忘记密码
+            // 忘记密码
         }
     }
 
@@ -76,7 +79,8 @@ public class LoginActivity extends CommonTitleActivity
     public void handleBackgroundMessage(Message msg) {
         super.handleBackgroundMessage(msg);
         if (msg.what == MSG_BACK_LOGIN) {
-            HttpRequestManager<UserResponse> request = new HttpRequestManager<UserResponse>(URLConfig.LOGIN, UserResponse.class);
+            HttpRequestManager<UserResponse> request = new HttpRequestManager<UserResponse>(
+                    URLConfig.LOGIN, UserResponse.class);
             String mobile = mEvMobile.getText().toString();
             InitShareData.setMobile(mobile);
             request.addParam("tel", mobile);
@@ -101,6 +105,7 @@ public class LoginActivity extends CommonTitleActivity
                         case UserResponse.CODE_SUCCESS:
                             InitShareData.setUserId(info.getUserId());
                             goActivity(MainActivity.class);
+                            startService(new Intent(this, MessageService.class));
                             finish();
                             break;
                         case UserResponse.CODE_SUCCESS_MPW:
@@ -108,6 +113,7 @@ public class LoginActivity extends CommonTitleActivity
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("isLoginJump", true);
                             goActivity(ModifyPwActivity.class, bundle);
+                            startService(new Intent(this, MessageService.class));
                             finish();
                             break;
                     }

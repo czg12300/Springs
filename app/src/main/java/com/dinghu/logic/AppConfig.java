@@ -1,3 +1,4 @@
+
 package com.dinghu.logic;
 
 /**
@@ -8,4 +9,6 @@ package com.dinghu.logic;
  */
 public class AppConfig {
     public static final boolean IS_DEBUG = true;
+
+    public static final int PUSH_MESSAGE_TIME_SPIT = 1 * 1000;
 }

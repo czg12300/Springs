@@ -13,36 +13,21 @@ import cn.common.http.base.BaseResponse;
  * @since 2015/9/21 11:51
  */
 public class MessageResponse extends BaseResponse {
-    public static final int CODE_FAIL = 0;
+    private int count;
 
-    public static final int CODE_SUCCESS = 1;
-
-    private String msg;
-
-    private int code;
-
-    public String getMsg() {
-        return msg;
+    public int getCount() {
+        return count;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override
     public Object parse(String json) {
         try {
             JSONObject root = new JSONObject(json);
-            setCode(root.optInt("code"));
-            setMsg(root.optString("msg"));
+            setCount(root.optInt("count"));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

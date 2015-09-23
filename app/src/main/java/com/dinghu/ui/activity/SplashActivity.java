@@ -43,7 +43,6 @@ public class SplashActivity extends BaseWorkerFragmentActivity {
         mIvSplash.setImageResource(R.drawable.splash);
         mIvSplash.setScaleType(ImageView.ScaleType.FIT_XY);
         setContentView(mIvSplash);
-        InitShareData.setUserId(21);
         if (InitShareData.isLogin()) {
             sendEmptyUiMessageDelayed(MSG_MAIN, DELAYED_TIME);
         } else {
