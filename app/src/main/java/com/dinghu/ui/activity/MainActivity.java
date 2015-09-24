@@ -52,7 +52,7 @@ public class MainActivity extends BaseWorkerFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // clearFragment();
+        clearFragment();
         setContentView(R.layout.activity_main);
         mVpContent = (MainTabViewPager) findViewById(R.id.vp_content);
         mRgMenu = (TabRadioGroup) findViewById(R.id.rg_menu);

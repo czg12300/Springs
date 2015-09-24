@@ -23,6 +23,7 @@ import cn.common.ui.activity.IUi;
 
 public abstract class BaseFragment extends Fragment implements IUi {
     private static final int MSG_UI_INIT_DATA = 30000;
+
     protected static final int REQUEST_CODE = 0x125f;
 
     protected static final int RESULT_CODE = 0x126f;
@@ -104,7 +105,6 @@ public abstract class BaseFragment extends Fragment implements IUi {
 
     }
 
-
     /**
      * 获取资源文件的颜色值
      *
@@ -144,7 +144,6 @@ public abstract class BaseFragment extends Fragment implements IUi {
     protected String[] getStringArray(int id) {
         return getResources().getStringArray(id);
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -199,14 +198,13 @@ public abstract class BaseFragment extends Fragment implements IUi {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         mDecorView = new FrameLayout(getActivity());
         mSavedInstanceState = savedInstanceState;
         initView();
         initEvent();
         return mDecorView;
     }
-
 
     protected View findViewById(int id) {
         return mDecorView.findViewById(id);

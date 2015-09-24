@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,20 +37,29 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
     }
 
     private static final String START = "start";
-    private static final String END = "end";
-    private BaseDialog mDateSelectDialog;
-    private DatePicker mDatePicker;
-    private Button mBtnOk;
-    private TextView mTvStart;
-    private TextView mTvEnd;
-    private TextView mTvTitle;
-    private String mStartDate;
-    private String mEndDate;
 
+    private static final String END = "end";
+
+    private BaseDialog mDateSelectDialog;
+
+    private DatePicker mDatePicker;
+
+    private Button mBtnOk;
+
+    private TextView mTvStart;
+
+    private TextView mTvEnd;
+
+    private TextView mTvTitle;
+
+    private String mStartDate;
+
+    private String mEndDate;
 
     @Override
     protected List<WorkListInfo> loadData() {
-        HttpRequestManager<WorkListResponse> request = new HttpRequestManager<WorkListResponse>(URLConfig.WORK_LIST_HISTORY, WorkListResponse.class);
+        HttpRequestManager<WorkListResponse> request = new HttpRequestManager<WorkListResponse>(
+                URLConfig.WORK_LIST_HISTORY, WorkListResponse.class);
         request.addParam("pageNum", getPageIndex() + "");
         request.addParam("pageSize", getPageSize() + "");
         request.addParam("employId", InitShareData.getUserId() + "");
@@ -131,12 +138,14 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
                         if (mDatePicker != null) {
                             String type = (String) v.getTag();
                             if (TextUtils.equals(type, START)) {
-                                mStartDate = mDatePicker.getYear() + "-" + (
-                                        mDatePicker.getMonth() + 1) + "-" + mDatePicker.getDayOfMonth();
+                                mStartDate = mDatePicker.getYear() + "-"
+                                        + (mDatePicker.getMonth() + 1) + "-"
+                                        + mDatePicker.getDayOfMonth();
                                 updateStartTime();
                             } else if (TextUtils.equals(type, END)) {
-                                mEndDate = mDatePicker.getYear() + "-" + (
-                                        mDatePicker.getMonth() + 1) + "-" + mDatePicker.getDayOfMonth();
+                                mEndDate = mDatePicker.getYear() + "-"
+                                        + (mDatePicker.getMonth() + 1) + "-"
+                                        + mDatePicker.getDayOfMonth();
                                 updateEndTime();
                             }
                             onRefresh();
@@ -150,11 +159,11 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
             if (TextUtils.equals(tag, START)) {
                 int[] ints = getTime(mStartDate);
                 mTvTitle.setText("请选择起初日期");
-                mDatePicker.init(ints[0], ints[1], ints[2], null);
+                mDatePicker.updateDate(ints[0], ints[1], ints[2]);
             } else if (TextUtils.equals(tag, END)) {
                 mTvTitle.setText("请选择结束日期");
                 int[] ints = getTime(mEndDate);
-                mDatePicker.init(ints[0], ints[1], ints[2], null);
+                mDatePicker.updateDate(ints[0], ints[1], ints[2]);
             }
             mBtnOk.setTag(tag);
             mDateSelectDialog.show();
@@ -187,7 +196,7 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
 
     private String getCurrentTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
     }
 }
