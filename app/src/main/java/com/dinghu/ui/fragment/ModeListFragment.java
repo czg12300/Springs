@@ -2,8 +2,8 @@
 package com.dinghu.ui.fragment;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 
 import com.dinghu.R;
@@ -45,9 +45,18 @@ public class ModeListFragment extends BaseWorkerFragment {
         mIndicatorViewPager.setOffscreenPageLimit(2);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    private void clearFragment() {
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments != null && fragments.size() > 0) {
+            FragmentTransaction removeFt = getChildFragmentManager().beginTransaction();
+            for (int i = 0; i < fragments.size(); i++) {
+                Fragment fragment = fragments.get(i);
+                if (fragment != null) {
+                    removeFt.remove(fragments.get(i));
+                }
+            }
+            removeFt.commit();
+        }
     }
 
     @Override
