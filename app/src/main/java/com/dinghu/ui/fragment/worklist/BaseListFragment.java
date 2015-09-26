@@ -1,5 +1,5 @@
 
-package com.dinghu.ui.fragment;
+package com.dinghu.ui.fragment.worklist;
 
 import android.os.Message;
 
@@ -29,7 +29,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
 
     private static final int MSG_UI_LOAD_FAIL = 1001;
 
-    private static final int MSG_UI_LOAD_SUCCESS = 1002;
+    protected static final int MSG_UI_LOAD_SUCCESS = 1002;
 
     private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
 

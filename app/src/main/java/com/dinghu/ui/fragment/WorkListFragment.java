@@ -1,20 +1,34 @@
 
 package com.dinghu.ui.fragment;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 
 import com.dinghu.R;
+import com.dinghu.data.BroadcastActions;
+import com.dinghu.ui.adapter.CommonFragmentPagerAdapter;
+import com.dinghu.ui.fragment.worklist.HistoryListFragment;
+import com.dinghu.ui.fragment.worklist.TodayListFragment;
+import com.dinghu.ui.fragment.worklist.TodoListFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import cn.common.ui.fragment.BaseWorkerFragment;
 import cn.common.ui.widgt.ChangeThemeUtils;
+import cn.common.ui.widgt.indicator.IIndicator;
+import cn.common.ui.widgt.indicator.IndicatorViewPager;
+import cn.common.utils.DisplayUtil;
 
 /**
  * 描述：工单页面
@@ -35,66 +49,93 @@ public class WorkListFragment extends BaseWorkerFragment {
      * 当前的fragment的id
      */
     private int currentTab = R.id.rb_mode_list;
+
     /**
      * 存放tab的fragment
      */
-    private HashMap<Integer, Fragment> mTabFragments;
-    private FrameLayout fl;
 
     @Override
     protected void initView() {
         setContentView(R.layout.fragment_work_list);
         ChangeThemeUtils.adjustStatusBar(findViewById(R.id.fl_title), getActivity());
         mRgMode = (RadioGroup) findViewById(R.id.rg_mode);
-        fl = (FrameLayout) findViewById(R.id.fl_fragment_content);
+        initIndicatorView();
     }
 
     @Override
     protected void initEvent() {
         super.initEvent();
-        findViewById(R.id.iv_refresh).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         mRgMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                showCurrentFragment(checkedId);
+//                showCurrentFragment(checkedId);
                 currentTab = checkedId;
+                Intent it = new Intent(BroadcastActions.ACTION_CHANGE_MODE);
+                if (checkedId == R.id.rb_mode_list) {
+                    it.putExtra("IsMapMode", false);
+                } else if (checkedId == R.id.rb_mode_map) {
+                    it.putExtra("IsMapMode", true);
+                }
+                sendBroadcast(it);
 
             }
         });
+
     }
+
+    private IndicatorViewPager mIndicatorViewPager;
+
+    private void initIndicatorView() {
+        mIndicatorViewPager = (IndicatorViewPager) findViewById(R.id.ivp);
+        mIndicatorViewPager.setTabHeight(getDimension(R.dimen.title_height));
+        mIndicatorViewPager.setTabChangeColor(true);
+        mIndicatorViewPager.setTabBackgroundColor(Color.WHITE);
+        mIndicatorViewPager.setTabTextColor(getColor(R.color.black_404040));
+        mIndicatorViewPager.setTabSelectColor(getColor(R.color.green_00cd92));
+        mIndicatorViewPager.setTabTextSize(getDimension(R.dimen.text_content));
+        mIndicatorViewPager.setTabLineHeight(DisplayUtil.dip(4));
+        mIndicatorViewPager.setAverage(false);
+        mIndicatorViewPager.setOffscreenPageLimit(2);
+    }
+
+    @Override
+    public void setupBroadcastActions(List<String> actions) {
+        super.setupBroadcastActions(actions);
+        actions.add(BroadcastActions.ACTION_CHANGE_MODE);
+    }
+
+    @Override
+    public void handleBroadcast(Context context, Intent intent) {
+        super.handleBroadcast(context, intent);
+        if (TextUtils.equals(intent.getAction(), BroadcastActions.ACTION_CHANGE_MODE)) {
+            mIndicatorViewPager.setCanScroll(!intent.getBooleanExtra("IsMapMode", false));
+        }
+    }
+
 
     @Override
     protected void initData() {
         super.initData();
-        mTabFragments = new HashMap<Integer, Fragment>();
-        mTabFragments.put(R.id.rb_mode_list, ModeListFragment.newInstance());
-        mTabFragments.put(R.id.rb_mode_map, ModeMapFragment.newInstance());
-        getFragmentManager().beginTransaction().add(R.id.fl_fragment_content, mTabFragments.get(R.id.rb_mode_list)).commit();
-    }
+        mIndicatorViewPager.setIndicator(new IIndicator() {
+            @Override
+            public List<String> getLabelList() {
+                List<String> list = new ArrayList<String>();
+                list.add(getString(R.string.tab_todo_work_list));
+                list.add(getString(R.string.tab_today_work_list));
+                list.add(getString(R.string.tab_history_work_list));
+                return list;
+            }
 
-    /**
-     * 显示当前的fragment
-     *
-     * @param checkedId
-     */
-    private void showCurrentFragment(int checkedId) {
-        Fragment toFragment = mTabFragments.get(checkedId);
-        Fragment fromFragment = mTabFragments.get(currentTab);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        fromFragment.onPause(); // 暂停当前tab
-        if (toFragment.isAdded()) {
-            toFragment.onResume(); // 启动目标tab的onResume()
-        } else {
-            ft.add(R.id.fl_fragment_content, toFragment);
-        }
-        ft.hide(fromFragment);
-        ft.show(toFragment);
-        ft.commitAllowingStateLoss();
+            @Override
+            public PagerAdapter getAdapter() {
+                List<Fragment> list = new ArrayList<Fragment>();
+                list.add(TodoListFragment.newInstance());
+                list.add(TodayListFragment.newInstance());
+                list.add(HistoryListFragment.newInstance());
+                return new CommonFragmentPagerAdapter(getActivity().getSupportFragmentManager(),
+                        list);
+            }
+        });
     }
 
 }

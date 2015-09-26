@@ -52,7 +52,6 @@ public class MainActivity extends BaseWorkerFragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // clearFragment();
         setContentView(R.layout.activity_main);
         mVpContent = (MainTabViewPager) findViewById(R.id.vp_content);
         mRgMenu = (TabRadioGroup) findViewById(R.id.rg_menu);
@@ -66,22 +65,6 @@ public class MainActivity extends BaseWorkerFragmentActivity
         mVpContent.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
     }
 
-    /**
-     * 清除当前activity中的所有fragment,用于被回收时再次调用onCreate，避免多个fragment
-     */
-    private void clearFragment() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        if (fragments != null && fragments.size() > 0) {
-            FragmentTransaction removeFt = getSupportFragmentManager().beginTransaction();
-            for (int i = 0; i < fragments.size(); i++) {
-                Fragment fragment = fragments.get(i);
-                if (fragment != null) {
-                    removeFt.remove(fragments.get(i));
-                }
-            }
-            removeFt.commit();
-        }
-    }
 
     @Override
     public void onPageScrollStateChanged(int status) {

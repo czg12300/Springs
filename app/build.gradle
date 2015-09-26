@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'springs'
+            keyPassword 'springs'
+            storeFile file('G:/Android/github/Springs/springs.keystore')
+            storePassword 'springs'
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
-
     defaultConfig {
         applicationId "com.dinghu.springs"
         minSdkVersion 8

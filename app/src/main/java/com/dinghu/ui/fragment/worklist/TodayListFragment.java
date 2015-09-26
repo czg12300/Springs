@@ -1,5 +1,5 @@
 
-package com.dinghu.ui.fragment;
+package com.dinghu.ui.fragment.worklist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import com.dinghu.logic.http.response.WorkListResponse;
 import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.common.ui.adapter.BaseListAdapter;
@@ -25,9 +24,14 @@ import cn.common.ui.adapter.BaseListAdapter;
  * @author jake
  * @since 2015/9/12 13:57
  */
-public class TodayListFragment extends BaseListFragment<WorkListInfo> {
+public class TodayListFragment extends BaseWorkListFragment<WorkListInfo> {
     public static TodayListFragment newInstance() {
         return new TodayListFragment();
+    }
+
+    @Override
+    protected void addMapMarker(List<WorkListInfo> list) {
+
     }
 
     @Override

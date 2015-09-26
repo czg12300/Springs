@@ -56,13 +56,14 @@
                 android:layout_centerVertical="true"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/ico_refesh_navigation" />
+                android:src="@drawable/ico_refesh_navigation"
+                android:visibility="gone" />
 
         </RelativeLayout>
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_fragment_content"
+    <cn.common.ui.widgt.indicator.IndicatorViewPager
+        android:id="@+id/ivp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

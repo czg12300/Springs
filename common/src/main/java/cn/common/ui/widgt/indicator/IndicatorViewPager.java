@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 
 /**
@@ -21,7 +22,16 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
 
     private ViewPagerCompat mViewPager;
 
-    private boolean mIsSwitchAnmation;
+    private boolean mIsSwitchAnimation;
+    private boolean canScroll = true;
+
+    public boolean canScroll() {
+        return canScroll;
+    }
+
+    public void setCanScroll(boolean canScroll) {
+        this.canScroll = canScroll;
+    }
 
     public IndicatorViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,7 +62,7 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mIndicator.onScrolled((mViewPager.getWidth() + mViewPager.getPageMargin()) * position
                 + positionOffsetPixels);
-        if (mIsSwitchAnmation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (mIsSwitchAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             switchAnmation(position, positionOffset);
         }
     }
@@ -78,7 +88,7 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
     }
 
     public void isSwitchAnnmation(boolean b) {
-        mIsSwitchAnmation = b;
+        mIsSwitchAnimation = b;
     }
 
     /**
@@ -132,9 +142,6 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
         mIndicator.setChangeTabColor(isChange);
     }
 
-    public void setPagerParent(ViewPager parent) {
-//        mViewPager.setParentViewPager(parent);
-    }
 
     public void setTabSelectColor(int color) {
         mIndicator.setTabSelectColor(color);
@@ -198,6 +205,29 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
             super(context, attrs);
         }
 
+        @Override
+        protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
+            if (!canScroll) {
+                return true;
+            }
+            return super.canScroll(v, checkV, dx, x, y);
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            if (!canScroll) {
+                return false;
+            }
+            return super.onInterceptTouchEvent(ev);
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent ev) {
+            if (!canScroll) {
+                return false;
+            }
+            return super.onTouchEvent(ev);
+        }
 
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -206,5 +236,7 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
             }
             return super.dispatchTouchEvent(ev);
         }
+
     }
+
 }
