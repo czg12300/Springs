@@ -16,11 +16,13 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.utils.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -144,11 +146,13 @@ public class MapViewHelper implements AMapLocationListener {
     }
 
     public void addMapMarker(List<WorkListInfo> list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (i == 0) {
-                mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(34.341568, 108.940174), 18, 0, 30)), 500, null);
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i == 0) {
+                    mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(34.341568, 108.940174), 18, 0, 30)), 500, null);
+                }
+                addMapMark(list.get(i));
             }
-            addMapMark(list.get(i));
         }
     }
 
@@ -175,10 +179,9 @@ public class MapViewHelper implements AMapLocationListener {
         // 设置Marker的可见性
         markerOptions.visible(true);
         // 设置Marker是否可以被拖拽，这里先设置为false，之后会演示Marker的拖拽功能
-        markerOptions.perspective(true);
         markerOptions.draggable(false);
         // 将Marker添加到地图上去
-        mAMap.addMarker(markerOptions).setObject(info);
+//        mAMap.addMarker(markerOptions).setObject(info);
         i++;
     }
 

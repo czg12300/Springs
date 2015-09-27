@@ -82,7 +82,7 @@ public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment
     private boolean isInit = false;
 
     protected MapView mMapView;
-    private View mVMap;
+    protected View mVMap;
     protected MapViewHelper mMapViewHelper;
 
     @Override

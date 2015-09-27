@@ -3,9 +3,7 @@ package com.dinghu.ui.fragment.worklist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,21 +11,6 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationListener;
-import com.amap.api.location.LocationManagerProxy;
-import com.amap.api.location.LocationProviderProxy;
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapOptions;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.CameraPosition;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
@@ -35,31 +18,30 @@ import com.dinghu.logic.URLConfig;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.logic.http.HttpRequestManager;
 import com.dinghu.logic.http.response.WorkListResponse;
-import com.dinghu.ui.activity.WorkListDetailActivity;
 import com.dinghu.ui.adapter.WorkListAdapter;
-import com.dinghu.ui.helper.MapViewHelper;
 import com.dinghu.ui.widget.xlistview.XListView;
-import com.dinghu.utils.ToastUtil;
+import com.dinghu.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import cn.common.ui.BaseDialog;
 import cn.common.ui.adapter.BaseListAdapter;
 
 /**
- * 描述：
+ * 描述：历史工单页面
  *
  * @author jake
  * @since 2015/9/12 13:57
  */
-public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
-    private MapViewHelper mMapViewHelper;
+public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
 
-    public static HistoryListFragment newInstance() {
-        return new HistoryListFragment();
+    public static HistoryListFragment newInstance(boolean isHome) {
+        HistoryListFragment fragment = new HistoryListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("IsHome", isHome);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     private static final String START = "start";
@@ -81,9 +63,6 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
     private String mStartDate;
 
     private String mEndDate;
-    private MapView mMapView;
-    private View mVMap;
-    private LinearLayout mLlList;
 
     @Override
     protected List<WorkListInfo> loadData() {
@@ -103,12 +82,12 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
 
     @Override
     public void setContentView(View view) {
-        View root = inflate(R.layout.fragment_history);
-        mLlList = (LinearLayout) root.findViewById(R.id.ll_list);
-        mLlList.addView(view, new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        super.setContentView(root);
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(inflate(R.layout.header_list_history));
+        layout.addView(view, new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        super.setContentView(layout);
         initListView();
-        initMapView();
     }
 
     private void initListView() {
@@ -133,35 +112,11 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
         } else {
             mStartDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) - 1) + "-1";
         }
-        mEndDate = getCurrentTime();
+        mEndDate = Utils.getCurrentTime();
         updateStartTime();
         updateEndTime();
     }
 
-    private void initMapView() {
-        mMapView = (MapView) findViewById(R.id.mv_map);
-        mVMap = findViewById(R.id.fl_map);
-        findViewById(R.id.iv_locate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMapViewHelper.startLocate();
-            }
-        });
-        findViewById(R.id.iv_plus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMapViewHelper.zoomIn();
-            }
-        });
-        findViewById(R.id.iv_minus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMapViewHelper.zoomOut();
-            }
-        });
-        mMapView.onCreate(mSavedInstanceState);// 此方法必须重写
-        mMapViewHelper = new MapViewHelper(mMapView);
-    }
 
     @Override
     protected void addFooter(XListView mLvList) {
@@ -171,29 +126,23 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
     protected void addHeader(XListView mLvList) {
     }
 
-    @Override
-    public void setupBroadcastActions(List<String> actions) {
-        super.setupBroadcastActions(actions);
-        actions.add(BroadcastActions.ACTION_CHANGE_MODE);
-    }
-
-    @Override
-    public void handleBroadcast(Context context, Intent intent) {
-        super.handleBroadcast(context, intent);
-        if (TextUtils.equals(intent.getAction(), BroadcastActions.ACTION_CHANGE_MODE)) {
-            if (intent.getBooleanExtra("IsMapMode", false)) {
-                mVMap.setVisibility(View.VISIBLE);
-                mLlList.setVisibility(View.GONE);
-            } else {
-                mVMap.setVisibility(View.GONE);
-                mLlList.setVisibility(View.VISIBLE);
-            }
-        }
-    }
 
     @Override
     protected BaseListAdapter<WorkListInfo> createAdapter() {
         return new WorkListAdapter(getActivity());
+    }
+
+    @Override
+    public void handleBroadcast(Context context, Intent intent) {
+        if (TextUtils.equals(intent.getAction(), BroadcastActions.ACTION_CHANGE_MODE)) {
+            if (getArguments().getBoolean("IsHome", false) && intent.getBooleanExtra("IsMapMode", false)) {
+                mVMap.setVisibility(View.VISIBLE);
+                mLvList.setVisibility(View.GONE);
+            } else {
+                mVMap.setVisibility(View.GONE);
+                mLvList.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void showDateSelectDialog(String tag) {
@@ -273,41 +222,8 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
 
 
     @Override
-    public void handleUiMessage(Message msg) {
-        if (msg.what == MSG_UI_LOAD_SUCCESS) {
-            mMapViewHelper.addMapMarker((List<WorkListInfo>) msg.obj);
-        }
-        super.handleUiMessage(msg);
-    }
-
-    private String getCurrentTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
-        return formatter.format(curDate);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
+    protected void addMapMarker(List<WorkListInfo> list) {
+        mMapViewHelper.addMapMarker(list);
     }
 
 }

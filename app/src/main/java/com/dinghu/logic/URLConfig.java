@@ -40,4 +40,5 @@ public class URLConfig {
     public static final String DETAIL_GAINGOODS = SERVER + "outForm/gainGoods";
 
     public static final String PUSH_MESSAGE = SERVER + "outForm/findUnRead";
+    public static final String ACCOUNT_BOOK = SERVER + "outForm/accountBook";
 }

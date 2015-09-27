@@ -131,7 +131,7 @@ public class WorkListFragment extends BaseWorkerFragment {
                 List<Fragment> list = new ArrayList<Fragment>();
                 list.add(TodoListFragment.newInstance());
                 list.add(TodayListFragment.newInstance());
-                list.add(HistoryListFragment.newInstance());
+                list.add(HistoryListFragment.newInstance(true));
                 return new CommonFragmentPagerAdapter(getActivity().getSupportFragmentManager(),
                         list);
             }
