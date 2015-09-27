@@ -38,16 +38,10 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
 
     @Override
     protected void addMapMarker(List<WorkListInfo> list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (i == 0) {
-                mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(34.341568, 108.940174), 18, 0, 30)), 500, null);
-            }
-            addMapMark(list.get(i));
-        }
-        mAMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+        mMapViewHelper.addMapMarker(list);
+        mMapViewHelper.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(marker.getPosition(), 18, 0, 30)), 500, null);
                 if (marker.isInfoWindowShown()) {
                     marker.hideInfoWindow();
                 } else {
@@ -56,7 +50,7 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
                 return true;
             }
         });
-        mAMap.setOnInfoWindowClickListener(new AMap.OnInfoWindowClickListener() {
+        mMapViewHelper.setOnInfoWindowClickListener(new AMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 if (getActivity() != null && !getActivity().isFinishing()) {
@@ -67,36 +61,6 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
                 }
             }
         });
-    }
-
-    int i = 1;
-
-    private void addMapMark(WorkListInfo info) {
-        // 设置Marker的图标样式
-        MarkerOptions markerOptions = new MarkerOptions();
-        switch (info.getTimeType()) {
-            case WorkListInfo.TIME_TYPE_IN:
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_blue));
-                break;
-            case WorkListInfo.TIME_TYPE_OUT_LESS_FIVE:
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_violet));
-                break;
-            case WorkListInfo.TIME_TYPE_OUT_MORE_FIVE:
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_red));
-                break;
-        }
-        // 设置Marker点击之后显示的标题
-        markerOptions.title(info.getAddress());
-        // 设置Marker的坐标，为我们点击地图的经纬度坐标
-        markerOptions.position(new LatLng(34.341568 + i, 108.940174 + i));
-        // 设置Marker的可见性
-        markerOptions.visible(true);
-        // 设置Marker是否可以被拖拽，这里先设置为false，之后会演示Marker的拖拽功能
-        markerOptions.perspective(true);
-        markerOptions.draggable(false);
-        // 将Marker添加到地图上去
-        mAMap.addMarker(markerOptions).setObject(info);
-        i++;
     }
 
     @Override

@@ -5,12 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
+import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.logic.http.HttpRequestManager;
 import com.dinghu.logic.http.response.WorkListResponse;
+import com.dinghu.ui.activity.WorkListDetailActivity;
 import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 
@@ -31,7 +40,18 @@ public class TodayListFragment extends BaseWorkListFragment<WorkListInfo> {
 
     @Override
     protected void addMapMarker(List<WorkListInfo> list) {
-
+        mMapViewHelper.addMapMarker(list);
+        mMapViewHelper.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.isInfoWindowShown()) {
+                    marker.hideInfoWindow();
+                } else {
+                    marker.showInfoWindow();
+                }
+                return true;
+            }
+        });
     }
 
     @Override
