@@ -23,6 +23,7 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
     private ViewPagerCompat mViewPager;
 
     private boolean mIsSwitchAnimation;
+
     private boolean canScroll = true;
 
     public boolean canScroll() {
@@ -85,6 +86,9 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
     @Override
     public void onPageSelected(int position) {
         mIndicator.onSwitched(position);
+        if (indicatorListener != null) {
+            indicatorListener.onTabPageSelected(position);
+        }
     }
 
     public void isSwitchAnnmation(boolean b) {
@@ -142,7 +146,6 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
         mIndicator.setChangeTabColor(isChange);
     }
 
-
     public void setTabSelectColor(int color) {
         mIndicator.setTabSelectColor(color);
     }
@@ -184,6 +187,10 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
         mViewPager.setAdapter(indicator.getAdapter());
         mIndicator.init(0, indicator.getLabelList(), mViewPager);
 
+    }
+
+    public int getCurrentItem() {
+        return mViewPager.getCurrentItem();
     }
 
     /**
@@ -239,4 +246,17 @@ public class IndicatorViewPager extends LinearLayout implements OnPageChangeList
 
     }
 
+    private IIndicatorListener indicatorListener;
+
+    public IIndicatorListener getIndicatorListener() {
+        return indicatorListener;
+    }
+
+    public void setIndicatorListener(IIndicatorListener indicatorListener) {
+        this.indicatorListener = indicatorListener;
+    }
+
+    public static interface IIndicatorListener {
+        void onTabPageSelected(int position);
+    }
 }

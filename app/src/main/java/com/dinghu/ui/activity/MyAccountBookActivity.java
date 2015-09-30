@@ -1,3 +1,4 @@
+
 package com.dinghu.ui.activity;
 
 import android.os.Message;
@@ -23,7 +24,9 @@ import cn.common.ui.BaseDialog;
  */
 public class MyAccountBookActivity extends CommonTitleActivity {
     private static final int MSG_BACK_LOAD = 0;
+
     private static final int MSG_UI_LOAD = 1;
+
     private TextView mTvWorkListCount;
 
     private TextView mTvSendCount;
@@ -39,11 +42,15 @@ public class MyAccountBookActivity extends CommonTitleActivity {
     private TextView mTvReceiveCount;
 
     private TextView mTvPayCount;
+
     private TextView mTvDate;
 
     private BaseDialog mDateSelectDialog;
+
     private DatePicker mDatePicker;
+
     private StatusView mStatusView;
+
     private String mDateMonth;
 
     @Override
@@ -82,7 +89,8 @@ public class MyAccountBookActivity extends CommonTitleActivity {
     public void handleBackgroundMessage(Message msg) {
         super.handleBackgroundMessage(msg);
         if (msg.what == MSG_BACK_LOAD) {
-            HttpRequestManager<AccountResponse> requestManager = new HttpRequestManager<AccountResponse>(URLConfig.ACCOUNT_BOOK, AccountResponse.class);
+            HttpRequestManager<AccountResponse> requestManager = new HttpRequestManager<AccountResponse>(
+                    URLConfig.ACCOUNT_BOOK, AccountResponse.class);
             requestManager.addParam("id", InitShareData.getUserId() + "");
             requestManager.addParam("date", mDateMonth);
             Message message = obtainUiMessage();
@@ -134,38 +142,41 @@ public class MyAccountBookActivity extends CommonTitleActivity {
         });
     }
 
-
     private void showDateSelectDialog() {
         if (!isFinishing()) {
             if (mDateSelectDialog == null) {
                 mDateSelectDialog = new BaseDialog(this);
                 mDateSelectDialog.setWindow(R.style.alpha_animation, 0.3f);
-                mDateSelectDialog.setContentView(R.layout.dialog_select_birthday);
+                mDateSelectDialog.setContentView(R.layout.dialog_select_date);
                 mDatePicker = (DatePicker) mDateSelectDialog.findViewById(R.id.date_picker);
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
-                mDatePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
-                ((ViewGroup) ((ViewGroup) mDatePicker.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
+                mDatePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                        cal.get(Calendar.DAY_OF_MONTH), null);
+                ((ViewGroup) ((ViewGroup) mDatePicker.getChildAt(0)).getChildAt(0)).getChildAt(2)
+                        .setVisibility(View.GONE);
                 mTvTitle = (TextView) mDateSelectDialog.findViewById(R.id.tv_title);
-                mDateSelectDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mDatePicker != null) {
-                            mDateMonth = mDatePicker.getYear() + "-" + (mDatePicker.getMonth() + 1);
-                            mTvDate.setText(mDatePicker.getYear() + "年" + (mDatePicker.getMonth() + 1) + "月");
-                            sendEmptyBackgroundMessage(MSG_BACK_LOAD);
-                        }
-                        if (mDateSelectDialog != null) {
-                            mDateSelectDialog.dismiss();
-                        }
-                    }
-                });
+                mDateSelectDialog.findViewById(R.id.btn_ok)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mDatePicker != null) {
+                                    mDateMonth = mDatePicker.getYear() + "-"
+                                            + (mDatePicker.getMonth() + 1);
+                                    mTvDate.setText(mDatePicker.getYear() + "年"
+                                            + (mDatePicker.getMonth() + 1) + "月");
+                                    sendEmptyBackgroundMessage(MSG_BACK_LOAD);
+                                }
+                                if (mDateSelectDialog != null) {
+                                    mDateSelectDialog.dismiss();
+                                }
+                            }
+                        });
             }
             int[] ints = getTime(mDateMonth);
             mDatePicker.updateDate(ints[0], ints[1] - 1, 1);
             mDateSelectDialog.show();
         }
     }
-
 
 }

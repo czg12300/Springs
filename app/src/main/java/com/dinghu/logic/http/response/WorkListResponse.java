@@ -49,6 +49,8 @@ public class WorkListResponse extends BaseResponse {
                         info.setFinishTime(root.optString("finishTime"));
                         info.setType(root.optString("type"));
                         info.setRequireTime(root.optString("requireTime"));
+                        info.setLat(root.optDouble("lat"));
+                        info.setLng(root.optDouble("lng"));
                         list.add(info);
                     }
                 }

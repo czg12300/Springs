@@ -29,6 +29,10 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         return getContext().getResources().getColor(id);
     }
 
+    public float getDimension(int id) {
+        return getContext().getResources().getDimension(id);
+    }
+
     public BaseListAdapter(Context context) {
         this(context, null);
     }

@@ -76,7 +76,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
             }
         });
         mStatusView.showLoadingView();
-        sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
+        sendEmptyBackgroundMessage(MSG_BACK_LOAD);
     }
 
     @Override

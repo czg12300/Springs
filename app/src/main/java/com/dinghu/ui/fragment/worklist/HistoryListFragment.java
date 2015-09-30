@@ -1,16 +1,6 @@
 
 package com.dinghu.ui.fragment.worklist;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
@@ -22,11 +12,20 @@ import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 import com.dinghu.utils.Utils;
 
-import java.util.Calendar;
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import cn.common.ui.BaseDialog;
 import cn.common.ui.adapter.BaseListAdapter;
+
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * 描述：历史工单页面
@@ -34,14 +33,10 @@ import cn.common.ui.adapter.BaseListAdapter;
  * @author jake
  * @since 2015/9/12 13:57
  */
-public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
+public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
 
-    public static HistoryListFragment newInstance(boolean isHome) {
-        HistoryListFragment fragment = new HistoryListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("IsHome", isHome);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static HistoryListFragment newInstance() {
+        return new HistoryListFragment();
     }
 
     private static final String START = "start";
@@ -117,7 +112,6 @@ public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
         updateEndTime();
     }
 
-
     @Override
     protected void addFooter(XListView mLvList) {
     }
@@ -125,7 +119,6 @@ public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
     @Override
     protected void addHeader(XListView mLvList) {
     }
-
 
     @Override
     protected BaseListAdapter<WorkListInfo> createAdapter() {
@@ -135,13 +128,6 @@ public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
     @Override
     public void handleBroadcast(Context context, Intent intent) {
         if (TextUtils.equals(intent.getAction(), BroadcastActions.ACTION_CHANGE_MODE)) {
-            if (getArguments().getBoolean("IsHome", false) && intent.getBooleanExtra("IsMapMode", false)) {
-                mVMap.setVisibility(View.VISIBLE);
-                mLvList.setVisibility(View.GONE);
-            } else {
-                mVMap.setVisibility(View.GONE);
-                mLvList.setVisibility(View.VISIBLE);
-            }
         }
     }
 
@@ -150,7 +136,7 @@ public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
             if (mDateSelectDialog == null) {
                 mDateSelectDialog = new BaseDialog(getActivity());
                 mDateSelectDialog.setWindow(R.style.alpha_animation, 0.3f);
-                mDateSelectDialog.setContentView(R.layout.dialog_select_birthday);
+                mDateSelectDialog.setContentView(R.layout.dialog_select_date);
                 mDatePicker = (DatePicker) mDateSelectDialog.findViewById(R.id.date_picker);
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(System.currentTimeMillis());
@@ -218,12 +204,6 @@ public class HistoryListFragment extends BaseWorkListFragment<WorkListInfo> {
             is[i] = Integer.valueOf(ss[i]);
         }
         return is;
-    }
-
-
-    @Override
-    protected void addMapMarker(List<WorkListInfo> list) {
-        mMapViewHelper.addMapMarker(list);
     }
 
 }

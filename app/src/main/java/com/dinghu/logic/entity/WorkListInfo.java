@@ -1,9 +1,5 @@
+
 package com.dinghu.logic.entity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cn.common.http.JsonParse;
 
 /**
  * 描述：
@@ -13,20 +9,54 @@ import cn.common.http.JsonParse;
  */
 public class WorkListInfo {
     public static final int TIME_TYPE_IN = 1;
+
     public static final int TIME_TYPE_OUT_LESS_FIVE = 2;
+
     public static final int TIME_TYPE_OUT_MORE_FIVE = 3;
+
     public static final String TYPE_PEISONG = "配送";
+
     public static final String TYPE_TAOCAN = "套餐";
+
     private long id;
+
     private int moneyOrCount;
+
     private int timeType;
+
     private String type;
+
     private String address;
+
     private String tel;
+
     private String name;
+
     private String goods;
+
     private String finishTime;
+
     private String requireTime;
+
+    private double lat;
+
+    private double lng;
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
 
     public long getId() {
         return id;

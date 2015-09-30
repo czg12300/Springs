@@ -25,6 +25,8 @@ public class URLConfig {
 
     public static final String LOGIN = SERVER + "employ/login";
 
+    public static final String GET_STORE_LIST = SERVER + "employ/getStaIds";
+
     public static final String MODIFY_PW = SERVER + "employ/updatePwd";
 
     public static final String WORK_LIST_TODO = SERVER + "outForm/unFinish";
@@ -40,5 +42,6 @@ public class URLConfig {
     public static final String DETAIL_GAINGOODS = SERVER + "outForm/gainGoods";
 
     public static final String PUSH_MESSAGE = SERVER + "outForm/findUnRead";
+
     public static final String ACCOUNT_BOOK = SERVER + "outForm/accountBook";
 }

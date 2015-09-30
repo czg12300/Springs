@@ -1,9 +1,5 @@
-package cn.common.http;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.text.TextUtils;
-import android.widget.Toast;
+package cn.common.http;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
@@ -77,7 +73,8 @@ public class HttpManager<T> {
             e.printStackTrace();
             final String errorMsg = e.getMessage();
             final int errorCode = e.getErrorCode();
-            if (errorCode == HttpReturnCode.HTTP_RESPONSE_ERROR_CODE || errorCode == HttpReturnCode.HTTP_NO_HOST_NAME) {
+            if (errorCode == HttpReturnCode.HTTP_RESPONSE_ERROR_CODE
+                    || errorCode == HttpReturnCode.HTTP_NO_HOST_NAME) {
                 // URLs.nextServer();
             }
             BaseToastUtil.show(errorMsg);
@@ -101,7 +98,6 @@ public class HttpManager<T> {
         }
         return null;
     }
-
 
     /**
      * 获取请求方式
@@ -152,7 +148,8 @@ public class HttpManager<T> {
         String result = null;
         try {
             if (status == HttpStatus.SC_OK) {
-                result = EntityUtils.toString(new BufferedHttpEntity(httpResponse.getEntity()), HTTP.UTF_8);
+                result = EntityUtils.toString(new BufferedHttpEntity(httpResponse.getEntity()),
+                        HTTP.UTF_8);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -175,7 +172,8 @@ public class HttpManager<T> {
     /**
      * 获取http的回复
      */
-    private org.apache.http.HttpResponse getHttpResponse(HttpUriRequest request) throws HttpException {
+    private org.apache.http.HttpResponse getHttpResponse(HttpUriRequest request)
+            throws HttpException {
         org.apache.http.HttpResponse httpResponse = null;
         try {
             httpResponse = SingleHttpClient.getInstance().getHttpClient().execute(request);
@@ -194,6 +192,8 @@ public class HttpManager<T> {
         } catch (IllegalArgumentException e) {
             // e.printStackTrace();
             throw HttpExcHandler.IllegalArgumentException();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return httpResponse;
     }

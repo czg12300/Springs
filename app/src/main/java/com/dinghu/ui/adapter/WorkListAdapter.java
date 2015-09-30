@@ -1,3 +1,4 @@
+
 package com.dinghu.ui.adapter;
 
 import android.content.Context;
@@ -9,18 +10,17 @@ import android.widget.TextView;
 
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
-import com.dinghu.logic.http.response.WorkListResponse;
 import com.dinghu.ui.activity.WorkListDetailActivity;
 
 import cn.common.ui.adapter.BaseListAdapter;
 
 /**
- * 描述：
+ * 描述：工单列表适配器
  *
  * @author jake
  * @since 2015/9/12 10:34
  */
-public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements View.OnClickListener {
+public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements View.OnClickListener {
     public WorkListAdapter(Context context) {
         super(context);
     }
@@ -85,14 +85,13 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
             if (!TextUtils.isEmpty(info.getAddress())) {
                 holder.tvAddress.setText(info.getAddress());
             }
-//            holder.tvContentLine1.setText(getContentLine1(info));
+            // holder.tvContentLine1.setText(getContentLine1(info));
             holder.tvContentLine2.setText(getContentLine2(info));
             holder.tvContentLine3.setText(getContentLine3(info));
             holder.tvContentLine4.setText(getContentLine4(info));
         }
         return convertView;
     }
-
 
     private String getContentLine2(WorkListInfo info) {
         String reslut = "";
@@ -131,11 +130,17 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
 
     final class ViewHolder {
         TextView tvIndex;
+
         TextView tvTitle;
+
         TextView tvAddress;
+
         TextView tvContentLine1;
+
         TextView tvContentLine2;
+
         TextView tvContentLine3;
+
         TextView tvContentLine4;
     }
 }

@@ -6,6 +6,7 @@
     <string name="title_mode_list">列表模式</string>
     <string name="title_work_list_detail">工单详情 </string>
     <string name="title_work_list_history">历史工单</string>
+    <string name="title_my_work_list">我的工单</string>
     <!--other-->
     <string name="app_name">鼎湖山泉</string>
     <string name="login_account_hint">请输入手机号</string>
@@ -38,6 +39,7 @@
     <string name="date_start">起初日期：</string>
     <string name="date_end">结束日期：</string>
     <string name="date_account_statistics_title">请选择需要统计的月份</string>
+    <string name="dialog_title_select_store">请选择门店</string>
     <!--网络-->
     <string name="load_error">网络异常</string>
     <string name="load_fail">加载失败\n请点击重试</string>

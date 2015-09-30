@@ -1,3 +1,4 @@
+
 package com.dinghu.ui.helper;
 
 import android.location.Location;
@@ -16,13 +17,11 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.dinghu.R;
 import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.utils.ToastUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,8 +32,11 @@ import java.util.List;
  */
 public class MapViewHelper implements AMapLocationListener {
     private AMap mAMap;
+
     private MapView mMapView;
+
     private LocationSource.OnLocationChangedListener mOnLocationChangedListener;
+
     private LocationManagerProxy mAMapLocationManager;
 
     public MapViewHelper(MapView mapView) {
@@ -77,7 +79,6 @@ public class MapViewHelper implements AMapLocationListener {
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
 
@@ -106,7 +107,9 @@ public class MapViewHelper implements AMapLocationListener {
         if (mOnLocationChangedListener != null && aLocation != null) {
             ToastUtil.show(aLocation.getCity() + aLocation.getAddress() + aLocation.getPoiName());
             mOnLocationChangedListener.onLocationChanged(aLocation);// 显示系统小蓝点
-            mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(aLocation.getLatitude(), aLocation.getLongitude()), 15, 0, 30)), 500, null);
+            mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                    new LatLng(aLocation.getLatitude(), aLocation.getLongitude()), 15, 0, 30)), 500,
+                    null);
         }
     }
 
@@ -148,15 +151,10 @@ public class MapViewHelper implements AMapLocationListener {
     public void addMapMarker(List<WorkListInfo> list) {
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
-                if (i == 0) {
-                    mAMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(34.341568, 108.940174), 18, 0, 30)), 500, null);
-                }
                 addMapMark(list.get(i));
             }
         }
     }
-
-    int i = 0;
 
     private void addMapMark(WorkListInfo info) {
         // 设置Marker的图标样式
@@ -166,7 +164,8 @@ public class MapViewHelper implements AMapLocationListener {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_blue));
                 break;
             case WorkListInfo.TIME_TYPE_OUT_LESS_FIVE:
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_violet));
+                markerOptions
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_violet));
                 break;
             case WorkListInfo.TIME_TYPE_OUT_MORE_FIVE:
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_red));
@@ -175,14 +174,13 @@ public class MapViewHelper implements AMapLocationListener {
         // 设置Marker点击之后显示的标题
         markerOptions.title(info.getAddress());
         // 设置Marker的坐标，为我们点击地图的经纬度坐标
-        markerOptions.position(new LatLng(34.341568 + i, 108.940174 + i));
+        markerOptions.position(new LatLng(info.getLat(), info.getLng()));
         // 设置Marker的可见性
         markerOptions.visible(true);
         // 设置Marker是否可以被拖拽，这里先设置为false，之后会演示Marker的拖拽功能
         markerOptions.draggable(false);
         // 将Marker添加到地图上去
-//        mAMap.addMarker(markerOptions).setObject(info);
-        i++;
+        mAMap.addMarker(markerOptions).setObject(info);
     }
 
     public void zoomIn() {
