@@ -72,8 +72,6 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements Vie
                         holder.tvTitle.setTextColor(getColor(R.color.red_fa5e51));
                         break;
                 }
-            } else {
-                convertView.setEnabled(false);
             }
             if (position < 100) {
                 holder.tvIndex.setVisibility(View.VISIBLE);
@@ -120,12 +118,10 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements Vie
 
     @Override
     public void onClick(View v) {
-        if (isTodo) {
-            WorkListInfo info = (WorkListInfo) v.getTag();
-            Intent it = new Intent(getContext(), WorkListDetailActivity.class);
-            it.putExtra("WorkListId", info.getId());
-            getContext().startActivity(it);
-        }
+        WorkListInfo info = (WorkListInfo) v.getTag();
+        Intent it = new Intent(getContext(), WorkListDetailActivity.class);
+        it.putExtra("WorkListId", info.getId());
+        getContext().startActivity(it);
     }
 
     final class ViewHolder {
