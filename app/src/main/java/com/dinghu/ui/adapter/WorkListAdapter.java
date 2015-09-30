@@ -20,7 +20,7 @@ import cn.common.ui.adapter.BaseListAdapter;
  * @author jake
  * @since 2015/9/12 10:34
  */
-public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements View.OnClickListener {
+public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements View.OnClickListener {
     public WorkListAdapter(Context context) {
         super(context);
     }
@@ -121,6 +121,9 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements Vie
         WorkListInfo info = (WorkListInfo) v.getTag();
         Intent it = new Intent(getContext(), WorkListDetailActivity.class);
         it.putExtra("WorkListId", info.getId());
+        if (!isTodo) {
+            it.putExtra("IsNotTodoWorkList", true);
+        }
         getContext().startActivity(it);
     }
 

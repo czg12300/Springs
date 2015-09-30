@@ -77,7 +77,6 @@ public class HttpManager<T> {
                     || errorCode == HttpReturnCode.HTTP_NO_HOST_NAME) {
                 // URLs.nextServer();
             }
-            BaseToastUtil.show(errorMsg);
         }
         return null;
     }

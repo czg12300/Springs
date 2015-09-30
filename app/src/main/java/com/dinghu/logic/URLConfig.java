@@ -9,9 +9,9 @@ package com.dinghu.logic;
  */
 public class URLConfig {
 
-    public static final String SERVER_RELEASE = "http://h5.lefeifan.com/";
 
-    public static final String SERVER_TEST = "http://dinghuapp.yfs.pub/";
+    public static final String SERVER_RELEASE = "http://dinghuapp.yfs.pub/";
+    public static final String SERVER_TEST = "http://192.168.0.19:8080/";
 
     public static String SERVER = SERVER_TEST;
 

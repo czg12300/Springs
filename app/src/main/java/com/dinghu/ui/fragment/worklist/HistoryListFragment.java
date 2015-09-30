@@ -14,6 +14,7 @@ import com.dinghu.utils.Utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,8 @@ import java.util.List;
  * @since 2015/9/12 13:57
  */
 public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
+
+    private BaseDialog mLoadingDialog;
 
     public static HistoryListFragment newInstance() {
         return new HistoryListFragment();
@@ -165,6 +168,7 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
                         if (mDateSelectDialog != null) {
                             mDateSelectDialog.dismiss();
                         }
+                        showLoadingDialog();
                     }
                 });
             }
@@ -206,4 +210,23 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
         return is;
     }
 
+    @Override
+    public void handleUiMessage(Message msg) {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
+        super.handleUiMessage(msg);
+
+    }
+
+    public void showLoadingDialog() {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            if (mLoadingDialog == null) {
+                mLoadingDialog = new BaseDialog(getActivity());
+                mLoadingDialog.setWindow(R.style.alpha_animation, 0.0f);
+                mLoadingDialog.setContentView(R.layout.dialog_loading);
+            }
+            mLoadingDialog.show();
+        }
+    }
 }

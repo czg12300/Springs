@@ -1,10 +1,14 @@
 package com.dinghu.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
@@ -33,13 +37,19 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private StatusView mStatusView;
     private WorkListDetailItemView mItemRequestTime;
     private WorkListDetailItemView mItemName;
-    private WorkListDetailItemView mItemTel;
     private WorkListDetailItemView mItemAddress;
     private WorkListDetailItemView mItemGoods;
     private WorkListDetailItemView mItemType;
     private WorkListDetailItemView mItemNum;
+    private TextView tvMobile;
+    private TextView tvSpinnerLabel;
+    private TextView tvSpinner;
+    private ImageView ivSpinnerAdd;
+    private ImageView ivSpinnerSub;
+    private ImageView ivMobile;
     private Button mBtnOk;
     private int status = -1;
+    private WorkListDetailResponse mInfo;
 
     @Override
     protected void initView() {
@@ -48,27 +58,62 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mStatusView.setContentView(R.layout.activity_work_list_detail);
         setContentView(mStatusView);
         mBtnOk = (Button) findViewById(R.id.btn_ok);
+        tvSpinnerLabel = (TextView) findViewById(R.id.tv_spinner_label);
+        tvSpinner = (TextView) findViewById(R.id.tv_spinner);
+        ivSpinnerAdd = (ImageView) findViewById(R.id.iv_spinner_add);
+        ivSpinnerSub = (ImageView) findViewById(R.id.iv_spinner_sub);
         mItemRequestTime = (WorkListDetailItemView) findViewById(R.id.div_request_time);
         mItemName = (WorkListDetailItemView) findViewById(R.id.div_name);
-        mItemTel = (WorkListDetailItemView) findViewById(R.id.div_mobile);
         mItemAddress = (WorkListDetailItemView) findViewById(R.id.div_address);
         mItemGoods = (WorkListDetailItemView) findViewById(R.id.div_goods);
         mItemType = (WorkListDetailItemView) findViewById(R.id.div_type);
         mItemNum = (WorkListDetailItemView) findViewById(R.id.div_num);
         mItemRequestTime.setLabel("要求时间：");
         mItemName.setLabel("姓名：");
-        mItemTel.setLabel("电话：");
+        tvMobile = (TextView) findViewById(R.id.tv_phone);
+        ivMobile = (ImageView) findViewById(R.id.iv_phone);
         mItemAddress.setLabel("地址：");
         mItemGoods.setLabel("产品：");
         mItemType.setLabel("类型：");
         mItemNum.setLabel("数量：");
         mStatusView.showLoadingView();
         sendEmptyBackgroundMessage(MSG_BACK_LOAD);
+        if (getIntent().getBooleanExtra("IsNotTodoWorkList", false)) {
+            tvSpinner.setBackgroundColor(Color.TRANSPARENT);
+            ivSpinnerAdd.setVisibility(View.GONE);
+            ivSpinnerSub.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void initEvent() {
         super.initEvent();
+        ivSpinnerAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInfo != null) {
+                    mInfo.setMoneyOrCount(mInfo.getMoneyOrCount() + 1);
+                    tvSpinner.setText(mInfo.getMoneyOrCount() + "");
+                }
+            }
+        });
+        ivSpinnerSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInfo != null) {
+                    if (mInfo.getMoneyOrCount() - 1 > 0) {
+                        mInfo.setMoneyOrCount(mInfo.getMoneyOrCount() - 1);
+                        tvSpinner.setText(mInfo.getMoneyOrCount() + "");
+                    }
+                }
+            }
+        });
+        ivMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callCustomerService();
+            }
+        });
         mStatusView.setStatusListener(new StatusView.StatusListener() {
             @Override
             public void onLoad() {
@@ -90,6 +135,16 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 打电话
+     */
+    private void callCustomerService() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + tvMobile.getText()));
+        startActivity(intent);
     }
 
     @Override
@@ -115,6 +170,11 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             case MSG_BACK_RESPONSE_WANGONG:
                 HttpRequestManager<FinishWorkResponse> requestWG = new HttpRequestManager<FinishWorkResponse>(URLConfig.DETAIL_SENDGOODS, FinishWorkResponse.class);
                 requestWG.addParam("id", getWorkListId() + "");
+                int count = 0;
+                if (mInfo != null) {
+                    count = mInfo.getMoneyOrCount();
+                }
+                requestWG.addParam("count", count + "");
                 Message msgWG = obtainUiMessage();
                 msgWG.what = MSG_UI_RESPONSE_WANGONG;
                 msgWG.obj = requestWG.sendRequest();
@@ -129,28 +189,40 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         if (msg.what == MSG_UI_LOAD) {
             if (msg.obj != null && msg.obj instanceof WorkListDetailResponse) {
                 mStatusView.showContentView();
-                WorkListDetailResponse info = (WorkListDetailResponse) msg.obj;
-                if (info != null) {
-                    mItemRequestTime.setContent(info.getTime());
-                    mItemName.setContent(info.getName());
-                    mItemTel.setContent(info.getTel());
-                    mItemAddress.setContent(info.getAddress());
-                    mItemGoods.setContent(info.getTime());
-                    mItemType.setContent(info.getTime());
-                    if (TextUtils.equals(info.getType(), WorkListInfo.TYPE_TAOCAN)) {
-                        mItemNum.setLabel("金额：");
-                        mItemNum.setContent(info.getMoneyOrCount() + "元");
-                    } else if (TextUtils.equals(info.getType(), WorkListInfo.TYPE_PEISONG)) {
-                        mItemNum.setLabel("数量：");
-                        mItemNum.setContent(info.getMoneyOrCount() + "桶");
+                mInfo = (WorkListDetailResponse) msg.obj;
+                if (mInfo != null) {
+                    mItemRequestTime.setContent(mInfo.getTime());
+                    mItemName.setContent(mInfo.getName());
+                    if (!TextUtils.isEmpty(mInfo.getTel())) {
+                        tvMobile.setText(mInfo.getTel());
+                        ivMobile.setVisibility(View.VISIBLE);
+                    } else {
+                        ivMobile.setVisibility(View.GONE);
                     }
-                    status = info.getStatus();
-                    if (info.getStatus() == WorkListDetailResponse.STATUS_WAIT) {
+                    mItemAddress.setContent(mInfo.getAddress());
+                    mItemGoods.setContent(mInfo.getTime());
+                    mItemType.setContent(mInfo.getTime());
+                    int count = 0;
+                    if (mInfo != null) {
+                        count = mInfo.getMoneyOrCount();
+                    }
+                    tvSpinner.setText("" + count);
+                    if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_TAOCAN)) {
+                        mItemNum.setLabel("金额：");
+                        mItemNum.setContent(mInfo.getMoneyOrCount() + "元");
+                        tvSpinnerLabel.setText("本次收款：");
+                    } else if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_PEISONG)) {
+                        mItemNum.setLabel("数量：");
+                        mItemNum.setContent(mInfo.getMoneyOrCount() + "桶");
+                        tvSpinnerLabel.setText("回收空桶：");
+                    }
+                    status = mInfo.getStatus();
+                    if (mInfo.getStatus() == WorkListDetailResponse.STATUS_WAIT) {
                         mBtnOk.setEnabled(false);
                     } else {
                         mBtnOk.setEnabled(true);
                     }
-                    mBtnOk.setText(info.getBtnMsg());
+                    mBtnOk.setText(mInfo.getBtnMsg());
                 }
             } else {
                 mStatusView.showFailView();
@@ -172,4 +244,5 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private long getWorkListId() {
         return getIntent().getLongExtra("WorkListId", -1);
     }
+
 }

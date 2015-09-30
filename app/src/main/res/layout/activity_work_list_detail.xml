@@ -40,11 +40,50 @@
                 android:layout_height="1px"
                 android:background="@color/gray_dddddd" />
 
-            <com.dinghu.ui.widget.WorkListDetailItemView
-                android:id="@+id/div_mobile"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:gravity="center_vertical"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="电话："
+                    android:textColor="@color/green_00cd79"
+                    android:textSize="@dimen/text_content" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="@color/gray_777777"
+                            android:textSize="@dimen/text_content" />
+
+                        <ImageView
+                            android:id="@+id/iv_phone"
+                            android:layout_width="80dp"
+                            android:layout_height="60dp"
+                            android:scaleType="center"
+                            android:src="@drawable/btn_phone" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -89,6 +128,66 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gray_dddddd" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_spinner_label"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="电话："
+                    android:textColor="@color/green_00cd79"
+                    android:textSize="@dimen/text_content" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/iv_spinner_sub"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/btn_selector_spinner_sub" />
+
+                        <TextView
+                            android:id="@+id/tv_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/bg_spinner"
+                            android:gravity="center"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:textColor="@color/gray_777777"
+                            android:textSize="@dimen/text_content" />
+
+                        <ImageView
+                            android:id="@+id/iv_spinner_add"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/btn_selector_spinner_add" />
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
