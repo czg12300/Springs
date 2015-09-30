@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.widget.RadioButton;
@@ -63,8 +62,12 @@ public class MainActivity extends BaseWorkerFragmentActivity
         list.add(WorkListFragment.newInstance());
         list.add(UserCenterFragment.newInstance());
         mVpContent.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager(), list));
+        mVpContent.setCanScroll(true);
     }
 
+    public MainTabViewPager getMainTabViewPager() {
+        return mVpContent;
+    }
 
     @Override
     public void onPageScrollStateChanged(int status) {
@@ -77,11 +80,13 @@ public class MainActivity extends BaseWorkerFragmentActivity
 
     @Override
     public void onPageSelected(int position) {
-        switch (mVpContent.getCurrentItem()) {
+        switch (position) {
             case 0:
                 mRbWorkList.setChecked(true);
                 break;
             case 1:
+                mVpContent.setCanScroll(true);
+                mVpContent.setCanScrollLeft(true);
                 mRbUserCenter.setChecked(true);
                 break;
         }

@@ -1,27 +1,24 @@
 
 package com.dinghu.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
+import com.dinghu.ui.activity.MainActivity;
 import com.dinghu.ui.adapter.CommonFragmentPagerAdapter;
 import com.dinghu.ui.fragment.worklist.HistoryListFragment;
 import com.dinghu.ui.fragment.worklist.TodayListFragment;
 import com.dinghu.ui.fragment.worklist.TodoListFragment;
+import com.dinghu.ui.widget.MainTabViewPager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.common.ui.fragment.BaseWorkerFragment;
@@ -39,16 +36,19 @@ import cn.common.utils.DisplayUtil;
 
 public class WorkListFragment extends BaseWorkerFragment {
 
-
     public static WorkListFragment newInstance() {
         return new WorkListFragment();
     }
 
     private RadioGroup mRgMode;
-    /**
-     * 当前的fragment的id
-     */
-    private int currentTab = R.id.rb_mode_list;
+
+    private IndicatorViewPager mIndicatorViewPager;
+
+    private TextView mTvTitle;
+
+    private boolean isMapMode = false;
+
+    private MainTabViewPager mainTabViewPager;
 
     /**
      * 存放tab的fragment
@@ -59,6 +59,9 @@ public class WorkListFragment extends BaseWorkerFragment {
         setContentView(R.layout.fragment_work_list);
         ChangeThemeUtils.adjustStatusBar(findViewById(R.id.fl_title), getActivity());
         mRgMode = (RadioGroup) findViewById(R.id.rg_mode);
+        mTvTitle = (TextView) findViewById(R.id.tv_title);
+        mainTabViewPager = ((MainActivity) getActivity()).getMainTabViewPager();
+        mainTabViewPager.setCanScroll(false);
         initIndicatorView();
     }
 
@@ -68,22 +71,21 @@ public class WorkListFragment extends BaseWorkerFragment {
         mRgMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                showCurrentFragment(checkedId);
-                currentTab = checkedId;
                 Intent it = new Intent(BroadcastActions.ACTION_CHANGE_MODE);
                 if (checkedId == R.id.rb_mode_list) {
+                    isMapMode = false;
+                    mIndicatorViewPager.setCanScroll(true);
                     it.putExtra("IsMapMode", false);
                 } else if (checkedId == R.id.rb_mode_map) {
+                    isMapMode = true;
                     it.putExtra("IsMapMode", true);
+                    mIndicatorViewPager.setCanScroll(false);
                 }
                 sendBroadcast(it);
-
             }
         });
 
     }
-
-    private IndicatorViewPager mIndicatorViewPager;
 
     private void initIndicatorView() {
         mIndicatorViewPager = (IndicatorViewPager) findViewById(R.id.ivp);
@@ -96,22 +98,30 @@ public class WorkListFragment extends BaseWorkerFragment {
         mIndicatorViewPager.setTabLineHeight(DisplayUtil.dip(4));
         mIndicatorViewPager.setAverage(false);
         mIndicatorViewPager.setOffscreenPageLimit(2);
-    }
+        mIndicatorViewPager.setIndicatorListener(new IndicatorViewPager.IIndicatorListener() {
+            @Override
+            public void onTabPageSelected(int position) {
+                if (position == 0) {
+                    mRgMode.setVisibility(View.VISIBLE);
+                    mTvTitle.setVisibility(View.GONE);
+                    if (isMapMode) {
+                        mIndicatorViewPager.setCanScroll(false);
+                    }
+                } else {
+                    mRgMode.setVisibility(View.GONE);
+                    mTvTitle.setVisibility(View.VISIBLE);
+                    mIndicatorViewPager.setCanScroll(true);
+                }
+                if (position == 2) {
+                    mainTabViewPager.setCanScroll(true);
+                    mainTabViewPager.setCanScrollLeft(false);
+                } else {
+                    mainTabViewPager.setCanScroll(false);
+                }
 
-    @Override
-    public void setupBroadcastActions(List<String> actions) {
-        super.setupBroadcastActions(actions);
-        actions.add(BroadcastActions.ACTION_CHANGE_MODE);
+            }
+        });
     }
-
-    @Override
-    public void handleBroadcast(Context context, Intent intent) {
-        super.handleBroadcast(context, intent);
-        if (TextUtils.equals(intent.getAction(), BroadcastActions.ACTION_CHANGE_MODE)) {
-            mIndicatorViewPager.setCanScroll(!intent.getBooleanExtra("IsMapMode", false));
-        }
-    }
-
 
     @Override
     protected void initData() {
@@ -131,7 +141,7 @@ public class WorkListFragment extends BaseWorkerFragment {
                 List<Fragment> list = new ArrayList<Fragment>();
                 list.add(TodoListFragment.newInstance());
                 list.add(TodayListFragment.newInstance());
-                list.add(HistoryListFragment.newInstance(true));
+                list.add(HistoryListFragment.newInstance());
                 return new CommonFragmentPagerAdapter(getActivity().getSupportFragmentManager(),
                         list);
             }

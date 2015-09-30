@@ -10,6 +10,26 @@ import android.view.View;
 public class MainTabViewPager extends ViewPager {
     private boolean canScroll = false;
 
+    private boolean canScrollLeft = true;
+
+    private boolean canScrollRight = true;
+
+    public boolean isCanScrollLeft() {
+        return canScrollLeft;
+    }
+
+    public void setCanScrollLeft(boolean canScrollLeft) {
+        this.canScrollLeft = canScrollLeft;
+    }
+
+    public boolean isCanScrollRight() {
+        return canScrollRight;
+    }
+
+    public void setCanScrollRight(boolean canScrollRight) {
+        this.canScrollRight = canScrollRight;
+    }
+
     public boolean isCanScroll() {
         return canScroll;
     }
@@ -31,8 +51,12 @@ public class MainTabViewPager extends ViewPager {
         if (!canScroll) {
             return false;
         } else {
-            return super.onInterceptTouchEvent(event);
+            if (canInvideScroll(event)) {
+                return super.onInterceptTouchEvent(event);
+            }
+
         }
+        return false;
     }
 
     @Override
@@ -40,8 +64,11 @@ public class MainTabViewPager extends ViewPager {
         if (!canScroll) {
             return false;
         } else {
-            return super.onTouchEvent(ev);
+            if (canInvideScroll(ev)) {
+                return super.onTouchEvent(ev);
+            }
         }
+        return false;
     }
 
     @Override
@@ -52,5 +79,41 @@ public class MainTabViewPager extends ViewPager {
             return super.canScroll(v, checkV, dx, x, y);
         }
 
+    }
+
+    private float xDistance, yDistance, xLast, yLast;
+
+    private boolean canInvideScroll(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                xDistance = yDistance = 0f;
+                xLast = ev.getX();
+                yLast = ev.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                final float curX = ev.getX();
+                final float curY = ev.getY();
+                xDistance += Math.abs(curX - xLast);
+                yDistance += Math.abs(curY - yLast);
+                yLast = curY;
+                if (xDistance > yDistance) {
+                    if (curX - xLast > 0) {
+                        xLast = curX;
+                        if (canScrollLeft) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        xLast = curX;
+                        if (canScrollRight) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+        }
+        return true;
     }
 }
