@@ -191,7 +191,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 requestWG.addParam("id", getWorkListId() + "");
                 int count = 0;
                 if (mInfo != null) {
-                    count = mInfo.getMoneyOrCount();
+                    count = mInfo.getMoneyOrCount2();
                 }
                 requestWG.addParam("count", count + "");
                 Message msgWG = obtainUiMessage();
