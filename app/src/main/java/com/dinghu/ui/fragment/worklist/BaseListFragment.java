@@ -32,6 +32,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
     protected static final int MSG_UI_LOAD_SUCCESS = 1002;
 
     private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
+    private static final int MSG_UI_NO_DATA = 1004;
 
     protected XListView mLvList;
 
@@ -140,6 +141,11 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
                     mLvList.stopLoadMore(true);
                 }
                 break;
+            case MSG_UI_NO_DATA:
+                mStatusView.showNoDataView();
+                mLvList.stopRefresh();
+                mLvList.stopLoadMore(false);
+                break;
         }
     }
 
@@ -153,7 +159,9 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
     public void handleBackgroundMessage(Message msg) {
         super.handleBackgroundMessage(msg);
         List<T> list = loadData();
-        if (list != null && list.size() >= mPageSize) {
+        if (list != null && list.size() == 0) {
+            sendEmptyUiMessage(MSG_UI_NO_DATA);
+        } else if (list != null && list.size() >= mPageSize) {
             Message message = obtainUiMessage();
             message.what = MSG_UI_LOAD_SUCCESS;
             message.obj = list;
@@ -164,7 +172,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
             message.what = MSG_UI_FINISH_LOAD_ALL;
             message.obj = list;
             message.sendToTarget();
-        } else if (mPageIndex == START_PAGE_INDEX) {
+        } else if (list == null && mPageIndex == START_PAGE_INDEX) {
             sendEmptyUiMessage(MSG_UI_LOAD_FAIL);
         }
 

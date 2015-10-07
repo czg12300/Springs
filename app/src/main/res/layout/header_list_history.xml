@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/fl_start"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -27,10 +27,11 @@
 
         <TextView
             android:id="@+id/tv_date_start"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:text="2015年9月"
             android:textColor="@color/orange_e48015"
             android:textSize="@dimen/text_content" />
@@ -41,16 +42,17 @@
             android:layout_gravity="right|center_vertical"
             android:src="@drawable/ico_down" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/gray_dddddd" />
-    </FrameLayout>
+    </LinearLayout>
 
-    <FrameLayout
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/gray_dddddd" />
+
+    <LinearLayout
         android:id="@+id/fl_end"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -73,10 +75,11 @@
 
         <TextView
             android:id="@+id/tv_date_end"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:text="2015年9月"
             android:textColor="@color/orange_e48015"
             android:textSize="@dimen/text_content" />
@@ -87,14 +90,14 @@
             android:layout_gravity="right|center_vertical"
             android:src="@drawable/ico_down" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/gray_dddddd" />
-    </FrameLayout>
+    </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/gray_dddddd" />
 
 </LinearLayout>

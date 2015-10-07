@@ -50,6 +50,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private Button mBtnOk;
     private int status = -1;
     private WorkListDetailResponse mInfo;
+    private boolean isFirstIn = true;
 
     @Override
     protected void initView() {
@@ -76,13 +77,31 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mItemGoods.setLabel("产品：");
         mItemType.setLabel("类型：");
         mItemNum.setLabel("数量：");
-        mStatusView.showLoadingView();
-        sendEmptyBackgroundMessage(MSG_BACK_LOAD);
-        if (getIntent().getBooleanExtra("IsNotTodoWorkList", false)) {
+        if (isFinishWorkList()) {
             tvSpinner.setBackgroundColor(Color.TRANSPARENT);
             ivSpinnerAdd.setVisibility(View.GONE);
             ivSpinnerSub.setVisibility(View.GONE);
         }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isFirstIn) {
+            mStatusView.showLoadingView();
+            sendEmptyBackgroundMessage(MSG_BACK_LOAD);
+            isFirstIn = false;
+        }
+    }
+
+    /**
+     * 判断是否为已完成的工单
+     *
+     * @return
+     */
+    private boolean isFinishWorkList() {
+        return getIntent().getBooleanExtra("IsNotTodoWorkList", false);
     }
 
     @Override
@@ -92,8 +111,8 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             @Override
             public void onClick(View v) {
                 if (mInfo != null) {
-                    mInfo.setMoneyOrCount(mInfo.getMoneyOrCount() + 1);
-                    tvSpinner.setText(mInfo.getMoneyOrCount() + "");
+                    mInfo.setMoneyOrCount2(mInfo.getMoneyOrCount2() + 1);
+                    tvSpinner.setText(mInfo.getMoneyOrCount2() + "");
                 }
             }
         });
@@ -101,9 +120,9 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             @Override
             public void onClick(View v) {
                 if (mInfo != null) {
-                    if (mInfo.getMoneyOrCount() - 1 > 0) {
-                        mInfo.setMoneyOrCount(mInfo.getMoneyOrCount() - 1);
-                        tvSpinner.setText(mInfo.getMoneyOrCount() + "");
+                    if (mInfo.getMoneyOrCount2() - 1 > 0) {
+                        mInfo.setMoneyOrCount2(mInfo.getMoneyOrCount2() - 1);
+                        tvSpinner.setText(mInfo.getMoneyOrCount2() + "");
                     }
                 }
             }
@@ -204,17 +223,26 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                     mItemType.setContent(mInfo.getTime());
                     int count = 0;
                     if (mInfo != null) {
-                        count = mInfo.getMoneyOrCount();
+                        count = mInfo.getMoneyOrCount2();
                     }
-                    tvSpinner.setText("" + count);
                     if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_TAOCAN)) {
                         mItemNum.setLabel("金额：");
                         mItemNum.setContent(mInfo.getMoneyOrCount() + "元");
                         tvSpinnerLabel.setText("本次收款：");
+                        if (isFinishWorkList()) {
+                            tvSpinner.setText("" + count + "元");
+                        } else {
+                            tvSpinner.setText("" + count);
+                        }
                     } else if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_PEISONG)) {
                         mItemNum.setLabel("数量：");
                         mItemNum.setContent(mInfo.getMoneyOrCount() + "桶");
                         tvSpinnerLabel.setText("回收空桶：");
+                        if (isFinishWorkList()) {
+                            tvSpinner.setText("" + count + "桶");
+                        } else {
+                            tvSpinner.setText("" + count);
+                        }
                     }
                     status = mInfo.getStatus();
                     if (mInfo.getStatus() == WorkListDetailResponse.STATUS_WAIT) {

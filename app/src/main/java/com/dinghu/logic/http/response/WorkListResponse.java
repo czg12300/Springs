@@ -42,6 +42,7 @@ public class WorkListResponse extends BaseResponse {
                         info.setId(root.optLong("id"));
                         info.setTimeType(root.optInt("timeType"));
                         info.setMoneyOrCount(root.optInt("moneyOrCount"));
+                        info.setMoneyOrCount2(root.optInt("moneyOrCount2"));
                         info.setAddress(root.optString("address"));
                         info.setTel(root.optString("tel"));
                         info.setName(root.optString("name"));

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import cn.common.ui.BaseDialog;
 import cn.common.ui.adapter.BaseListAdapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -73,6 +74,9 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
         request.addParam("endDate", mEndDate);
         WorkListResponse response = request.sendRequest();
         if (response != null) {
+            if (response.isOk() && response.getList() == null) {
+                return new ArrayList<WorkListInfo>();
+            }
             return response.getList();
         }
         return null;

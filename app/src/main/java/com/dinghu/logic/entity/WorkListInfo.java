@@ -21,7 +21,6 @@ public class WorkListInfo {
     private long id;
 
     private int moneyOrCount;
-
     private int timeType;
 
     private String type;
@@ -41,6 +40,19 @@ public class WorkListInfo {
     private double lat;
 
     private double lng;
+
+    private int moneyOrCount2;
+
+    public int getMoneyOrCount2() {
+        return moneyOrCount2;
+    }
+
+    public void setMoneyOrCount2(int moneyOrCount2) {
+        if (moneyOrCount2 < 0) {
+            moneyOrCount2 = 0;
+        }
+        this.moneyOrCount2 = moneyOrCount2;
+    }
 
     public double getLat() {
         return lat;
@@ -71,6 +83,9 @@ public class WorkListInfo {
     }
 
     public void setMoneyOrCount(int moneyOrCount) {
+        if (moneyOrCount < 0) {
+            moneyOrCount = 0;
+        }
         this.moneyOrCount = moneyOrCount;
     }
 

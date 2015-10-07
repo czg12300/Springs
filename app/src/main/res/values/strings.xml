@@ -43,6 +43,7 @@
     <!--网络-->
     <string name="load_error">网络异常</string>
     <string name="load_fail">加载失败\n请点击重试</string>
+    <string name="load_no_data">暂无记录\n点击获取最新记录</string>
     <!--xlistview-->
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

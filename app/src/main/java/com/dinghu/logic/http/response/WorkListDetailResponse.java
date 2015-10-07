@@ -39,6 +39,19 @@ public class WorkListDetailResponse extends BaseResponse {
 
     private int status;
 
+    private int moneyOrCount2;
+
+    public int getMoneyOrCount2() {
+        return moneyOrCount2;
+    }
+
+    public void setMoneyOrCount2(int moneyOrCount2) {
+        if (moneyOrCount2 < 0) {
+            moneyOrCount2 = 0;
+        }
+        this.moneyOrCount2 = moneyOrCount2;
+    }
+
     public long getId() {
         return id;
     }
@@ -76,6 +89,9 @@ public class WorkListDetailResponse extends BaseResponse {
     }
 
     public void setMoneyOrCount(int moneyOrCount) {
+        if (moneyOrCount < 0) {
+            moneyOrCount = 0;
+        }
         this.moneyOrCount = moneyOrCount;
     }
 
@@ -126,6 +142,7 @@ public class WorkListDetailResponse extends BaseResponse {
             if (root != null) {
                 setId(root.optLong("id"));
                 setMoneyOrCount(root.optInt("moneyOrCount"));
+                setMoneyOrCount2(root.optInt("moneyOrCount2"));
                 setStatus(root.optInt("status"));
                 setName(root.optString("name"));
                 setAddress(root.optString("address"));

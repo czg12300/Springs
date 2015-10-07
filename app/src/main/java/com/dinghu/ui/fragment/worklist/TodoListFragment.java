@@ -18,6 +18,7 @@ import com.dinghu.ui.activity.WorkListDetailActivity;
 import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.common.ui.adapter.BaseListAdapter;
@@ -65,35 +66,6 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
         });
     }
 
-    int i = 0;
-
-    private void addMapMark(WorkListInfo info) {
-        // 设置Marker的图标样式
-        MarkerOptions markerOptions = new MarkerOptions();
-        switch (info.getTimeType()) {
-            case WorkListInfo.TIME_TYPE_IN:
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_blue));
-                break;
-            case WorkListInfo.TIME_TYPE_OUT_LESS_FIVE:
-                markerOptions
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_violet));
-                break;
-            case WorkListInfo.TIME_TYPE_OUT_MORE_FIVE:
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ico_point_red));
-                break;
-        }
-        // 设置Marker点击之后显示的标题
-        markerOptions.title(info.getAddress());
-        // 设置Marker的坐标，为我们点击地图的经纬度坐标
-        markerOptions.position(new LatLng(34.341568 + i, 108.940174 + i));
-        // 设置Marker的可见性
-        markerOptions.visible(true);
-        // 设置Marker是否可以被拖拽，这里先设置为false，之后会演示Marker的拖拽功能
-        markerOptions.draggable(false);
-        // 将Marker添加到地图上去
-        mMapViewHelper.getAMap().addMarker(markerOptions).setObject(info);
-        i++;
-    }
 
     @Override
     protected List<WorkListInfo> loadData() {
@@ -104,6 +76,9 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
         request.addParam("employId", InitShareData.getUserId() + "");
         WorkListResponse response = request.sendRequest();
         if (response != null) {
+            if (response.isOk() && response.getList() == null) {
+                return new ArrayList<WorkListInfo>();
+            }
             return response.getList();
         }
         return null;

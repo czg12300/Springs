@@ -21,6 +21,7 @@ public class StatusView extends FrameLayout {
     private View mContentView;
     private View mLoadView;
     private View mFailView;
+    private View mNoDataView;
 
     public static interface StatusListener {
         void onLoad();
@@ -36,6 +37,14 @@ public class StatusView extends FrameLayout {
         super(context, attrs);
         inflate(context, R.layout.view_status_tip, this);
         mLoadView = findViewById(R.id.ll_loading);
+        mNoDataView = findViewById(R.id.ll_no_data);
+        mNoDataView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingView();
+                mListener.onLoad();
+            }
+        });
         mFailView = findViewById(R.id.ll_fail);
         mFailView.setOnClickListener(new OnClickListener() {
             @Override
@@ -49,6 +58,7 @@ public class StatusView extends FrameLayout {
     public void showLoadingView() {
         mContentView.setVisibility(GONE);
         mFailView.setVisibility(GONE);
+        mNoDataView.setVisibility(GONE);
         mLoadView.setVisibility(VISIBLE);
     }
 
@@ -56,12 +66,21 @@ public class StatusView extends FrameLayout {
         mContentView.setVisibility(VISIBLE);
         mFailView.setVisibility(GONE);
         mLoadView.setVisibility(GONE);
+        mNoDataView.setVisibility(GONE);
     }
 
     public void showFailView() {
         mContentView.setVisibility(GONE);
         mFailView.setVisibility(VISIBLE);
         mLoadView.setVisibility(GONE);
+        mNoDataView.setVisibility(GONE);
+    }
+
+    public void showNoDataView() {
+        mContentView.setVisibility(GONE);
+        mFailView.setVisibility(GONE);
+        mLoadView.setVisibility(GONE);
+        mNoDataView.setVisibility(VISIBLE);
     }
 
     public void setContentView(View vContent) {

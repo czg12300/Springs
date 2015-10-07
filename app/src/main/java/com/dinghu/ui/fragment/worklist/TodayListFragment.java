@@ -14,6 +14,7 @@ import com.dinghu.logic.http.response.WorkListResponse;
 import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.common.ui.adapter.BaseListAdapter;
@@ -53,6 +54,9 @@ public class TodayListFragment extends BaseListFragment<WorkListInfo> {
         request.addParam("employId", InitShareData.getUserId() + "");
         WorkListResponse response = request.sendRequest();
         if (response != null) {
+            if (response.isOk() && response.getList() == null) {
+                return new ArrayList<WorkListInfo>();
+            }
             return response.getList();
         }
         return null;

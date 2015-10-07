@@ -72,6 +72,7 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
                         holder.tvTitle.setTextColor(getColor(R.color.red_fa5e51));
                         break;
                 }
+                holder.tvContentLine4.setVisibility(View.GONE);
             }
             if (position < 100) {
                 holder.tvIndex.setVisibility(View.VISIBLE);
