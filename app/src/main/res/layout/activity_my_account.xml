@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
     <LinearLayout
         android:id="@+id/root"
@@ -10,7 +10,7 @@
         android:background="@color/white_f9f9f9"
         android:orientation="vertical">
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/fl_date"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -29,37 +29,38 @@
                 android:gravity="center_vertical"
                 android:text="@string/statistics_month"
                 android:textColor="@color/black_333333"
-                android:textSize="@dimen/text_content" />
+                android:textSize="@dimen/text_content"/>
 
             <TextView
                 android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_weight="1"
+                android:gravity="left"
                 android:text="2015年9月"
                 android:textColor="@color/green_00cd92"
-                android:textSize="@dimen/text_content" />
+                android:textSize="@dimen/text_content"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:src="@drawable/ico_down" />
+                android:src="@drawable/ico_down"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/gray_dddddd" />
-        </FrameLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/gray_dddddd"/>
 
         <com.dinghu.ui.widget.StatusView
             android:id="@+id/status_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 </ScrollView>

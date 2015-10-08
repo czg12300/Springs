@@ -231,8 +231,8 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                         ivMobile.setVisibility(View.GONE);
                     }
                     mItemAddress.setContent(mInfo.getAddress());
-                    mItemGoods.setContent(mInfo.getTime());
-                    mItemType.setContent(mInfo.getTime());
+                    mItemGoods.setContent(mInfo.getGoods());
+                    mItemType.setContent(mInfo.getType());
                     int count = 0;
                     if (mInfo != null) {
                         count = mInfo.getMoneyOrCount2();
@@ -271,8 +271,8 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             if (msg.obj != null && msg.obj instanceof FinishWorkResponse) {
                 FinishWorkResponse response = (FinishWorkResponse) msg.obj;
                 if (response.getCode() == FinishWorkResponse.CODE_SUCCESS) {
-                    finish();
                     sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
+                    finish();
                 }
                 ToastUtil.show(response.getMsg());
             } else {
