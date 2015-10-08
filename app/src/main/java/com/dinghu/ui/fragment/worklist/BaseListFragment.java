@@ -159,7 +159,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
     public void handleBackgroundMessage(Message msg) {
         super.handleBackgroundMessage(msg);
         List<T> list = loadData();
-        if (list != null && list.size() == 0) {
+        if (list != null && list.size() == 0 && getPageIndex() == START_PAGE_INDEX) {
             sendEmptyUiMessage(MSG_UI_NO_DATA);
         } else if (list != null && list.size() >= mPageSize) {
             Message message = obtainUiMessage();

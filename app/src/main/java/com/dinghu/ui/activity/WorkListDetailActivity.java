@@ -1,6 +1,7 @@
 
 package com.dinghu.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -22,6 +23,8 @@ import com.dinghu.ui.widget.StatusView;
 import com.dinghu.ui.widget.WorkListDetailItemView;
 import com.dinghu.utils.ToastUtil;
 
+import cn.common.ui.BaseDialog;
+
 /**
  * 描述：工单详情页面
  *
@@ -40,6 +43,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private static final int MSG_UI_RESPONSE_QUHUO = 101;
 
     private static final int MSG_UI_RESPONSE_WANGONG = 102;
+    private static final int MSG_UI_FINISH = 103;
 
     private StatusView mStatusView;
 
@@ -76,6 +80,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private long workListId = -1;
 
     private boolean isFinishWorkList = false;
+    private BaseDialog mLoadingDialog;
 
     @Override
     protected void initView() {
@@ -160,6 +165,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                             sendEmptyBackgroundMessage(MSG_BACK_RESPONSE_WANGONG);
                             break;
                     }
+                    showLoadingDialog();
                 }
             }
         });
@@ -272,13 +278,28 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 FinishWorkResponse response = (FinishWorkResponse) msg.obj;
                 if (response.getCode() == FinishWorkResponse.CODE_SUCCESS) {
                     sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
-                    finish();
+                    if (mLoadingDialog != null) {
+                        mLoadingDialog.dismiss();
+                    }
+                    sendEmptyUiMessageDelayed(MSG_UI_FINISH, 1000);
                 }
                 ToastUtil.show(response.getMsg());
             } else {
                 ToastUtil.show(R.string.load_error);
             }
+        } else if (msg.what == MSG_UI_FINISH) {
+            finish();
         }
     }
 
+    public void showLoadingDialog() {
+        if (!isFinishing()) {
+            if (mLoadingDialog == null) {
+                mLoadingDialog = new BaseDialog(this);
+                mLoadingDialog.setWindow(R.style.alpha_animation, 0.0f);
+                mLoadingDialog.setContentView(R.layout.dialog_loading);
+            }
+            mLoadingDialog.show();
+        }
+    }
 }

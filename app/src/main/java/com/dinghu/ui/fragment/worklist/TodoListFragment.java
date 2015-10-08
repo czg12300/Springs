@@ -1,7 +1,9 @@
 
 package com.dinghu.ui.fragment.worklist;
 
+import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -9,6 +11,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.dinghu.R;
+import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
 import com.dinghu.logic.entity.WorkListInfo;
@@ -37,6 +40,21 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
     @Override
     protected void mapViewIsVisible() {
         mMapViewHelper.startLocate();
+    }
+
+    @Override
+    public void setupBroadcastActions(List<String> actions) {
+        super.setupBroadcastActions(actions);
+        actions.add(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
+    }
+
+    @Override
+    public void handleBroadcast(Context context, Intent intent) {
+        super.handleBroadcast(context, intent);
+        String action = intent.getAction();
+        if (TextUtils.equals(action, BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST)) {
+            onRefresh();
+        }
     }
 
     @Override
