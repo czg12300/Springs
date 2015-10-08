@@ -1,3 +1,4 @@
+
 package com.dinghu.ui.activity;
 
 import android.content.Intent;
@@ -29,28 +30,52 @@ import com.dinghu.utils.ToastUtil;
  */
 public class WorkListDetailActivity extends CommonTitleActivity {
     private static final int MSG_BACK_LOAD = 0;
+
     private static final int MSG_BACK_RESPONSE_QUHUO = 1;
+
     private static final int MSG_BACK_RESPONSE_WANGONG = 2;
+
     private static final int MSG_UI_LOAD = 100;
+
     private static final int MSG_UI_RESPONSE_QUHUO = 101;
+
     private static final int MSG_UI_RESPONSE_WANGONG = 102;
+
     private StatusView mStatusView;
+
     private WorkListDetailItemView mItemRequestTime;
+
     private WorkListDetailItemView mItemName;
+
     private WorkListDetailItemView mItemAddress;
+
     private WorkListDetailItemView mItemGoods;
+
     private WorkListDetailItemView mItemType;
+
     private WorkListDetailItemView mItemNum;
+
     private TextView tvMobile;
+
     private TextView tvSpinnerLabel;
+
     private TextView tvSpinner;
+
     private ImageView ivSpinnerAdd;
+
     private ImageView ivSpinnerSub;
+
     private ImageView ivMobile;
+
     private Button mBtnOk;
+
     private int status = -1;
+
     private WorkListDetailResponse mInfo;
-    private boolean isFirstIn = true;
+
+    private long workListId = -1;
+
+    private boolean isFinishWorkList = false;
 
     @Override
     protected void initView() {
@@ -77,31 +102,15 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mItemGoods.setLabel("产品：");
         mItemType.setLabel("类型：");
         mItemNum.setLabel("数量：");
-        if (isFinishWorkList()) {
+        workListId = getIntent().getLongExtra("WorkListId", -1);
+        isFinishWorkList = getIntent().getBooleanExtra("IsNotTodoWorkList", false);
+        if (isFinishWorkList) {
             tvSpinner.setBackgroundColor(Color.TRANSPARENT);
             ivSpinnerAdd.setVisibility(View.GONE);
             ivSpinnerSub.setVisibility(View.GONE);
         }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isFirstIn) {
-            mStatusView.showLoadingView();
-            sendEmptyBackgroundMessage(MSG_BACK_LOAD);
-            isFirstIn = false;
-        }
-    }
-
-    /**
-     * 判断是否为已完成的工单
-     *
-     * @return
-     */
-    private boolean isFinishWorkList() {
-        return getIntent().getBooleanExtra("IsNotTodoWorkList", false);
+        mStatusView.showLoadingView();
+        sendEmptyBackgroundMessage(MSG_BACK_LOAD);
     }
 
     @Override
@@ -171,24 +180,27 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         super.handleBackgroundMessage(msg);
         switch (msg.what) {
             case MSG_BACK_LOAD:
-                HttpRequestManager<WorkListDetailResponse> requestLoad = new HttpRequestManager<WorkListDetailResponse>(URLConfig.WORK_LIST_DETAIL, WorkListDetailResponse.class);
-                requestLoad.addParam("id", getWorkListId() + "");
+                HttpRequestManager<WorkListDetailResponse> requestLoad = new HttpRequestManager<WorkListDetailResponse>(
+                        URLConfig.WORK_LIST_DETAIL, WorkListDetailResponse.class);
+                requestLoad.addParam("id", workListId + "");
                 Message msgLoad = obtainUiMessage();
                 msgLoad.what = MSG_UI_LOAD;
                 msgLoad.obj = requestLoad.sendRequest();
                 msgLoad.sendToTarget();
                 break;
             case MSG_BACK_RESPONSE_QUHUO:
-                HttpRequestManager<FinishWorkResponse> requestQH = new HttpRequestManager<FinishWorkResponse>(URLConfig.DETAIL_GAINGOODS, FinishWorkResponse.class);
-                requestQH.addParam("id", getWorkListId() + "");
+                HttpRequestManager<FinishWorkResponse> requestQH = new HttpRequestManager<FinishWorkResponse>(
+                        URLConfig.DETAIL_GAINGOODS, FinishWorkResponse.class);
+                requestQH.addParam("id", workListId + "");
                 Message msgQH = obtainUiMessage();
                 msgQH.what = MSG_UI_RESPONSE_QUHUO;
                 msgQH.obj = requestQH.sendRequest();
                 msgQH.sendToTarget();
                 break;
             case MSG_BACK_RESPONSE_WANGONG:
-                HttpRequestManager<FinishWorkResponse> requestWG = new HttpRequestManager<FinishWorkResponse>(URLConfig.DETAIL_SENDGOODS, FinishWorkResponse.class);
-                requestWG.addParam("id", getWorkListId() + "");
+                HttpRequestManager<FinishWorkResponse> requestWG = new HttpRequestManager<FinishWorkResponse>(
+                        URLConfig.DETAIL_SENDGOODS, FinishWorkResponse.class);
+                requestWG.addParam("id", workListId + "");
                 int count = 0;
                 if (mInfo != null) {
                     count = mInfo.getMoneyOrCount2();
@@ -229,7 +241,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                         mItemNum.setLabel("金额：");
                         mItemNum.setContent(mInfo.getMoneyOrCount() + "元");
                         tvSpinnerLabel.setText("本次收款：");
-                        if (isFinishWorkList()) {
+                        if (isFinishWorkList) {
                             tvSpinner.setText("" + count + "元");
                         } else {
                             tvSpinner.setText("" + count);
@@ -238,7 +250,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                         mItemNum.setLabel("数量：");
                         mItemNum.setContent(mInfo.getMoneyOrCount() + "桶");
                         tvSpinnerLabel.setText("回收空桶：");
-                        if (isFinishWorkList()) {
+                        if (isFinishWorkList) {
                             tvSpinner.setText("" + count + "桶");
                         } else {
                             tvSpinner.setText("" + count);
@@ -267,10 +279,6 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 ToastUtil.show(R.string.load_error);
             }
         }
-    }
-
-    private long getWorkListId() {
-        return getIntent().getLongExtra("WorkListId", -1);
     }
 
 }

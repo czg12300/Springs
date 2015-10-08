@@ -1,12 +1,5 @@
 package com.dinghu.ui.fragment.worklist;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Message;
-import android.text.TextUtils;
-import android.view.View;
-
 import com.amap.api.maps.MapView;
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
@@ -14,12 +7,19 @@ import com.dinghu.ui.helper.MapViewHelper;
 import com.dinghu.ui.widget.StatusView;
 import com.dinghu.ui.widget.xlistview.XListView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Message;
+import android.text.TextUtils;
+import android.view.View;
 
 import cn.common.ui.adapter.BaseListAdapter;
 import cn.common.ui.fragment.BaseWorkerFragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 描述：未完工工单页面
@@ -199,7 +199,7 @@ public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment impleme
     protected abstract void addMapMarker(List<T> list);
 
     private String getCurrentTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM — dd HH:mm");
         Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
     }

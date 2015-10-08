@@ -150,7 +150,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
     }
 
     private String getCurrentTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日    HH:mm:ss     ");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM — dd HH:mm");
         Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
     }
