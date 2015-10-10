@@ -54,6 +54,10 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
         }
     }
 
+    public List<T> getDataList() {
+        return mDataList;
+    }
+
     protected boolean isAvailable(List<T> list) {
         return list != null && list.size() > 0;
     }

@@ -4,13 +4,10 @@ package com.dinghu.ui.fragment.worklist;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
@@ -37,29 +34,17 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
         return new TodoListFragment();
     }
 
-    @Override
-    protected void mapViewIsVisible() {
-        mMapViewHelper.startLocate();
-    }
 
     @Override
     public void setupBroadcastActions(List<String> actions) {
         super.setupBroadcastActions(actions);
+        actions.add(BroadcastActions.ACTION_CHANGE_MODE);
         actions.add(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
     }
 
     @Override
-    public void handleBroadcast(Context context, Intent intent) {
-        super.handleBroadcast(context, intent);
-        String action = intent.getAction();
-        if (TextUtils.equals(action, BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST)) {
-            onRefresh();
-        }
-    }
-
-    @Override
-    protected void addMapMarker(List<WorkListInfo> list) {
-        mMapViewHelper.addMapMarker(list);
+    protected void initEvent() {
+        super.initEvent();
         mMapViewHelper.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -84,6 +69,44 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
         });
     }
 
+    @Override
+    public void handleBroadcast(Context context, Intent intent) {
+        super.handleBroadcast(context, intent);
+        String action = intent.getAction();
+        if (TextUtils.equals(intent.getAction(), BroadcastActions.ACTION_CHANGE_MODE)) {
+            if (intent.getBooleanExtra("IsMapMode", false)) {
+                mVMap.setVisibility(View.VISIBLE);
+                mLvList.setVisibility(View.GONE);
+                mMapViewHelper.startLocate();
+                mMapViewHelper.getAMap().clear();
+                mMapViewHelper.addMapMarker(mAdapter.getDataList());
+            } else {
+                mVMap.setVisibility(View.GONE);
+                mLvList.setVisibility(View.VISIBLE);
+            }
+        } else if (TextUtils.equals(action, BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST)) {
+            onRefresh();
+        }
+    }
+
+    @Override
+    protected void onRefreshSucceed(List list) {
+        super.onRefreshSucceed(list);
+        if (mVMap.getVisibility() == View.VISIBLE) {
+            mMapViewHelper.getAMap().clear();
+            mMapViewHelper.addMapMarker(mAdapter.getDataList());
+        }
+    }
+
+    @Override
+    protected void onLoadMoreSucceed(List list) {
+        super.onLoadMoreSucceed(list);
+        if (mVMap.getVisibility() == View.VISIBLE) {
+            mMapViewHelper.getAMap().clear();
+            mMapViewHelper.addMapMarker(mAdapter.getDataList());
+        }
+
+    }
 
     @Override
     protected List<WorkListInfo> loadData() {

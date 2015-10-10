@@ -27,15 +27,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
 
     private static final int MSG_BACK_LOAD = 1000;
 
-    private static final int MSG_UI_LOAD_FAIL = 1001;
-
-    protected static final int MSG_UI_LOAD_SUCCESS = 1002;
-
-    private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
-
-    private static final int MSG_UI_NO_DATA = 1004;
-
-    private static final int MSG_UI_LOAD_MORE_FAIL = 1005;
+    private static final int MSG_UI_LOAD = 1000;
 
     protected XListView mLvList;
 
@@ -43,7 +35,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
 
     private int mPageSize = 10;
 
-    private BaseListAdapter<T> mAdapter;
+    protected BaseListAdapter<T> mAdapter;
 
     protected void setPageSize(int pageSize) {
         mPageSize = pageSize;
@@ -59,12 +51,11 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
 
     private StatusView mStatusView;
 
-    private boolean isInit = false;
 
     @Override
     protected void initView() {
         mStatusView = new StatusView(getActivity());
-        mStatusView.setContentView(R.layout.fragment_base_list);
+        mStatusView.setContentView(getContentViewId());
         setContentView(mStatusView);
         mLvList = (XListView) findViewById(R.id.lv_list);
         mLvList.setPullLoadEnable(true);
@@ -83,81 +74,75 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
         sendEmptyBackgroundMessage(MSG_BACK_LOAD);
     }
 
+    /**
+     * 获取中间内容的布局文件，必须包含XListView
+     *
+     * @return
+     */
+    protected int getContentViewId() {
+        return R.layout.fragment_base_list;
+    }
+
     @Override
     protected void initData() {
         super.initData();
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !isInit) {
-            if (mStatusView != null) {
-
-                isInit = true;
-            }
-        }
-    }
 
     @Override
     public void handleUiMessage(Message msg) {
         super.handleUiMessage(msg);
-        switch (msg.what) {
-            case MSG_UI_LOAD_FAIL:
+        if (msg.what == MSG_UI_LOAD) {
+            List<T> list = (List<T>) msg.obj;
+            if (list == null) {
                 if (mPageIndex > START_PAGE_INDEX) {
                     mPageIndex--;
                 }
-                if (mAdapter.getCount() == 0 && mPageIndex == START_PAGE_INDEX) {
+                if (mAdapter.getCount() > 0) {
+                    mStatusView.showContentView();
+                    mLvList.stopRefresh();
+                    mLvList.stopLoadMore(false);
+                } else {
                     mStatusView.showFailView();
                     mLvList.stopRefresh();
                     mLvList.stopLoadMore(false);
-                } else if (mPageIndex == START_PAGE_INDEX) {
-                    mStatusView.showContentView();
-                    mLvList.stopRefresh();
-                    mLvList.stopLoadMore(false);
+                }
+            } else {
+                mStatusView.showContentView();
+                mLvList.setRefreshTime(getCurrentTime());
+                mLvList.stopRefresh();
+                if (list.size() < mPageSize) {
+                    mLvList.stopLoadMore(true);
                 } else {
-                    mStatusView.showContentView();
                     mLvList.stopLoadMore(false);
                 }
-                break;
-            case MSG_UI_LOAD_SUCCESS:
-                mStatusView.showContentView();
-                List<T> list = (List<T>) msg.obj;
-                if (mPageIndex == START_PAGE_INDEX) {
-                    mAdapter.setData(list);
-                    mLvList.setRefreshTime(getCurrentTime());
-                    mLvList.stopRefresh();
-                    mLvList.stopLoadMore(false);
-                } else {
-                    mLvList.setRefreshTime(getCurrentTime());
-                    mLvList.stopRefresh();
+                if (mPageIndex > START_PAGE_INDEX) {
                     mAdapter.addAll(list);
-                    mLvList.stopLoadMore(false);
-                }
-                break;
-            case MSG_UI_FINISH_LOAD_ALL:
-                mStatusView.showContentView();
-                if (mPageIndex == START_PAGE_INDEX) {
-                    mAdapter.setData((List<T>) msg.obj);
-                    mLvList.setRefreshTime(getCurrentTime());
-                    mLvList.stopRefresh();
-                    mLvList.stopLoadMore(true);
+                    //必须先添加到adapter才调用onLoadMoreSucceed
+                    onLoadMoreSucceed(list);
                 } else {
-                    mAdapter.addAll((List<T>) msg.obj);
-                    mLvList.stopLoadMore(true);
+                    mAdapter.setData(list);
+                    //必须先添加到adapter才调用onRefreshSucceed
+                    onRefreshSucceed(list);
                 }
-                break;
-            case MSG_UI_NO_DATA:
-                mStatusView.showNoDataView();
-                mLvList.stopRefresh();
-                mLvList.stopLoadMore(false);
-                break;
-            case MSG_UI_LOAD_MORE_FAIL:
-                mStatusView.showContentView();
-                mLvList.stopRefresh();
-                mLvList.stopLoadMore(false);
-                break;
+            }
         }
+    }
+
+    /**
+     * 刷新成功，可用于子类扩展
+     *
+     * @param list
+     */
+    protected void onRefreshSucceed(List<T> list) {
+    }
+
+    /**
+     * 加载数据成功，可用于子类扩展
+     *
+     * @param list
+     */
+    protected void onLoadMoreSucceed(List<T> list) {
     }
 
     private String getCurrentTime() {
@@ -169,25 +154,10 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
     @Override
     public void handleBackgroundMessage(Message msg) {
         super.handleBackgroundMessage(msg);
-        List<T> list = loadData();
-        if (list != null && list.size() == 0 && getPageIndex() == START_PAGE_INDEX) {
-            sendEmptyUiMessage(MSG_UI_NO_DATA);
-        } else if (list != null && list.size() >= mPageSize) {
-            Message message = obtainUiMessage();
-            message.what = MSG_UI_LOAD_SUCCESS;
-            message.obj = list;
-            message.sendToTarget();
-        } else if (list != null && list.size() < mPageSize) {
-            Message message = obtainUiMessage();
-            message.what = MSG_UI_FINISH_LOAD_ALL;
-            message.obj = list;
-            message.sendToTarget();
-        } else if (mPageIndex > START_PAGE_INDEX && list == null) {
-            sendEmptyUiMessage(MSG_UI_LOAD_MORE_FAIL);
-        } else if (list == null && mPageIndex == START_PAGE_INDEX) {
-            sendEmptyUiMessage(MSG_UI_LOAD_FAIL);
-        }
-
+        Message message = obtainUiMessage();
+        message.what = MSG_UI_LOAD;
+        message.obj = loadData();
+        message.sendToTarget();
     }
 
     @Override

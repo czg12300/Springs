@@ -3,6 +3,7 @@ package com.dinghu.ui.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
@@ -148,4 +149,8 @@ public class WorkListFragment extends BaseWorkerFragment {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }
