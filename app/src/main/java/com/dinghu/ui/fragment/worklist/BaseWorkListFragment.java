@@ -1,11 +1,5 @@
-package com.dinghu.ui.fragment.worklist;
 
-import com.amap.api.maps.MapView;
-import com.dinghu.R;
-import com.dinghu.data.BroadcastActions;
-import com.dinghu.ui.helper.MapViewHelper;
-import com.dinghu.ui.widget.StatusView;
-import com.dinghu.ui.widget.xlistview.XListView;
+package com.dinghu.ui.fragment.worklist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +8,19 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 
-import cn.common.ui.adapter.BaseListAdapter;
-import cn.common.ui.fragment.BaseWorkerFragment;
+import com.amap.api.maps.MapView;
+import com.dinghu.R;
+import com.dinghu.data.BroadcastActions;
+import com.dinghu.ui.helper.MapViewHelper;
+import com.dinghu.ui.widget.StatusView;
+import com.dinghu.ui.widget.xlistview.XListView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import cn.common.ui.adapter.BaseListAdapter;
+import cn.common.ui.fragment.BaseWorkerFragment;
 
 /**
  * 描述：未完工工单页面
@@ -27,7 +28,8 @@ import java.util.List;
  * @author jake
  * @since 2015/9/12 13:57
  */
-public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment implements XListView.IXListViewListener {
+public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment
+        implements XListView.IXListViewListener {
 
     private static final int START_PAGE_INDEX = 1;
 
@@ -38,6 +40,7 @@ public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment impleme
     private static final int MSG_UI_LOAD_SUCCESS = 1002;
 
     private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
+
     private static final int MSG_UI_NO_DATA = 1004;
 
     protected XListView mLvList;
@@ -142,6 +145,9 @@ public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment impleme
         super.handleUiMessage(msg);
         switch (msg.what) {
             case MSG_UI_LOAD_FAIL:
+                if (mPageIndex > START_PAGE_INDEX) {
+                    mPageIndex--;
+                }
                 if (mAdapter.getCount() == 0 && mPageIndex == START_PAGE_INDEX) {
                     mStatusView.showFailView();
                     mLvList.stopRefresh();
@@ -215,7 +221,7 @@ public abstract class BaseWorkListFragment<T> extends BaseWorkerFragment impleme
             message.what = MSG_UI_LOAD_SUCCESS;
             message.obj = list;
             message.sendToTarget();
-        } else if (mPageIndex > START_PAGE_INDEX && list == null || list != null && list.size() < mPageSize) {
+        } else if (list != null && list.size() < mPageSize) {
             Message message = obtainUiMessage();
             message.what = MSG_UI_FINISH_LOAD_ALL;
             message.obj = list;

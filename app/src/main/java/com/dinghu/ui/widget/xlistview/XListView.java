@@ -9,8 +9,6 @@
 
 package com.dinghu.ui.widget.xlistview;
 
-import com.dinghu.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -24,6 +22,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 import android.widget.TextView;
+
+import com.dinghu.R;
 
 public class XListView extends ListView implements OnScrollListener {
 
@@ -285,10 +285,12 @@ public class XListView extends ListView implements OnScrollListener {
     }
 
     private void startLoadMore() {
-        mPullLoading = true;
-        mFooterView.setState(XListViewFooter.STATE_LOADING);
-        if (mListViewListener != null) {
-            mListViewListener.onLoadMore();
+        if (!mPullLoading) {
+            mPullLoading = true;
+            mFooterView.setState(XListViewFooter.STATE_LOADING);
+            if (mListViewListener != null) {
+                mListViewListener.onLoadMore();
+            }
         }
     }
 
@@ -322,10 +324,12 @@ public class XListView extends ListView implements OnScrollListener {
                 if (getFirstVisiblePosition() == 0) {
                     // invoke refresh
                     if (mEnablePullRefresh && mHeaderView.getVisiableHeight() > mHeaderViewHeight) {
-                        mPullRefreshing = true;
-                        mHeaderView.setState(XListViewHeader.STATE_REFRESHING);
-                        if (mListViewListener != null) {
-                            mListViewListener.onRefresh();
+                        if (!mPullRefreshing) {
+                            mPullRefreshing = true;
+                            mHeaderView.setState(XListViewHeader.STATE_REFRESHING);
+                            if (mListViewListener != null) {
+                                mListViewListener.onRefresh();
+                            }
                         }
                     }
                     resetHeaderHeight();

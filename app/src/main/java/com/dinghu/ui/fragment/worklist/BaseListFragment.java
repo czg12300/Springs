@@ -32,7 +32,10 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
     protected static final int MSG_UI_LOAD_SUCCESS = 1002;
 
     private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
+
     private static final int MSG_UI_NO_DATA = 1004;
+
+    private static final int MSG_UI_LOAD_MORE_FAIL = 1005;
 
     protected XListView mLvList;
 
@@ -101,6 +104,9 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
         super.handleUiMessage(msg);
         switch (msg.what) {
             case MSG_UI_LOAD_FAIL:
+                if (mPageIndex > START_PAGE_INDEX) {
+                    mPageIndex--;
+                }
                 if (mAdapter.getCount() == 0 && mPageIndex == START_PAGE_INDEX) {
                     mStatusView.showFailView();
                     mLvList.stopRefresh();
@@ -146,6 +152,11 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
                 mLvList.stopRefresh();
                 mLvList.stopLoadMore(false);
                 break;
+            case MSG_UI_LOAD_MORE_FAIL:
+                mStatusView.showContentView();
+                mLvList.stopRefresh();
+                mLvList.stopLoadMore(false);
+                break;
         }
     }
 
@@ -166,12 +177,13 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
             message.what = MSG_UI_LOAD_SUCCESS;
             message.obj = list;
             message.sendToTarget();
-        } else if (mPageIndex > START_PAGE_INDEX && list == null
-                || list != null && list.size() < mPageSize) {
+        } else if (list != null && list.size() < mPageSize) {
             Message message = obtainUiMessage();
             message.what = MSG_UI_FINISH_LOAD_ALL;
             message.obj = list;
             message.sendToTarget();
+        } else if (mPageIndex > START_PAGE_INDEX && list == null) {
+            sendEmptyUiMessage(MSG_UI_LOAD_MORE_FAIL);
         } else if (list == null && mPageIndex == START_PAGE_INDEX) {
             sendEmptyUiMessage(MSG_UI_LOAD_FAIL);
         }

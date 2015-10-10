@@ -1,3 +1,4 @@
+
 package com.dinghu.ui.activity;
 
 import android.os.Message;
@@ -18,16 +19,27 @@ import cn.common.ui.adapter.BaseListAdapter;
  * @author jake
  * @since 2015/9/20 12:15
  */
-public abstract class BaseListActivity<T> extends CommonTitleActivity implements XListView.IXListViewListener {
+public abstract class BaseListActivity<T> extends CommonTitleActivity
+        implements XListView.IXListViewListener {
 
     private static final int START_PAGE_INDEX = 1;
+
     private static final int MSG_BACK_LOAD = 1000;
+
     private static final int MSG_UI_LOAD_FAIL = 1001;
+
     private static final int MSG_UI_LOAD_SUCCESS = 1002;
+
     private static final int MSG_UI_FINISH_LOAD_ALL = 1003;
+
+    private static final int MSG_UI_LOAD_MORE_FAIL = 1005;
+
     protected XListView mLvList;
+
     private int mPageIndex = START_PAGE_INDEX;
+
     private int mPageSize = 10;
+
     private BaseListAdapter<T> mAdapter;
 
     protected void setPageSize(int pageSize) {
@@ -116,15 +128,19 @@ public abstract class BaseListActivity<T> extends CommonTitleActivity implements
                     mLvList.stopLoadMore(true);
                 }
                 break;
+            case MSG_UI_LOAD_MORE_FAIL:
+                mStatusView.showContentView();
+                mLvList.stopRefresh();
+                mLvList.stopLoadMore(false);
+                break;
         }
     }
 
     private String getCurrentTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
         return formatter.format(curDate);
     }
-
 
     @Override
     public void handleBackgroundMessage(Message msg) {
@@ -135,11 +151,14 @@ public abstract class BaseListActivity<T> extends CommonTitleActivity implements
             message.what = MSG_UI_LOAD_SUCCESS;
             message.obj = list;
             message.sendToTarget();
-        } else if (mPageIndex > START_PAGE_INDEX && list == null || list != null && list.size() < mPageSize) {
+        } else if (mPageIndex > START_PAGE_INDEX && list == null
+                || list != null && list.size() < mPageSize) {
             Message message = obtainUiMessage();
             message.what = MSG_UI_FINISH_LOAD_ALL;
             message.obj = list;
             message.sendToTarget();
+        } else if (mPageIndex > START_PAGE_INDEX && list == null) {
+            sendEmptyUiMessage(MSG_UI_LOAD_MORE_FAIL);
         } else if (mPageIndex == START_PAGE_INDEX) {
             sendEmptyUiMessage(MSG_UI_LOAD_FAIL);
         }
