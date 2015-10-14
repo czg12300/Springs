@@ -3,7 +3,9 @@
     package="com.dinghu"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-sdk android:minSdkVersion="8"/>
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="18"/>
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
@@ -23,8 +25,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-     <uses-permission android:name="android.permission.CALL_PHONE"/>
+     
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
     <application
         android:name="com.dinghu.SpringApplication"
         android:allowBackup="true"

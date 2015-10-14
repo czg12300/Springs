@@ -1,18 +1,18 @@
 
 package com.dinghu.ui.fragment.worklist;
 
-import android.os.Message;
-
 import com.dinghu.R;
 import com.dinghu.ui.widget.StatusView;
 import com.dinghu.ui.widget.xlistview.XListView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import android.os.Message;
 
 import cn.common.ui.adapter.BaseListAdapter;
 import cn.common.ui.fragment.BaseWorkerFragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 描述：未完工工单页面
@@ -51,7 +51,6 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
 
     private StatusView mStatusView;
 
-
     @Override
     protected void initView() {
         mStatusView = new StatusView(getActivity());
@@ -88,7 +87,6 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
         super.initData();
     }
 
-
     @Override
     public void handleUiMessage(Message msg) {
         super.handleUiMessage(msg);
@@ -108,22 +106,26 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
                     mLvList.stopLoadMore(false);
                 }
             } else {
-                mStatusView.showContentView();
                 mLvList.setRefreshTime(getCurrentTime());
                 mLvList.stopRefresh();
-                if (list.size() < mPageSize) {
-                    mLvList.stopLoadMore(true);
+                if (list.size() > 0) {
+                    mStatusView.showContentView();
+                    if (list.size() < mPageSize) {
+                        mLvList.stopLoadMore(true);
+                    } else {
+                        mLvList.stopLoadMore(false);
+                    }
+                    if (mPageIndex > START_PAGE_INDEX) {
+                        mAdapter.addAll(list);
+                        // 必须先添加到adapter才调用onLoadMoreSucceed
+                        onLoadMoreSucceed(list);
+                    } else {
+                        mAdapter.setData(list);
+                        // 必须先添加到adapter才调用onRefreshSucceed
+                        onRefreshSucceed(list);
+                    }
                 } else {
-                    mLvList.stopLoadMore(false);
-                }
-                if (mPageIndex > START_PAGE_INDEX) {
-                    mAdapter.addAll(list);
-                    //必须先添加到adapter才调用onLoadMoreSucceed
-                    onLoadMoreSucceed(list);
-                } else {
-                    mAdapter.setData(list);
-                    //必须先添加到adapter才调用onRefreshSucceed
-                    onRefreshSucceed(list);
+                    mStatusView.showNoDataView();
                 }
             }
         }

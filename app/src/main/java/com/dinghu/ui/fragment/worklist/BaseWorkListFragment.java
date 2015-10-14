@@ -1,12 +1,12 @@
 
 package com.dinghu.ui.fragment.worklist;
 
-import android.os.Bundle;
-import android.view.View;
-
 import com.amap.api.maps.MapView;
 import com.dinghu.R;
 import com.dinghu.ui.helper.MapViewHelper;
+
+import android.os.Bundle;
+import android.view.View;
 
 /**
  * 描述：未完工工单页面
@@ -14,7 +14,7 @@ import com.dinghu.ui.helper.MapViewHelper;
  * @author jake
  * @since 2015/9/12 13:57
  */
-public abstract class BaseWorkListFragment<T> extends BaseListFragment {
+public abstract class BaseWorkListFragment<T> extends BaseListFragment<T> {
 
     protected MapView mMapView;
 
