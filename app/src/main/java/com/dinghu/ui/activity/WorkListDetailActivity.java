@@ -327,7 +327,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 mItemType.setContent(mInfo.getType());
                 if (!TextUtils.isEmpty(mInfo.getReport())) {
                     mItemReport.setVisibility(View.VISIBLE);
-                    mItemReport.setContent(mInfo.getReport());
+                    mItemReport.setContent("上次未能完成：(" + mInfo.getReport() + ")");
                 } else {
                     mItemReport.setVisibility(View.GONE);
                 }
@@ -408,6 +408,10 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 mUnFinishDialog.setWindow(R.style.alpha_animation, 0.0f);
                 mUnFinishDialog.setContentView(R.layout.dialog_un_finish);
                 mEvReport = (EditText) mUnFinishDialog.findViewById(R.id.ev_report);
+                if (mInfo != null && !TextUtils.isEmpty(mInfo.getReport())) {
+                    mEvReport.setText(mInfo.getReport());
+                    mEvReport.setSelection(mEvReport.getText().length());
+                }
                 mUnFinishDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

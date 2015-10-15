@@ -159,7 +159,7 @@ public class WorkListDetailResponse extends BaseResponse {
                 setTime(root.optString("time"));
                 setType(root.optString("type"));
                 setBtnMsg(root.optString("btnMsg"));
-                setBtnMsg(root.optString("report"));
+                setReport(root.optString("report"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
