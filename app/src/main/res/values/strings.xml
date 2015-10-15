@@ -20,6 +20,7 @@
     <string name="my_account_book">我的账本</string>
     <string name="exit">退出</string>
     <string name="ok">确定</string>
+    <string name="cancel">取消</string>
     <string name="pw_old_hint">请输入原始密码</string>
     <string name="pw_new_hint">请输入新密码</string>
     <string name="pw_again_hint">请再次输入新密码</string>

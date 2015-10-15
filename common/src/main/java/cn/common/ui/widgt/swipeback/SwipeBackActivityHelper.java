@@ -26,6 +26,7 @@ public class SwipeBackActivityHelper {
             public void onScrollStateChange(int state, float scrollPercent) {
                 if (state == SwipeBackLayout.STATE_IDLE && scrollPercent == 0) {
                     ChangeThemeUtils.convertActivityFromTranslucent(mActivity);
+                    mActivity.finish();
                 }
             }
 

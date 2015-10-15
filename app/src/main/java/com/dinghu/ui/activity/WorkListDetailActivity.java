@@ -1,7 +1,6 @@
 
 package com.dinghu.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -9,6 +8,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,16 +34,14 @@ import cn.common.ui.BaseDialog;
 public class WorkListDetailActivity extends CommonTitleActivity {
     private static final int MSG_BACK_LOAD = 0;
 
-    private static final int MSG_BACK_RESPONSE_QUHUO = 1;
 
-    private static final int MSG_BACK_RESPONSE_WANGONG = 2;
+    private static final int MSG_BACK_UN_FINISH_WORK = 1;
+    private static final int MSG_BACK_FINISH_WORK = 2;
 
-    private static final int MSG_UI_LOAD = 100;
-
-    private static final int MSG_UI_RESPONSE_QUHUO = 101;
-
-    private static final int MSG_UI_RESPONSE_WANGONG = 102;
-    private static final int MSG_UI_FINISH = 103;
+    private static final int MSG_UI_LOAD = 0;
+    private static final int MSG_UI_FINISH = 1;
+    private static final int MSG_UI_UN_FINISH_WORK = 2;
+    private static final int MSG_UI_FINISH_WORK = 3;
 
     private StatusView mStatusView;
 
@@ -58,6 +56,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private WorkListDetailItemView mItemType;
 
     private WorkListDetailItemView mItemNum;
+    private WorkListDetailItemView mItemReport;
 
     private TextView tvMobile;
 
@@ -70,17 +69,20 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private ImageView ivSpinnerSub;
 
     private ImageView ivMobile;
+    private View vButton;
+    private Button mBtnUnFinish;
+    private Button mBtnFinish;
 
-    private Button mBtnOk;
-
-    private int status = -1;
 
     private WorkListDetailResponse mInfo;
 
     private long workListId = -1;
 
     private boolean isFinishWorkList = false;
+    private BaseDialog mFinishDialog;
+    private BaseDialog mUnFinishDialog;
     private BaseDialog mLoadingDialog;
+    private EditText mEvReport;
 
     @Override
     protected void initView() {
@@ -88,7 +90,9 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mStatusView = new StatusView(this);
         mStatusView.setContentView(R.layout.activity_work_list_detail);
         setContentView(mStatusView);
-        mBtnOk = (Button) findViewById(R.id.btn_ok);
+        vButton = findViewById(R.id.ll_opt);
+        mBtnUnFinish = (Button) findViewById(R.id.btn_un_finish);
+        mBtnFinish = (Button) findViewById(R.id.btn_finish);
         tvSpinnerLabel = (TextView) findViewById(R.id.tv_spinner_label);
         tvSpinner = (TextView) findViewById(R.id.tv_spinner);
         ivSpinnerAdd = (ImageView) findViewById(R.id.iv_spinner_add);
@@ -99,6 +103,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mItemGoods = (WorkListDetailItemView) findViewById(R.id.div_goods);
         mItemType = (WorkListDetailItemView) findViewById(R.id.div_type);
         mItemNum = (WorkListDetailItemView) findViewById(R.id.div_num);
+        mItemReport = (WorkListDetailItemView) findViewById(R.id.div_report);
         mItemRequestTime.setLabel("要求时间：");
         mItemName.setLabel("姓名：");
         tvMobile = (TextView) findViewById(R.id.tv_phone);
@@ -107,12 +112,15 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mItemGoods.setLabel("产品：");
         mItemType.setLabel("类型：");
         mItemNum.setLabel("数量：");
+        mItemReport.getTvLabel().setVisibility(View.GONE);
+        mItemReport.getTvContent().setTextColor(Color.RED);
         workListId = getIntent().getLongExtra("WorkListId", -1);
         isFinishWorkList = getIntent().getBooleanExtra("IsNotTodoWorkList", false);
         if (isFinishWorkList) {
             tvSpinner.setBackgroundColor(Color.TRANSPARENT);
             ivSpinnerAdd.setVisibility(View.GONE);
             ivSpinnerSub.setVisibility(View.GONE);
+            vButton.setVisibility(View.GONE);
         }
         mStatusView.showLoadingView();
         sendEmptyBackgroundMessage(MSG_BACK_LOAD);
@@ -153,20 +161,16 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 sendEmptyBackgroundMessage(MSG_BACK_LOAD);
             }
         });
-        mBtnOk.setOnClickListener(new View.OnClickListener() {
+        mBtnUnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status != -1) {
-                    switch (status) {
-                        case WorkListDetailResponse.STATUS_QUHUO:
-                            sendEmptyBackgroundMessage(MSG_BACK_RESPONSE_QUHUO);
-                            break;
-                        case WorkListDetailResponse.STATUS_WANGONG:
-                            sendEmptyBackgroundMessage(MSG_BACK_RESPONSE_WANGONG);
-                            break;
-                    }
-                    showLoadingDialog();
-                }
+                showUnFinishDialog();
+            }
+        });
+        mBtnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFinishDialog();
             }
         });
     }
@@ -186,109 +190,202 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         super.handleBackgroundMessage(msg);
         switch (msg.what) {
             case MSG_BACK_LOAD:
-                HttpRequestManager<WorkListDetailResponse> requestLoad = new HttpRequestManager<WorkListDetailResponse>(
-                        URLConfig.WORK_LIST_DETAIL, WorkListDetailResponse.class);
-                requestLoad.addParam("id", workListId + "");
-                Message msgLoad = obtainUiMessage();
-                msgLoad.what = MSG_UI_LOAD;
-                msgLoad.obj = requestLoad.sendRequest();
-                msgLoad.sendToTarget();
+                loadDataTask();
                 break;
-            case MSG_BACK_RESPONSE_QUHUO:
-                HttpRequestManager<FinishWorkResponse> requestQH = new HttpRequestManager<FinishWorkResponse>(
-                        URLConfig.DETAIL_GAINGOODS, FinishWorkResponse.class);
-                requestQH.addParam("id", workListId + "");
-                Message msgQH = obtainUiMessage();
-                msgQH.what = MSG_UI_RESPONSE_QUHUO;
-                msgQH.obj = requestQH.sendRequest();
-                msgQH.sendToTarget();
+            case MSG_BACK_UN_FINISH_WORK:
+                unFinishWorkTask();
                 break;
-            case MSG_BACK_RESPONSE_WANGONG:
-                HttpRequestManager<FinishWorkResponse> requestWG = new HttpRequestManager<FinishWorkResponse>(
-                        URLConfig.DETAIL_SENDGOODS, FinishWorkResponse.class);
-                requestWG.addParam("id", workListId + "");
-                int count = 0;
-                if (mInfo != null) {
-                    count = mInfo.getMoneyOrCount2();
-                }
-                requestWG.addParam("count", count + "");
-                Message msgWG = obtainUiMessage();
-                msgWG.what = MSG_UI_RESPONSE_WANGONG;
-                msgWG.obj = requestWG.sendRequest();
-                msgWG.sendToTarget();
+            case MSG_BACK_FINISH_WORK:
+                finishWorkTask();
                 break;
         }
+    }
+
+    /**
+     * 完工确认数据请求
+     */
+    private void finishWorkTask() {
+        HttpRequestManager<FinishWorkResponse> requestWG = new HttpRequestManager<FinishWorkResponse>(
+                URLConfig.DETAIL_SENDGOODS, FinishWorkResponse.class);
+        requestWG.addParam("id", workListId + "");
+        int count = 0;
+        if (mInfo != null) {
+            count = mInfo.getMoneyOrCount2();
+        }
+        requestWG.addParam("count", count + "");
+        Message msgWG = obtainUiMessage();
+        msgWG.what = MSG_UI_FINISH_WORK;
+        msgWG.obj = requestWG.sendRequest();
+        msgWG.sendToTarget();
+    }
+
+    /**
+     * 未完工确认数据请求
+     */
+    private void unFinishWorkTask() {
+        HttpRequestManager<FinishWorkResponse> requestQH = new HttpRequestManager<FinishWorkResponse>(
+                URLConfig.UN_FINISH_WORK, FinishWorkResponse.class);
+        requestQH.addParam("id", workListId + "");
+        String report = "";
+        if (mEvReport != null) {
+            report = mEvReport.getText().toString();
+        }
+        requestQH.addParam("report", report);
+        Message msgQH = obtainUiMessage();
+        msgQH.what = MSG_UI_UN_FINISH_WORK;
+        msgQH.obj = requestQH.sendRequest();
+        msgQH.sendToTarget();
+    }
+
+    /**
+     * 加载数据的请求
+     */
+    private void loadDataTask() {
+        HttpRequestManager<WorkListDetailResponse> requestLoad = new HttpRequestManager<WorkListDetailResponse>(
+                URLConfig.WORK_LIST_DETAIL, WorkListDetailResponse.class);
+        requestLoad.addParam("id", workListId + "");
+        Message msgLoad = obtainUiMessage();
+        msgLoad.what = MSG_UI_LOAD;
+        msgLoad.obj = requestLoad.sendRequest();
+        msgLoad.sendToTarget();
     }
 
     @Override
     public void handleUiMessage(Message msg) {
         super.handleUiMessage(msg);
-        if (msg.what == MSG_UI_LOAD) {
-            if (msg.obj != null && msg.obj instanceof WorkListDetailResponse) {
-                mStatusView.showContentView();
-                mInfo = (WorkListDetailResponse) msg.obj;
+        switch (msg.what) {
+            case MSG_UI_LOAD:
+                updateData(msg);
+                break;
+            case MSG_UI_FINISH_WORK:
+                dealFinishWork(msg);
+                break;
+            case MSG_UI_UN_FINISH_WORK:
+                dealUnFinishWork(msg);
+                break;
+            case MSG_UI_FINISH:
+                finish();
+                break;
+        }
+    }
+
+    /**
+     * 处理完工
+     *
+     * @param msg
+     */
+    private void dealFinishWork(Message msg) {
+        if (msg.obj != null && msg.obj instanceof FinishWorkResponse) {
+            FinishWorkResponse response = (FinishWorkResponse) msg.obj;
+            if (response.getCode() == FinishWorkResponse.CODE_SUCCESS) {
+                sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
+                sendEmptyUiMessageDelayed(MSG_UI_FINISH, 1000);
+            }
+            if (mLoadingDialog != null) {
+                mLoadingDialog.dismiss();
+            }
+            ToastUtil.show(response.getMsg());
+        } else {
+            ToastUtil.show(R.string.load_error);
+        }
+    }
+
+    private void dealUnFinishWork(Message msg) {
+        if (msg.obj != null && msg.obj instanceof FinishWorkResponse) {
+            FinishWorkResponse response = (FinishWorkResponse) msg.obj;
+            if (response.getCode() == FinishWorkResponse.CODE_SUCCESS) {
+                sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
+            }
+            if (mItemReport != null && mEvReport != null) {
+                mItemReport.setVisibility(View.VISIBLE);
+                mItemReport.setContent("上次未能完成：(" + mEvReport.getText().toString() + ")");
+            }
+            if (mLoadingDialog != null) {
+                mLoadingDialog.dismiss();
+            }
+            ToastUtil.show(response.getMsg());
+        } else {
+            ToastUtil.show(R.string.load_error);
+        }
+    }
+
+    private void updateData(Message msg) {
+        if (msg.obj != null && msg.obj instanceof WorkListDetailResponse) {
+            mStatusView.showContentView();
+            mInfo = (WorkListDetailResponse) msg.obj;
+            if (mInfo != null) {
+                mItemRequestTime.setContent(mInfo.getTime());
+                mItemName.setContent(mInfo.getName());
+                if (!TextUtils.isEmpty(mInfo.getTel())) {
+                    tvMobile.setText(mInfo.getTel());
+                    ivMobile.setVisibility(View.VISIBLE);
+                } else {
+                    ivMobile.setVisibility(View.GONE);
+                }
+                mItemAddress.setContent(mInfo.getAddress());
+                mItemGoods.setContent(mInfo.getGoods());
+                mItemType.setContent(mInfo.getType());
+                if (!TextUtils.isEmpty(mInfo.getReport())) {
+                    mItemReport.setVisibility(View.VISIBLE);
+                    mItemReport.setContent(mInfo.getReport());
+                } else {
+                    mItemReport.setVisibility(View.GONE);
+                }
+                int count = 0;
                 if (mInfo != null) {
-                    mItemRequestTime.setContent(mInfo.getTime());
-                    mItemName.setContent(mInfo.getName());
-                    if (!TextUtils.isEmpty(mInfo.getTel())) {
-                        tvMobile.setText(mInfo.getTel());
-                        ivMobile.setVisibility(View.VISIBLE);
-                    } else {
-                        ivMobile.setVisibility(View.GONE);
-                    }
-                    mItemAddress.setContent(mInfo.getAddress());
-                    mItemGoods.setContent(mInfo.getGoods());
-                    mItemType.setContent(mInfo.getType());
-                    int count = 0;
-                    if (mInfo != null) {
-                        count = mInfo.getMoneyOrCount2();
-                    }
-                    if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_TAOCAN)) {
-                        mItemNum.setLabel("金额：");
-                        mItemNum.setContent(mInfo.getMoneyOrCount() + "元");
-                        tvSpinnerLabel.setText("本次收款：");
-                        if (isFinishWorkList) {
-                            tvSpinner.setText("" + count + "元");
-                        } else {
-                            tvSpinner.setText("" + count);
-                        }
-                    } else if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_PEISONG)) {
-                        mItemNum.setLabel("数量：");
-                        mItemNum.setContent(mInfo.getMoneyOrCount() + "桶");
-                        tvSpinnerLabel.setText("回收空桶：");
-                        if (isFinishWorkList) {
-                            tvSpinner.setText("" + count + "桶");
-                        } else {
-                            tvSpinner.setText("" + count);
-                        }
-                    }
-                    status = mInfo.getStatus();
-                    if (mInfo.getStatus() == WorkListDetailResponse.STATUS_WAIT) {
-                        mBtnOk.setEnabled(false);
-                    } else {
-                        mBtnOk.setEnabled(true);
-                    }
-                    mBtnOk.setText(mInfo.getBtnMsg());
+                    count = mInfo.getMoneyOrCount2();
                 }
-            } else {
-                mStatusView.showFailView();
-            }
-        } else if (msg.what == MSG_UI_RESPONSE_QUHUO || msg.what == MSG_UI_RESPONSE_WANGONG) {
-            if (msg.obj != null && msg.obj instanceof FinishWorkResponse) {
-                FinishWorkResponse response = (FinishWorkResponse) msg.obj;
-                if (response.getCode() == FinishWorkResponse.CODE_SUCCESS) {
-                    sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
-                    if (mLoadingDialog != null) {
-                        mLoadingDialog.dismiss();
+                if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_TAOCAN)) {
+                    mItemNum.setLabel("金额：");
+                    mItemNum.setContent(mInfo.getMoneyOrCount() + "元");
+                    tvSpinnerLabel.setText("本次收款：");
+                    if (isFinishWorkList) {
+                        tvSpinner.setText("" + count + "元");
+                    } else {
+                        tvSpinner.setText("" + count);
                     }
-                    sendEmptyUiMessageDelayed(MSG_UI_FINISH, 1000);
+                } else if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_PEISONG)) {
+                    mItemNum.setLabel("数量：");
+                    mItemNum.setContent(mInfo.getMoneyOrCount() + "桶");
+                    tvSpinnerLabel.setText("回收空桶：");
+                    if (isFinishWorkList) {
+                        tvSpinner.setText("" + count + "桶");
+                    } else {
+                        tvSpinner.setText("" + count);
+                    }
                 }
-                ToastUtil.show(response.getMsg());
-            } else {
-                ToastUtil.show(R.string.load_error);
             }
-        } else if (msg.what == MSG_UI_FINISH) {
-            finish();
+        } else {
+            mStatusView.showFailView();
+        }
+    }
+
+    public void showFinishDialog() {
+        if (!isFinishing()) {
+            if (mFinishDialog == null) {
+                mFinishDialog = new BaseDialog(this);
+                mFinishDialog.setWindow(R.style.alpha_animation, 0.0f);
+                mFinishDialog.setContentView(R.layout.dialog_finish);
+                mFinishDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mFinishDialog != null) {
+                            mFinishDialog.dismiss();
+                        }
+                    }
+                });
+                mFinishDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mFinishDialog != null) {
+                            mFinishDialog.dismiss();
+                        }
+                        sendEmptyBackgroundMessage(MSG_BACK_FINISH_WORK);
+                        showLoadingDialog();
+                    }
+                });
+            }
+            mFinishDialog.show();
         }
     }
 
@@ -298,8 +395,40 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 mLoadingDialog = new BaseDialog(this);
                 mLoadingDialog.setWindow(R.style.alpha_animation, 0.0f);
                 mLoadingDialog.setContentView(R.layout.dialog_loading);
+
             }
             mLoadingDialog.show();
+        }
+    }
+
+    public void showUnFinishDialog() {
+        if (!isFinishing()) {
+            if (mUnFinishDialog == null) {
+                mUnFinishDialog = new BaseDialog(this);
+                mUnFinishDialog.setWindow(R.style.alpha_animation, 0.0f);
+                mUnFinishDialog.setContentView(R.layout.dialog_un_finish);
+                mEvReport = (EditText) mUnFinishDialog.findViewById(R.id.ev_report);
+                mUnFinishDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mUnFinishDialog != null) {
+                            mUnFinishDialog.dismiss();
+                        }
+                    }
+                });
+                mUnFinishDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mUnFinishDialog != null) {
+                            mUnFinishDialog.dismiss();
+                        }
+                        sendEmptyBackgroundMessage(MSG_BACK_UN_FINISH_WORK);
+                        showLoadingDialog();
+                    }
+                });
+            }
+
+            mUnFinishDialog.show();
         }
     }
 }

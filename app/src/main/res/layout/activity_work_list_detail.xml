@@ -24,10 +24,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_name"
@@ -35,10 +31,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,21 +77,12 @@
             </LinearLayout>
 
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
-
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_goods"
@@ -107,21 +90,11 @@
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
-
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_num"
@@ -129,10 +102,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="60dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -186,6 +155,7 @@
 
                     </LinearLayout>
                 </FrameLayout>
+
             </LinearLayout>
 
 
@@ -193,6 +163,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/gray_dddddd" />
+
+            <com.dinghu.ui.widget.WorkListDetailItemView
+                android:id="@+id/div_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -205,18 +183,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/btn_ok"
+        <LinearLayout
+            android:id="@+id/ll_opt"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/btn_selector_exit"
-            android:text="@string/exit"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_content" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_un_finish"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_selector_red"
+                android:text="未完工"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_content" />
+
+            <Button
+                android:id="@+id/btn_finish"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_selector_ok"
+                android:text="完工确认"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_content" />
+
+
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

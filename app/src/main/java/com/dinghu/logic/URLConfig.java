@@ -39,7 +39,7 @@ public class URLConfig {
 
     public static final String DETAIL_SENDGOODS = SERVER + "outForm/sendGoods";
 
-    public static final String DETAIL_GAINGOODS = SERVER + "outForm/gainGoods";
+    public static final String UN_FINISH_WORK = SERVER + "outForm/cannotFinish";
 
     public static final String PUSH_MESSAGE = SERVER + "outForm/findUnRead";
 

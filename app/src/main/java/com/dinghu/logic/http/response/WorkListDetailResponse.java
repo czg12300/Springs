@@ -36,10 +36,18 @@ public class WorkListDetailResponse extends BaseResponse {
     private String type;
 
     private String btnMsg;
-
+    private String report;
     private int status;
 
     private int moneyOrCount2;
+
+    public String getReport() {
+        return report;
+    }
+
+    public void setReport(String report) {
+        this.report = report;
+    }
 
     public int getMoneyOrCount2() {
         return moneyOrCount2;
@@ -151,6 +159,7 @@ public class WorkListDetailResponse extends BaseResponse {
                 setTime(root.optString("time"));
                 setType(root.optString("type"));
                 setBtnMsg(root.optString("btnMsg"));
+                setBtnMsg(root.optString("report"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
