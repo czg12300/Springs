@@ -12,6 +12,7 @@
         android:background="@color/white">
 
         <LinearLayout
+            android:id="@+id/ll_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -135,15 +136,17 @@
                             android:layout_height="30dp"
                             android:src="@drawable/btn_selector_spinner_sub" />
 
-                        <TextView
-                            android:id="@+id/tv_spinner"
+                        <EditText
+                            android:id="@+id/ev_spinner"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:background="@drawable/bg_spinner"
                             android:gravity="center"
+                            android:inputType="number"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
+                            android:singleLine="true"
                             android:textColor="@color/gray_777777"
                             android:textSize="@dimen/text_content" />
 

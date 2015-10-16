@@ -3,13 +3,17 @@ package com.dinghu.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dinghu.R;
@@ -19,6 +23,8 @@ import com.dinghu.logic.entity.WorkListInfo;
 import com.dinghu.logic.http.HttpRequestManager;
 import com.dinghu.logic.http.response.FinishWorkResponse;
 import com.dinghu.logic.http.response.WorkListDetailResponse;
+import com.dinghu.ui.widget.AndroidBug5497Workaround;
+import com.dinghu.ui.widget.LinearLayoutView;
 import com.dinghu.ui.widget.StatusView;
 import com.dinghu.ui.widget.WorkListDetailItemView;
 import com.dinghu.utils.ToastUtil;
@@ -33,7 +39,6 @@ import cn.common.ui.BaseDialog;
  */
 public class WorkListDetailActivity extends CommonTitleActivity {
     private static final int MSG_BACK_LOAD = 0;
-
 
     private static final int MSG_BACK_UN_FINISH_WORK = 1;
     private static final int MSG_BACK_FINISH_WORK = 2;
@@ -62,7 +67,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
 
     private TextView tvSpinnerLabel;
 
-    private TextView tvSpinner;
+    private EditText evSpinner;
 
     private ImageView ivSpinnerAdd;
 
@@ -82,7 +87,9 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private BaseDialog mFinishDialog;
     private BaseDialog mUnFinishDialog;
     private BaseDialog mLoadingDialog;
-    private EditText mEvReport;
+    private EditText mEvFinishReport;
+    private EditText mEvUnFinishReport;
+    private int softInputBoxHeight = 0;
 
     @Override
     protected void initView() {
@@ -90,11 +97,14 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mStatusView = new StatusView(this);
         mStatusView.setContentView(R.layout.activity_work_list_detail);
         setContentView(mStatusView);
+        FrameLayout content = (FrameLayout) findViewById(android.R.id.content);
+        content.setBackgroundColor(getColor(R.color.background));
+        AndroidBug5497Workaround.assistActivity(this, true);
         vButton = findViewById(R.id.ll_opt);
         mBtnUnFinish = (Button) findViewById(R.id.btn_un_finish);
         mBtnFinish = (Button) findViewById(R.id.btn_finish);
         tvSpinnerLabel = (TextView) findViewById(R.id.tv_spinner_label);
-        tvSpinner = (TextView) findViewById(R.id.tv_spinner);
+        evSpinner = (EditText) findViewById(R.id.ev_spinner);
         ivSpinnerAdd = (ImageView) findViewById(R.id.iv_spinner_add);
         ivSpinnerSub = (ImageView) findViewById(R.id.iv_spinner_sub);
         mItemRequestTime = (WorkListDetailItemView) findViewById(R.id.div_request_time);
@@ -112,15 +122,18 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mItemGoods.setLabel("产品：");
         mItemType.setLabel("类型：");
         mItemNum.setLabel("数量：");
-        mItemReport.getTvLabel().setVisibility(View.GONE);
-        mItemReport.getTvContent().setTextColor(Color.RED);
         workListId = getIntent().getLongExtra("WorkListId", -1);
         isFinishWorkList = getIntent().getBooleanExtra("IsNotTodoWorkList", false);
+        mItemReport.getTvLabel().setVisibility(View.GONE);
         if (isFinishWorkList) {
-            tvSpinner.setBackgroundColor(Color.TRANSPARENT);
+            evSpinner.setBackgroundColor(Color.TRANSPARENT);
             ivSpinnerAdd.setVisibility(View.GONE);
             ivSpinnerSub.setVisibility(View.GONE);
             vButton.setVisibility(View.GONE);
+            mItemNum.setVisibility(View.GONE);
+            mItemReport.getTvContent().setTextColor(getColor(R.color.gray_777777));
+        } else {
+            mItemReport.getTvContent().setTextColor(Color.RED);
         }
         mStatusView.showLoadingView();
         sendEmptyBackgroundMessage(MSG_BACK_LOAD);
@@ -134,7 +147,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             public void onClick(View v) {
                 if (mInfo != null) {
                     mInfo.setMoneyOrCount2(mInfo.getMoneyOrCount2() + 1);
-                    tvSpinner.setText(mInfo.getMoneyOrCount2() + "");
+                    evSpinner.setText(mInfo.getMoneyOrCount2() + "");
                 }
             }
         });
@@ -144,7 +157,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 if (mInfo != null) {
                     if (mInfo.getMoneyOrCount2() - 1 > 0) {
                         mInfo.setMoneyOrCount2(mInfo.getMoneyOrCount2() - 1);
-                        tvSpinner.setText(mInfo.getMoneyOrCount2() + "");
+                        evSpinner.setText(mInfo.getMoneyOrCount2() + "");
                     }
                 }
             }
@@ -208,11 +221,16 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         HttpRequestManager<FinishWorkResponse> requestWG = new HttpRequestManager<FinishWorkResponse>(
                 URLConfig.DETAIL_SENDGOODS, FinishWorkResponse.class);
         requestWG.addParam("id", workListId + "");
-        int count = 0;
-        if (mInfo != null) {
-            count = mInfo.getMoneyOrCount2();
+        if (evSpinner != null && !TextUtils.isEmpty(evSpinner.getText())) {
+            requestWG.addParam("count", evSpinner.getText().toString());
+        } else {
+            if (mInfo != null) {
+                requestWG.addParam("count", mInfo.getMoneyOrCount2() + "");
+            }
         }
-        requestWG.addParam("count", count + "");
+        if (mEvUnFinishReport != null) {
+            requestWG.addParam("report", mEvUnFinishReport.getText().toString());
+        }
         Message msgWG = obtainUiMessage();
         msgWG.what = MSG_UI_FINISH_WORK;
         msgWG.obj = requestWG.sendRequest();
@@ -227,8 +245,8 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 URLConfig.UN_FINISH_WORK, FinishWorkResponse.class);
         requestQH.addParam("id", workListId + "");
         String report = "";
-        if (mEvReport != null) {
-            report = mEvReport.getText().toString();
+        if (mEvFinishReport != null) {
+            report = mEvFinishReport.getText().toString();
         }
         requestQH.addParam("report", report);
         Message msgQH = obtainUiMessage();
@@ -270,7 +288,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     }
 
     /**
-     * 处理完工
+     * 处理完工返回
      *
      * @param msg
      */
@@ -281,6 +299,10 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
                 sendEmptyUiMessageDelayed(MSG_UI_FINISH, 1000);
             }
+            if (mItemReport != null && response != null) {
+                mItemReport.setVisibility(View.VISIBLE);
+                mItemReport.setContent(response.getMsg());
+            }
             if (mLoadingDialog != null) {
                 mLoadingDialog.dismiss();
             }
@@ -290,15 +312,23 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         }
     }
 
+    /**
+     * 未完工返回
+     *
+     * @param msg
+     */
     private void dealUnFinishWork(Message msg) {
         if (msg.obj != null && msg.obj instanceof FinishWorkResponse) {
             FinishWorkResponse response = (FinishWorkResponse) msg.obj;
+            if (response == null) {
+                return;
+            }
             if (response.getCode() == FinishWorkResponse.CODE_SUCCESS) {
                 sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
             }
-            if (mItemReport != null && mEvReport != null) {
+            if (mItemReport != null && response != null) {
                 mItemReport.setVisibility(View.VISIBLE);
-                mItemReport.setContent("上次未能完成：(" + mEvReport.getText().toString() + ")");
+                mItemReport.setContent(response.getMsg());
             }
             if (mLoadingDialog != null) {
                 mLoadingDialog.dismiss();
@@ -309,6 +339,11 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         }
     }
 
+    /**
+     * 更新ui数据显示
+     *
+     * @param msg
+     */
     private void updateData(Message msg) {
         if (msg.obj != null && msg.obj instanceof WorkListDetailResponse) {
             mStatusView.showContentView();
@@ -327,7 +362,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 mItemType.setContent(mInfo.getType());
                 if (!TextUtils.isEmpty(mInfo.getReport())) {
                     mItemReport.setVisibility(View.VISIBLE);
-                    mItemReport.setContent("上次未能完成：(" + mInfo.getReport() + ")");
+                    mItemReport.setContent(mInfo.getReport());
                 } else {
                     mItemReport.setVisibility(View.GONE);
                 }
@@ -340,18 +375,18 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                     mItemNum.setContent(mInfo.getMoneyOrCount() + "元");
                     tvSpinnerLabel.setText("本次收款：");
                     if (isFinishWorkList) {
-                        tvSpinner.setText("" + count + "元");
+                        evSpinner.setText("" + count + "元");
                     } else {
-                        tvSpinner.setText("" + count);
+                        evSpinner.setText("" + count);
                     }
                 } else if (TextUtils.equals(mInfo.getType(), WorkListInfo.TYPE_PEISONG)) {
                     mItemNum.setLabel("数量：");
                     mItemNum.setContent(mInfo.getMoneyOrCount() + "桶");
                     tvSpinnerLabel.setText("回收空桶：");
                     if (isFinishWorkList) {
-                        tvSpinner.setText("" + count + "桶");
+                        evSpinner.setText("" + count + "桶");
                     } else {
-                        tvSpinner.setText("" + count);
+                        evSpinner.setText("" + count);
                     }
                 }
             }
@@ -360,12 +395,16 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         }
     }
 
-    public void showFinishDialog() {
+    /**
+     * 完工确认弹窗
+     */
+    private void showFinishDialog() {
         if (!isFinishing()) {
             if (mFinishDialog == null) {
                 mFinishDialog = new BaseDialog(this);
                 mFinishDialog.setWindow(R.style.alpha_animation, 0.0f);
                 mFinishDialog.setContentView(R.layout.dialog_finish);
+                mEvFinishReport = (EditText) mFinishDialog.findViewById(R.id.ev_report);
                 mFinishDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -385,11 +424,15 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                     }
                 });
             }
+            mEvFinishReport.getText().clear();
             mFinishDialog.show();
         }
     }
 
-    public void showLoadingDialog() {
+    /**
+     * 加载弹窗
+     */
+    private void showLoadingDialog() {
         if (!isFinishing()) {
             if (mLoadingDialog == null) {
                 mLoadingDialog = new BaseDialog(this);
@@ -401,16 +444,19 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         }
     }
 
-    public void showUnFinishDialog() {
+    /**
+     * 未完工确认弹窗
+     */
+    private void showUnFinishDialog() {
         if (!isFinishing()) {
             if (mUnFinishDialog == null) {
                 mUnFinishDialog = new BaseDialog(this);
                 mUnFinishDialog.setWindow(R.style.alpha_animation, 0.0f);
                 mUnFinishDialog.setContentView(R.layout.dialog_un_finish);
-                mEvReport = (EditText) mUnFinishDialog.findViewById(R.id.ev_report);
+                mEvUnFinishReport = (EditText) mUnFinishDialog.findViewById(R.id.ev_report);
                 if (mInfo != null && !TextUtils.isEmpty(mInfo.getReport())) {
-                    mEvReport.setText(mInfo.getReport());
-                    mEvReport.setSelection(mEvReport.getText().length());
+                    mEvFinishReport.setText(mInfo.getReport());
+                    mEvFinishReport.setSelection(mEvFinishReport.getText().length());
                 }
                 mUnFinishDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -431,7 +477,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                     }
                 });
             }
-
+            mEvUnFinishReport.getText().clear();
             mUnFinishDialog.show();
         }
     }
