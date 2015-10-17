@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
@@ -88,7 +89,6 @@ public class WorkListDetailActivity extends CommonTitleActivity {
     private BaseDialog mLoadingDialog;
     private EditText mEvFinishReport;
     private EditText mEvUnFinishReport;
-    private int softInputBoxHeight = 0;
 
     @Override
     protected void initView() {
@@ -98,7 +98,9 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         setContentView(mStatusView);
         FrameLayout content = (FrameLayout) findViewById(android.R.id.content);
         content.setBackgroundColor(getColor(R.color.background));
-        AndroidBug5497Workaround.assistActivity(this, true);
+        if (Build.VERSION.SDK_INT >= 19) {
+            AndroidBug5497Workaround.assistActivity(this, true);
+        }
         vButton = findViewById(R.id.ll_opt);
         mBtnUnFinish = (Button) findViewById(R.id.btn_un_finish);
         mBtnFinish = (Button) findViewById(R.id.btn_finish);
@@ -129,7 +131,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             ivSpinnerAdd.setVisibility(View.GONE);
             ivSpinnerSub.setVisibility(View.GONE);
             vButton.setVisibility(View.GONE);
-            mItemNum.setVisibility(View.GONE);
+            findViewById(R.id.fl_status).setVisibility(View.GONE);
             mItemReport.getTvContent().setTextColor(getColor(R.color.gray_777777));
         } else {
             mItemReport.getTvContent().setTextColor(Color.RED);
@@ -227,8 +229,8 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 requestWG.addParam("count", mInfo.getMoneyOrCount2() + "");
             }
         }
-        if (mEvUnFinishReport != null) {
-            requestWG.addParam("report", mEvUnFinishReport.getText().toString());
+        if (mEvFinishReport != null) {
+            requestWG.addParam("report", mEvFinishReport.getText().toString());
         }
         Message msgWG = obtainUiMessage();
         msgWG.what = MSG_UI_FINISH_WORK;
@@ -243,11 +245,9 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         HttpRequestManager<FinishWorkResponse> requestQH = new HttpRequestManager<FinishWorkResponse>(
                 URLConfig.UN_FINISH_WORK, FinishWorkResponse.class);
         requestQH.addParam("id", workListId + "");
-        String report = "";
-        if (mEvFinishReport != null) {
-            report = mEvFinishReport.getText().toString();
+        if (mEvUnFinishReport != null) {
+            requestQH.addParam("report", mEvUnFinishReport.getText().toString());
         }
-        requestQH.addParam("report", report);
         Message msgQH = obtainUiMessage();
         msgQH.what = MSG_UI_UN_FINISH_WORK;
         msgQH.obj = requestQH.sendRequest();

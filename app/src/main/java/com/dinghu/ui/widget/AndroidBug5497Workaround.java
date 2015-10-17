@@ -57,7 +57,7 @@ public class AndroidBug5497Workaround {
     private int computeUsableHeight() {
         Rect r = new Rect();
         mChildOfContent.getWindowVisibleDisplayFrame(r);
-        if (isAdjustStatusBar && Build.VERSION.SDK_INT > 19) {
+        if (isAdjustStatusBar && Build.VERSION.SDK_INT >= 19) {
             return (r.bottom - r.top + ChangeThemeUtils.getStatusBarHeight(mActivity));
         }
         return (r.bottom - r.top);
