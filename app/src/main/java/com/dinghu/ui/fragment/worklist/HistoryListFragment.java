@@ -179,11 +179,11 @@ public class HistoryListFragment extends BaseListFragment<WorkListInfo> {
             if (TextUtils.equals(tag, START)) {
                 int[] ints = getTime(mStartDate);
                 mTvTitle.setText("请选择起初日期");
-                mDatePicker.updateDate(ints[0], ints[1], ints[2]);
+                mDatePicker.updateDate(ints[0], ints[1] - 1, ints[2]);
             } else if (TextUtils.equals(tag, END)) {
                 mTvTitle.setText("请选择结束日期");
                 int[] ints = getTime(mEndDate);
-                mDatePicker.updateDate(ints[0], ints[1], ints[2]);
+                mDatePicker.updateDate(ints[0], ints[1] - 1, ints[2]);
             }
             mBtnOk.setTag(tag);
             mDateSelectDialog.show();

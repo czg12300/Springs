@@ -24,7 +24,6 @@ import com.dinghu.logic.http.HttpRequestManager;
 import com.dinghu.logic.http.response.FinishWorkResponse;
 import com.dinghu.logic.http.response.WorkListDetailResponse;
 import com.dinghu.ui.widget.AndroidBug5497Workaround;
-import com.dinghu.ui.widget.LinearLayoutView;
 import com.dinghu.ui.widget.StatusView;
 import com.dinghu.ui.widget.WorkListDetailItemView;
 import com.dinghu.utils.ToastUtil;
@@ -299,10 +298,6 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
                 sendEmptyUiMessageDelayed(MSG_UI_FINISH, 1000);
             }
-            if (mItemReport != null && response != null) {
-                mItemReport.setVisibility(View.VISIBLE);
-                mItemReport.setContent(response.getMsg());
-            }
             if (mLoadingDialog != null) {
                 mLoadingDialog.dismiss();
             }
@@ -333,7 +328,6 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             if (mLoadingDialog != null) {
                 mLoadingDialog.dismiss();
             }
-            ToastUtil.show(response.getMsg());
         } else {
             ToastUtil.show(R.string.load_error);
         }
@@ -424,7 +418,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                     }
                 });
             }
-            mEvFinishReport.getText().clear();
+            mEvFinishReport.setText("");
             mFinishDialog.show();
         }
     }
@@ -454,10 +448,6 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 mUnFinishDialog.setWindow(R.style.alpha_animation, 0.0f);
                 mUnFinishDialog.setContentView(R.layout.dialog_un_finish);
                 mEvUnFinishReport = (EditText) mUnFinishDialog.findViewById(R.id.ev_report);
-                if (mInfo != null && !TextUtils.isEmpty(mInfo.getReport())) {
-                    mEvFinishReport.setText(mInfo.getReport());
-                    mEvFinishReport.setSelection(mEvFinishReport.getText().length());
-                }
                 mUnFinishDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -477,7 +467,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                     }
                 });
             }
-            mEvUnFinishReport.getText().clear();
+            mEvUnFinishReport.setText("");
             mUnFinishDialog.show();
         }
     }
