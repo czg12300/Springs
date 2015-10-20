@@ -15,13 +15,13 @@ import com.dinghu.data.BroadcastActions;
 import com.dinghu.ui.adapter.CommonFragmentPagerAdapter;
 import com.dinghu.ui.fragment.UserCenterFragment;
 import com.dinghu.ui.fragment.WorkListFragment;
-import com.dinghu.ui.widget.MainTabViewPager;
 import com.dinghu.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.common.ui.activity.BaseWorkerFragmentActivity;
+import cn.common.ui.widgt.MainTabViewPager;
 import cn.common.ui.widgt.TabRadioGroup;
 
 public class MainActivity extends BaseWorkerFragmentActivity
@@ -85,7 +85,6 @@ public class MainActivity extends BaseWorkerFragmentActivity
                 mRbWorkList.setChecked(true);
                 break;
             case 1:
-                mVpContent.setCanScroll(true);
                 mVpContent.setCanScrollLeft(true);
                 mRbUserCenter.setChecked(true);
                 break;

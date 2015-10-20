@@ -1,6 +1,7 @@
 
 package com.dinghu.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,13 +18,13 @@ import com.dinghu.ui.adapter.CommonFragmentPagerAdapter;
 import com.dinghu.ui.fragment.worklist.HistoryListFragment;
 import com.dinghu.ui.fragment.worklist.TodayListFragment;
 import com.dinghu.ui.fragment.worklist.TodoListFragment;
-import com.dinghu.ui.widget.MainTabViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.common.ui.fragment.BaseWorkerFragment;
 import cn.common.ui.widgt.ChangeThemeUtils;
+import cn.common.ui.widgt.MainTabViewPager;
 import cn.common.ui.widgt.indicator.IIndicator;
 import cn.common.ui.widgt.indicator.IndicatorViewPager;
 import cn.common.utils.DisplayUtil;
@@ -51,9 +52,12 @@ public class WorkListFragment extends BaseWorkerFragment {
 
     private MainTabViewPager mainTabViewPager;
 
-    /**
-     * 存放tab的fragment
-     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mainTabViewPager = ((MainActivity) activity).getMainTabViewPager();
+        mainTabViewPager.setCanScroll(false);
+    }
 
     @Override
     protected void initView() {
@@ -61,8 +65,6 @@ public class WorkListFragment extends BaseWorkerFragment {
         ChangeThemeUtils.adjustStatusBar(findViewById(R.id.fl_title), getActivity());
         mRgMode = (RadioGroup) findViewById(R.id.rg_mode);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
-        mainTabViewPager = ((MainActivity) getActivity()).getMainTabViewPager();
-        mainTabViewPager.setCanScroll(false);
         initIndicatorView();
     }
 
@@ -114,14 +116,25 @@ public class WorkListFragment extends BaseWorkerFragment {
                     mIndicatorViewPager.setCanScroll(true);
                 }
                 if (position == 2) {
-                    mainTabViewPager.setCanScroll(true);
-                    mainTabViewPager.setCanScrollLeft(false);
+                    mainTabViewPager.setCanScrollRight(true);
                 } else {
                     mainTabViewPager.setCanScroll(false);
                 }
 
             }
         });
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && mIndicatorViewPager != null && mainTabViewPager != null) {
+            if (mIndicatorViewPager.getCurrentItem() == 2) {
+                mainTabViewPager.setCanScrollRight(true);
+            } else {
+                mainTabViewPager.setCanScroll(false);
+            }
+        }
     }
 
     @Override

@@ -1,20 +1,21 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:id="@+id/root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
 
-    <com.dinghu.ui.widget.MainTabViewPager
+    <cn.common.ui.widgt.MainTabViewPager
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/gray_dddddd" />
+        android:background="@color/gray_dddddd"/>
 
     <cn.common.ui.widgt.TabRadioGroup
         android:id="@+id/rg_menu"
@@ -41,7 +42,7 @@
                 android:paddingRight="30dp"
                 android:text="@string/tab_main_work_list"
                 android:textColor="@drawable/text_selector_main_menu"
-                android:textSize="@dimen/text_litter" />
+                android:textSize="@dimen/text_litter"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -62,7 +63,7 @@
                 android:paddingRight="15dp"
                 android:text="@string/tab_main_user_center"
                 android:textColor="@drawable/text_selector_main_menu"
-                android:textSize="@dimen/text_litter" />
+                android:textSize="@dimen/text_litter"/>
         </RelativeLayout>
     </cn.common.ui.widgt.TabRadioGroup>
 </LinearLayout>
