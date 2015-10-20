@@ -4,12 +4,17 @@ package cn.common.http;
 import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.ParseException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
@@ -18,7 +23,6 @@ import java.net.SocketException;
 
 import cn.common.http.exception.HttpExcHandler;
 import cn.common.http.exception.HttpException;
-import cn.common.utils.BaseToastUtil;
 
 /**
  * http接口请求中心
@@ -175,7 +179,7 @@ public class HttpManager<T> {
             throws HttpException {
         org.apache.http.HttpResponse httpResponse = null;
         try {
-            httpResponse = SingleHttpClient.getInstance().getHttpClient().execute(request);
+            httpResponse = createHttpClient().execute(request);
         } catch (ConnectTimeoutException e) {
             // e.printStackTrace();
             throw HttpExcHandler.responseTimeOut();
@@ -195,6 +199,18 @@ public class HttpManager<T> {
             e.printStackTrace();
         }
         return httpResponse;
+    }
+
+    // 创建一个HttpClient对象
+    private static HttpClient createHttpClient() {
+        HttpClient client = new DefaultHttpClient();
+        HttpParams httpParams = client.getParams();
+        httpParams.setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+        // 设置 连接超时时间
+        HttpConnectionParams.setConnectionTimeout(httpParams, 10 * 1000);
+        // 设置 读数据超时时间
+        HttpConnectionParams.setSoTimeout(httpParams, 10 * 1000);
+        return client;
     }
 
 }
