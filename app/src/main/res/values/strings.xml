@@ -8,7 +8,7 @@
     <string name="title_work_list_history">历史工单</string>
     <string name="title_my_work_list">我的工单</string>
     <!--other-->
-    <string name="app_name">鼎湖快递</string>
+    <string name="app_name">鼎湖快送</string>
     <string name="login_account_hint">请输入手机号</string>
     <string name="login_pw_hint">请输入密码</string>
     <string name="login_now">立即登录</string>
