@@ -1,14 +1,6 @@
 
 package com.dinghu;
 
-import com.dinghu.data.BroadcastActions;
-import com.dinghu.data.InitShareData;
-import com.dinghu.logic.AppConfig;
-import com.dinghu.logic.URLConfig;
-import com.dinghu.logic.http.HttpRequestManager;
-import com.dinghu.logic.http.response.MessageResponse;
-import com.dinghu.ui.activity.MainActivity;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,6 +14,14 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
+
+import com.dinghu.data.BroadcastActions;
+import com.dinghu.data.InitShareData;
+import com.dinghu.logic.AppConfig;
+import com.dinghu.logic.URLConfig;
+import com.dinghu.logic.http.HttpRequestManager;
+import com.dinghu.logic.http.response.MessageResponse;
+import com.dinghu.ui.activity.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -111,10 +111,12 @@ public class MessageService extends Service {
         messageNotification = new Notification();
         messageNotification.icon = R.drawable.ic_launcher;
         messageNotification.tickerText = "配送提醒";
+        messageNotification.flags = Notification.FLAG_AUTO_CANCEL;
         messageNotification.defaults = Notification.DEFAULT_SOUND;
         messageNotificationManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
         messageIntent = new Intent(this, MainActivity.class);
+        messageIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         messagePendingIntent = PendingIntent.getActivity(this, 0, messageIntent, 0);
     }
 
