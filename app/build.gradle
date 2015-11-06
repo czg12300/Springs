@@ -5,7 +5,13 @@ android {
         debug {
             keyAlias 'springs'
             keyPassword 'springs'
-            storeFile file('G:/Android/github/Springs/springs.keystore')
+            storeFile file('F:/git/github/Springs/springs.keystore')
+            storePassword 'springs'
+        }
+        release {
+            keyAlias 'springs'
+            keyPassword 'springs'
+            storeFile file('F:/git/github/Springs/springs.keystore')
             storePassword 'springs'
         }
     }
@@ -19,15 +25,29 @@ android {
         versionName "1.0"
     }
     buildTypes {
-        release {
-            minifyEnabled false
+        debug {
+            signingConfig signingConfigs.release
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        sourceSets {
-            main {
-                jniLibs.srcDirs = ['libs']
-            }
+//        release {
+//            signingConfig signingConfigs.release
+//            zipAlignEnabled true
+//            minifyEnabled true
+//            shrinkResources true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+
+
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
         }
+        instrumentTest.setRoot('tests')
     }
 }
 
@@ -38,7 +58,3 @@ dependencies {
     compile files('libs/Android_Map_2.5.1.20150827.jar')
     compile files('libs/MapApiServices.jar')
 }
-//dependencies {
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile 'com.android.support:appcompat-v7:22.1.1'
-//}
