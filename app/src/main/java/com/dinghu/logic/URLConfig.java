@@ -9,8 +9,8 @@ package com.dinghu.logic;
  */
 public class URLConfig {
 
-
     public static final String SERVER_RELEASE = "http://dinghuapp.yfs.pub/";
+
     public static final String SERVER_TEST = "http://192.168.0.19:8080/";
 
     public static String SERVER = SERVER_TEST;
@@ -44,4 +44,6 @@ public class URLConfig {
     public static final String PUSH_MESSAGE = SERVER + "outForm/findUnRead";
 
     public static final String ACCOUNT_BOOK = SERVER + "outForm/accountBook";
+
+    public static final String DETAIL_CANCEL = SERVER + "outForm/cancel";
 }

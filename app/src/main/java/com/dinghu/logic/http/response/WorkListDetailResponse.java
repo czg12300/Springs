@@ -4,6 +4,8 @@ package com.dinghu.logic.http.response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
+
 import cn.common.http.base.BaseResponse;
 
 /**
@@ -18,6 +20,10 @@ public class WorkListDetailResponse extends BaseResponse {
     public static final int STATUS_WANGONG = 2;
 
     public static final int STATUS_WAIT = 3;
+
+    public static final int BUTTON_SHOW_BUTTON = 1;
+
+    public static final int BUTTON_NOT_SHOW = 0;
 
     private long id;
 
@@ -36,10 +42,52 @@ public class WorkListDetailResponse extends BaseResponse {
     private String type;
 
     private String btnMsg;
+
     private String report;
+
     private int status;
 
     private int moneyOrCount2;
+
+    private int hasBtn;
+
+    private String btnName;
+
+    private String confirmInfo;
+
+    public String getBtnName() {
+        return btnName;
+    }
+
+    public void setBtnName(String btnName) {
+        this.btnName = btnName;
+    }
+
+    public String getConfirmInfo() {
+        return confirmInfo;
+    }
+
+    public void setConfirmInfo(String confirmInfo) {
+        this.confirmInfo = confirmInfo;
+    }
+
+    public void setHasBtn(int hasBtn) {
+        this.hasBtn = hasBtn;
+    }
+
+    public int getHasBtn() {
+        return hasBtn;
+    }
+
+    /**
+     * 判断是否显示按钮
+     * 
+     * @return
+     */
+    public boolean hasBtn() {
+        return hasBtn == BUTTON_SHOW_BUTTON && !TextUtils.isEmpty(btnName)
+                && !TextUtils.isEmpty(confirmInfo);
+    }
 
     public String getReport() {
         return report;
@@ -160,6 +208,7 @@ public class WorkListDetailResponse extends BaseResponse {
                 setType(root.optString("type"));
                 setBtnMsg(root.optString("btnMsg"));
                 setReport(root.optString("report"));
+                setHasBtn(root.optInt("hasBtn"));
             }
         } catch (JSONException e) {
             e.printStackTrace();

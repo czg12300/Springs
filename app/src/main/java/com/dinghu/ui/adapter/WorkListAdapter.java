@@ -20,19 +20,25 @@ import cn.common.ui.adapter.BaseListAdapter;
  * @author jake
  * @since 2015/9/12 10:34
  */
-public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements View.OnClickListener {
-    public WorkListAdapter(Context context) {
+public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements View.OnClickListener {
+    public static final int TYPE_TODO = 0;
+
+    public static final int TYPE_TODAY = 1;
+
+    public static final int TYPE_HISTORY = 2;
+
+    public WorkListAdapter(Context context, int type) {
         super(context);
+        this.type = type;
     }
 
-    private boolean isTodo = false;
+    private int type;
 
-    public boolean isTodo() {
-        return isTodo;
+    public int getType() {
+        return type;
     }
 
-    public WorkListAdapter setIsTodo(boolean isTodo) {
-        this.isTodo = isTodo;
+    public WorkListAdapter setType(int type) {
         return this;
     }
 
@@ -57,7 +63,7 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
         WorkListInfo info = mDataList.get(position);
         if (info != null) {
             convertView.setTag(info);
-            if (isTodo) {
+            if (type == TYPE_TODO) {
                 switch (info.getTimeType()) {
                     case WorkListInfo.TIME_TYPE_IN:
                         holder.tvIndex.setBackgroundResource(R.drawable.bg_black_r);
@@ -122,9 +128,7 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo> implements Vi
         WorkListInfo info = (WorkListInfo) v.getTag();
         Intent it = new Intent(getContext(), WorkListDetailActivity.class);
         it.putExtra("WorkListId", info.getId());
-        if (!isTodo) {
-            it.putExtra("IsNotTodoWorkList", true);
-        }
+        it.putExtra("type", type);
         getContext().startActivity(it);
     }
 

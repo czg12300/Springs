@@ -1,11 +1,6 @@
 
 package com.dinghu.ui.fragment.worklist;
 
-import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
-import android.view.View;
-
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.Marker;
 import com.dinghu.data.BroadcastActions;
@@ -18,10 +13,15 @@ import com.dinghu.ui.activity.WorkListDetailActivity;
 import com.dinghu.ui.adapter.WorkListAdapter;
 import com.dinghu.ui.widget.xlistview.XListView;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
+import android.view.View;
 
 import cn.common.ui.adapter.BaseListAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 描述：未完工工单页面
@@ -33,7 +33,6 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
     public static TodoListFragment newInstance() {
         return new TodoListFragment();
     }
-
 
     @Override
     public void setupBroadcastActions(List<String> actions) {
@@ -137,7 +136,7 @@ public class TodoListFragment extends BaseWorkListFragment<WorkListInfo> {
 
     @Override
     protected BaseListAdapter<WorkListInfo> createAdapter() {
-        return new WorkListAdapter(getActivity()).setIsTodo(true);
+        return new WorkListAdapter(getActivity(), WorkListAdapter.TYPE_TODO);
     }
 
 }

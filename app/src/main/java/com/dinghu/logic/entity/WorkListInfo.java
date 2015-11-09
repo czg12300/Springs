@@ -18,9 +18,12 @@ public class WorkListInfo {
 
     public static final String TYPE_TAOCAN = "套餐";
 
+    public static final String TYPE_XIAOTUI = "销退";
+
     private long id;
 
     private int moneyOrCount;
+
     private int timeType;
 
     private String type;

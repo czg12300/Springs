@@ -1,3 +1,4 @@
+
 package com.dinghu.logic.http.response;
 
 import org.json.JSONException;
@@ -13,13 +14,30 @@ import cn.common.http.base.BaseResponse;
  */
 public class AccountResponse extends BaseResponse {
     private int ps_ssCount;
+
     private int ps_formTotal;
+
     private int ps_ct;
+
     private int ps_gc;
+
     private int ps_emptyCount;
+
     private int tc_formTotal;
+
     private double tc_jkAmount;
+
     private double tc_skAmount;
+
+    private String storeName;
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
     public int getPs_ssCount() {
         return ps_ssCount;
@@ -97,6 +115,7 @@ public class AccountResponse extends BaseResponse {
             setTc_formTotal(root.optInt("tc_formTotal"));
             setTc_jkAmount(root.optDouble("tc_jkAmount"));
             setTc_skAmount(root.optDouble("tc_skAmount"));
+            setStoreName(root.optString("mendian"));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

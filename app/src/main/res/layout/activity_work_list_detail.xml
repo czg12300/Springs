@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+              android:id="@+id/root"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/background"
+              android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,14 +23,14 @@
                 android:id="@+id/div_request_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:minHeight="60dp"/>
 
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:minHeight="60dp"/>
 
 
             <LinearLayout
@@ -46,7 +46,7 @@
                     android:gravity="right"
                     android:text="电话："
                     android:textColor="@color/green_00cd79"
-                    android:textSize="@dimen/text_content" />
+                    android:textSize="@dimen/text_content"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -65,14 +65,14 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:textColor="@color/gray_777777"
-                            android:textSize="@dimen/text_content" />
+                            android:textSize="@dimen/text_content"/>
 
                         <ImageView
                             android:id="@+id/iv_phone"
                             android:layout_width="80dp"
                             android:layout_height="60dp"
                             android:scaleType="center"
-                            android:src="@drawable/btn_phone" />
+                            android:src="@drawable/btn_phone"/>
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
@@ -82,26 +82,26 @@
                 android:id="@+id/div_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:minHeight="60dp"/>
 
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_goods"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:minHeight="60dp"/>
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:minHeight="60dp"/>
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp" />
+                android:minHeight="60dp"/>
 
 
             <LinearLayout
@@ -119,7 +119,7 @@
                     android:gravity="right"
                     android:text="电话："
                     android:textColor="@color/green_00cd79"
-                    android:textSize="@dimen/text_content" />
+                    android:textSize="@dimen/text_content"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                             android:id="@+id/iv_spinner_sub"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/btn_selector_spinner_sub" />
+                            android:src="@drawable/btn_selector_spinner_sub"/>
 
                         <EditText
                             android:id="@+id/ev_spinner"
@@ -149,13 +149,13 @@
                             android:paddingRight="5dp"
                             android:singleLine="true"
                             android:textColor="@color/gray_777777"
-                            android:textSize="@dimen/text_content" />
+                            android:textSize="@dimen/text_content"/>
 
                         <ImageView
                             android:id="@+id/iv_spinner_add"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/btn_selector_spinner_add" />
+                            android:src="@drawable/btn_selector_spinner_add"/>
 
                     </LinearLayout>
                 </FrameLayout>
@@ -166,14 +166,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray_dddddd" />
+                android:background="@color/gray_dddddd"/>
 
             <com.dinghu.ui.widget.WorkListDetailItemView
                 android:id="@+id/div_report"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="60dp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </LinearLayout>
     </ScrollView>
@@ -181,7 +181,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/gray_dddddd" />
+        android:background="@color/gray_dddddd"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -207,7 +207,7 @@
                 android:background="@drawable/btn_selector_red"
                 android:text="未完工"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_content" />
+                android:textSize="@dimen/text_content"/>
 
             <Button
                 android:id="@+id/btn_finish"
@@ -218,9 +218,23 @@
                 android:background="@drawable/btn_selector_ok"
                 android:text="完工确认"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_content" />
-
+                android:textSize="@dimen/text_content"/>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_opt"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_selector_red"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_content"/>
     </FrameLayout>
 </LinearLayout>

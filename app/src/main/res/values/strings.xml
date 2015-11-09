@@ -26,6 +26,7 @@
     <string name="pw_again_hint">请再次输入新密码</string>
     <string name="statistics_month">统计月份：</string>
     <string name="account_title1">配送工单统计</string>
+    <string name="store_name">当前门店：</string>
     <string name="work_list_count">工单总数（张）：</string>
     <string name="send_count">送水数量（桶）：</string>
     <string name="null_count">空桶数量（桶）：</string>

@@ -1,10 +1,6 @@
 
 package com.dinghu.ui.fragment;
 
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.dinghu.R;
 import com.dinghu.data.BroadcastActions;
 import com.dinghu.data.InitShareData;
@@ -13,11 +9,15 @@ import com.dinghu.ui.activity.LoginActivity;
 import com.dinghu.ui.activity.ModifyPwActivity;
 import com.dinghu.ui.activity.MyAccountBookActivity;
 
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import cn.common.ui.fragment.BaseWorkerFragment;
 import cn.common.ui.widgt.ChangeThemeUtils;
 
 /**
- * Created by Administrator on 2015/8/13.
+ * 用户中心页面
  */
 public class UserCenterFragment extends BaseWorkerFragment implements View.OnClickListener {
 
@@ -26,6 +26,7 @@ public class UserCenterFragment extends BaseWorkerFragment implements View.OnCli
     }
 
     private TextView mTvTitle;
+
     private Button mBtnExit;
 
     private View mVModifyPw;
