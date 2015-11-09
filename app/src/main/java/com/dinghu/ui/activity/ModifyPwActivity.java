@@ -14,7 +14,6 @@ import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
 import com.dinghu.logic.http.HttpRequestManager;
 import com.dinghu.logic.http.response.ModifyPwResponse;
-import com.dinghu.ui.helper.LoadingDialogHelper;
 import com.dinghu.utils.MD5Util;
 import com.dinghu.utils.ToastUtil;
 
@@ -33,8 +32,6 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
     private EditText mEvPwAgain;
 
     private Button mBtnOk;
-
-    private LoadingDialogHelper mLoadingDialogHelper;
 
     @Override
     protected void initView() {
@@ -56,11 +53,9 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
         mBtnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLoadingDialogHelper.show();
-                sendEmptyBackgroundMessageDelayed(MSG_BACK_MODIFY_PW, 300);
+                sendEmptyBackgroundMessage(MSG_BACK_MODIFY_PW);
             }
         });
-        mLoadingDialogHelper = new LoadingDialogHelper(this);
     }
 
     @Override
@@ -85,7 +80,6 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
     public void handleUiMessage(Message msg) {
         super.handleUiMessage(msg);
         if (msg.what == MSG_UI_MODIFY_PW) {
-            mLoadingDialogHelper.hide();
             if (msg.obj != null && msg.obj instanceof ModifyPwResponse) {
                 ModifyPwResponse info = (ModifyPwResponse) msg.obj;
                 if (info != null) {
