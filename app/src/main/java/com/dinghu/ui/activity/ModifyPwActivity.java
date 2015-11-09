@@ -12,8 +12,9 @@ import android.widget.EditText;
 import com.dinghu.R;
 import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
-import com.dinghu.logic.http.response.ModifyPwResponse;
 import com.dinghu.logic.http.HttpRequestManager;
+import com.dinghu.logic.http.response.ModifyPwResponse;
+import com.dinghu.ui.helper.LoadingDialogHelper;
 import com.dinghu.utils.MD5Util;
 import com.dinghu.utils.ToastUtil;
 
@@ -22,11 +23,18 @@ import com.dinghu.utils.ToastUtil;
  */
 public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher {
     private static final int MSG_BACK_MODIFY_PW = 0;
+
     private static final int MSG_UI_MODIFY_PW = 1;
+
     private EditText mEvPwOld;
+
     private EditText mEvPwNew;
+
     private EditText mEvPwAgain;
+
     private Button mBtnOk;
+
+    private LoadingDialogHelper mLoadingDialogHelper;
 
     @Override
     protected void initView() {
@@ -48,17 +56,19 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
         mBtnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEmptyBackgroundMessage(MSG_BACK_MODIFY_PW);
+                mLoadingDialogHelper.show();
+                sendEmptyBackgroundMessageDelayed(MSG_BACK_MODIFY_PW, 300);
             }
         });
+        mLoadingDialogHelper = new LoadingDialogHelper(this);
     }
-
 
     @Override
     public void handleBackgroundMessage(Message msg) {
         super.handleBackgroundMessage(msg);
         if (msg.what == MSG_BACK_MODIFY_PW) {
-            HttpRequestManager<ModifyPwResponse> request = new HttpRequestManager<ModifyPwResponse>(URLConfig.MODIFY_PW, ModifyPwResponse.class);
+            HttpRequestManager<ModifyPwResponse> request = new HttpRequestManager<ModifyPwResponse>(
+                    URLConfig.MODIFY_PW, ModifyPwResponse.class);
             request.addParam("id", "" + InitShareData.getUserId());
             request.addParam("tel", "" + InitShareData.getMobile());
             request.addParam("oldPwd", MD5Util.md5(mEvPwOld.getText().toString()));
@@ -75,6 +85,7 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
     public void handleUiMessage(Message msg) {
         super.handleUiMessage(msg);
         if (msg.what == MSG_UI_MODIFY_PW) {
+            mLoadingDialogHelper.hide();
             if (msg.obj != null && msg.obj instanceof ModifyPwResponse) {
                 ModifyPwResponse info = (ModifyPwResponse) msg.obj;
                 if (info != null) {
@@ -102,7 +113,8 @@ public class ModifyPwActivity extends CommonTitleActivity implements TextWatcher
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (TextUtils.isEmpty(mEvPwOld.getText()) || TextUtils.isEmpty(mEvPwNew.getText()) || TextUtils.isEmpty(mEvPwAgain.getText())) {
+        if (TextUtils.isEmpty(mEvPwOld.getText()) || TextUtils.isEmpty(mEvPwNew.getText())
+                || TextUtils.isEmpty(mEvPwAgain.getText())) {
             mBtnOk.setEnabled(false);
         } else {
             mBtnOk.setEnabled(true);

@@ -71,7 +71,7 @@ public abstract class BaseListActivity<T> extends CommonTitleActivity
         mStatusView.setStatusListener(new StatusView.StatusListener() {
             @Override
             public void onLoad() {
-                sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
+                sendEmptyBackgroundMessage(MSG_BACK_LOAD);
             }
         });
     }
@@ -80,7 +80,7 @@ public abstract class BaseListActivity<T> extends CommonTitleActivity
     protected void initData() {
         super.initData();
         mStatusView.showLoadingView();
-        sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
+        sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 1000);
     }
 
     @Override

@@ -1,6 +1,7 @@
 
 package com.dinghu.logic.http;
 
+import com.dinghu.logic.AppConfig;
 import com.dinghu.logic.URLConfig;
 import com.dinghu.utils.MD5Util;
 
@@ -11,6 +12,7 @@ public class HttpRequestManager<T> extends BaseRequest<T> {
 
     public HttpRequestManager(String svc, Class<?> clazz) {
         super(svc, clazz);
+        setDebug(AppConfig.IS_DEBUG);
     }
 
     @Override

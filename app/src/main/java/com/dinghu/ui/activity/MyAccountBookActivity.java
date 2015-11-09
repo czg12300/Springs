@@ -1,10 +1,6 @@
 
 package com.dinghu.ui.activity;
 
-import android.os.Message;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-
 import com.dinghu.R;
 import com.dinghu.data.InitShareData;
 import com.dinghu.logic.URLConfig;
@@ -13,6 +9,10 @@ import com.dinghu.logic.http.response.AccountResponse;
 import com.dinghu.ui.helper.DateSelectorHelper;
 import com.dinghu.ui.helper.LoadingDialogHelper;
 import com.dinghu.ui.widget.StatusView;
+
+import android.os.Message;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 /**
  * 描述：我的账本页面
@@ -123,7 +123,7 @@ public class MyAccountBookActivity extends CommonTitleActivity {
         mStatusView.setStatusListener(new StatusView.StatusListener() {
             @Override
             public void onLoad() {
-                sendEmptyBackgroundMessage(MSG_BACK_LOAD);
+                sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 300);
             }
         });
         mDateSelectorHelper.setListener(new DateSelectorHelper.IListener() {

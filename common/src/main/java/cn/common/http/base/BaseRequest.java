@@ -1,3 +1,4 @@
+
 package cn.common.http.base;
 
 import android.text.TextUtils;
@@ -14,64 +15,68 @@ import cn.common.http.HttpManager;
  * @since 2015/9/21 16:33
  */
 public abstract class BaseRequest<T> {
-  private String mSvc;
+    private String mSvc;
 
-  private HashMap<String, String> mParams;
+    private HashMap<String, String> mParams;
 
-  private Class<?> mClazz;
+    private Class<?> mClazz;
 
-  private HttpManager<T> mHttpManager;
+    private HttpManager<T> mHttpManager;
 
-  public BaseRequest(String svc, Class<?> clazz) {
-    mSvc = svc;
-    mClazz = clazz;
-    mParams = new HashMap<String, String>();
-    addCommonParam();
-    mHttpManager = new HttpManager<T>(mClazz);
-  }
-
-  protected abstract void addCommonParam();
-
-  public void addParam(String key, String value) {
-    mParams.put(key, value);
-  }
-
-  public void addParams(HashMap<String, String> params) {
-    if (params != null && params.size() > 0) {
-      mParams.putAll(params);
+    public BaseRequest(String svc, Class<?> clazz) {
+        mSvc = svc;
+        mClazz = clazz;
+        mParams = new HashMap<String, String>();
+        addCommonParam();
+        mHttpManager = new HttpManager<T>(mClazz);
     }
-  }
 
-  public void setParams(HashMap<String, String> params) {
-    if (params != null && params.size() > 0) {
-      mParams = params;
+    protected abstract void addCommonParam();
+
+    public void addParam(String key, String value) {
+        mParams.put(key, value);
     }
-  }
 
-  /**
-   * 开始请求
-   */
-  public T sendRequest() {
-    return mHttpManager.post(getUrl(), getParams());
-  }
-
-  private String getUrl() {
-    if (!TextUtils.isEmpty(mSvc) && mSvc.startsWith("http")) {
-      return mSvc;
+    public void addParams(HashMap<String, String> params) {
+        if (params != null && params.size() > 0) {
+            mParams.putAll(params);
+        }
     }
-    return getServerUrl() + mSvc;
-  }
 
-  protected abstract String getServerUrl();
+    public void setParams(HashMap<String, String> params) {
+        if (params != null && params.size() > 0) {
+            mParams = params;
+        }
+    }
 
-  private AjaxParams getParams() {
-    return new AjaxParams(mParams);
-  }
+    protected void setDebug(boolean isDebug) {
+        mHttpManager.setDebug(isDebug);
+    }
 
-  /**
-   * 取消请求
-   */
-  public synchronized void cancelRequest() {
-    mHttpManager.cancelRequest();
-  }
+    /**
+     * 开始请求
+     */
+    public T sendRequest() {
+        return mHttpManager.post(getUrl(), getParams());
+    }
+
+    private String getUrl() {
+        if (!TextUtils.isEmpty(mSvc) && mSvc.startsWith("http")) {
+            return mSvc;
+        }
+        return getServerUrl() + mSvc;
+    }
+
+    protected abstract String getServerUrl();
+
+    private AjaxParams getParams() {
+        return new AjaxParams(mParams);
+    }
+
+    /**
+     * 取消请求
+     */
+    public synchronized void cancelRequest() {
+        mHttpManager.cancelRequest();
+    }
 }

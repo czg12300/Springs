@@ -80,7 +80,7 @@ public class WorkListAdapter extends BaseListAdapter<WorkListInfo>implements Vie
                 }
                 holder.tvContentLine4.setVisibility(View.GONE);
             }
-            if (position < 100) {
+            if (position < 99) {
                 holder.tvIndex.setVisibility(View.VISIBLE);
                 holder.tvIndex.setText("" + (position + 1));
             } else {

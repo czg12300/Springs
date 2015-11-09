@@ -117,6 +117,8 @@ public class MessageService extends Service {
                 Context.NOTIFICATION_SERVICE);
         messageIntent = new Intent(this, MainActivity.class);
         messageIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        messageIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        messageIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         messagePendingIntent = PendingIntent.getActivity(this, 0, messageIntent, 0);
     }
 

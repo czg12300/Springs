@@ -4,6 +4,7 @@ package com.dinghu.ui.fragment.worklist;
 import com.dinghu.R;
 import com.dinghu.ui.widget.StatusView;
 import com.dinghu.ui.widget.xlistview.XListView;
+import com.dinghu.utils.ToastUtil;
 
 import android.os.Message;
 
@@ -66,7 +67,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
         mStatusView.setStatusListener(new StatusView.StatusListener() {
             @Override
             public void onLoad() {
-                sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 2000);
+                sendEmptyBackgroundMessageDelayed(MSG_BACK_LOAD, 300);
             }
         });
         mStatusView.showLoadingView();
@@ -105,6 +106,7 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
                     mLvList.stopRefresh();
                     mLvList.stopLoadMore(false);
                 }
+                ToastUtil.show(R.string.load_error);
             } else {
                 mLvList.setRefreshTime(getCurrentTime());
                 mLvList.stopRefresh();
