@@ -127,7 +127,11 @@ public abstract class BaseListFragment<T> extends BaseWorkerFragment
                         onRefreshSucceed(list);
                     }
                 } else {
-                    mStatusView.showNoDataView();
+                    if (mAdapter.getCount() > 0) {
+                        mLvList.stopLoadMore(true);
+                    } else {
+                        mStatusView.showNoDataView();
+                    }
                 }
             }
         }
