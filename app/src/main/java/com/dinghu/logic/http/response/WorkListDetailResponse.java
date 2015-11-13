@@ -1,10 +1,10 @@
 
 package com.dinghu.logic.http.response;
 
+import android.text.TextUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.text.TextUtils;
 
 import cn.common.http.base.BaseResponse;
 
@@ -209,6 +209,8 @@ public class WorkListDetailResponse extends BaseResponse {
                 setBtnMsg(root.optString("btnMsg"));
                 setReport(root.optString("report"));
                 setHasBtn(root.optInt("hasBtn"));
+                setBtnName(root.optString("btnName"));
+                setConfirmInfo(root.getString("confirmInfo"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
