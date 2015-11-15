@@ -38,17 +38,6 @@ public class MessageService extends Service {
         return null;
     }
 
-    // 点击查看
-    private Intent messageIntent = null;
-
-    private PendingIntent messagePendingIntent = null;
-
-    // 通知栏消息
-    private int messageNotificationID = 1000;
-
-    private Notification messageNotification = null;
-
-    private NotificationManager messageNotificationManager = null;
 
     private HandlerThread mHandlerThread;
 
@@ -91,13 +80,14 @@ public class MessageService extends Service {
                     request.addParam("id", InitShareData.getUserId() + "");
                     MessageResponse response = request.sendRequest();
                     if (response != null && response.getCount() > 0) {
-                        sendMessage2Notification("您有" + response.getCount() + "个配送任务");
+                        Intent it=new Intent("com.dinghu.MessageHandleReceive.ACTION");
+                        it.putExtra("Message",response.getCount());
+                        sendBroadcast(it);
                     }
                 }
                 return true;
             }
         });
-        initNotification();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -107,30 +97,5 @@ public class MessageService extends Service {
 
     }
 
-    private void initNotification() {
-        messageNotification = new Notification();
-        messageNotification.icon = R.drawable.ic_launcher;
-        messageNotification.tickerText = "配送提醒";
-        messageNotification.flags = Notification.FLAG_AUTO_CANCEL;
-        messageNotification.defaults = Notification.DEFAULT_SOUND;
-        messageNotificationManager = (NotificationManager) getSystemService(
-                Context.NOTIFICATION_SERVICE);
-        messageIntent = new Intent(this, MainActivity.class);
-        messageIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        messageIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        messagePendingIntent = PendingIntent.getActivity(this, 0, messageIntent, 0);
-    }
-
-    private void sendMessage2Notification(String msg) {
-        // 获取服务器消息
-        if (!TextUtils.isEmpty(msg)) {
-            // 更新通知栏
-            messageNotification.setLatestEventInfo(MessageService.this, "配送提醒", msg,
-                    messagePendingIntent);
-            messageNotificationManager.notify(messageNotificationID, messageNotification);
-            // 每次通知完，通知ID递增一下，避免消息覆盖掉
-            messageNotificationID++;
-        }
-    }
 
 }

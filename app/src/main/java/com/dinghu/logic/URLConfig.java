@@ -7,43 +7,35 @@ package com.dinghu.logic;
  * @author jake
  * @since 2015/9/19 16:47
  */
-public class URLConfig {
+public interface URLConfig {
 
-    public static final String SERVER_RELEASE = "http://dinghuapp.yfs.pub/";
+    String SERVER_RELEASE = "http://dinghuapp.yfs.pub/";
 
-    public static final String SERVER_TEST = "http://192.168.0.19:8080/";
+    String SERVER_TEST = "http://192.168.0.19:8080/";
 
-    public static String SERVER = SERVER_TEST;
+    String SERVER = AppConfig.IS_DEBUG ? SERVER_TEST : SERVER_RELEASE;
 
-    static {
-        if (AppConfig.IS_DEBUG) {
-            SERVER = SERVER_TEST;
-        } else {
-            SERVER = SERVER_RELEASE;
-        }
-    }
+    String LOGIN = SERVER + "employ/login";
 
-    public static final String LOGIN = SERVER + "employ/login";
+    String GET_STORE_LIST = SERVER + "employ/getStaIds";
 
-    public static final String GET_STORE_LIST = SERVER + "employ/getStaIds";
+    String MODIFY_PW = SERVER + "employ/updatePwd";
 
-    public static final String MODIFY_PW = SERVER + "employ/updatePwd";
+    String WORK_LIST_TODO = SERVER + "outForm/unFinish";
 
-    public static final String WORK_LIST_TODO = SERVER + "outForm/unFinish";
+    String WORK_LIST_TODAY = SERVER + "outForm/todayFinish";
 
-    public static final String WORK_LIST_TODAY = SERVER + "outForm/todayFinish";
+    String WORK_LIST_HISTORY = SERVER + "outForm/history";
 
-    public static final String WORK_LIST_HISTORY = SERVER + "outForm/history";
+    String WORK_LIST_DETAIL = SERVER + "outForm/detail";
 
-    public static final String WORK_LIST_DETAIL = SERVER + "outForm/detail";
+    String DETAIL_SENDGOODS = SERVER + "outForm/sendGoods";
 
-    public static final String DETAIL_SENDGOODS = SERVER + "outForm/sendGoods";
+    String UN_FINISH_WORK = SERVER + "outForm/cannotFinish";
 
-    public static final String UN_FINISH_WORK = SERVER + "outForm/cannotFinish";
+    String PUSH_MESSAGE = SERVER + "outForm/findUnRead";
 
-    public static final String PUSH_MESSAGE = SERVER + "outForm/findUnRead";
+    String ACCOUNT_BOOK = SERVER + "outForm/accountBook";
 
-    public static final String ACCOUNT_BOOK = SERVER + "outForm/accountBook";
-
-    public static final String DETAIL_CANCEL = SERVER + "outForm/cancel";
+    String DETAIL_CANCEL = SERVER + "outForm/cancel";
 }

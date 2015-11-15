@@ -172,7 +172,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
         mBtnOpt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isFinishWorkList() && mInfo.hasBtn()) {
+                if (isFinishWorkList() && (mInfo != null && mInfo.hasBtn())) {
                     showCancelDialog();
                 }
             }
@@ -260,7 +260,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 URLConfig.DETAIL_CANCEL, FinishWorkResponse.class);
         requestWG.addParam("id", workListId + "");
         Message msgWG = obtainUiMessage();
-        msgWG.what = MSG_UI_FINISH_WORK;
+        msgWG.what = MSG_UI_CANCEL;
         msgWG.obj = requestWG.sendRequest();
         msgWG.sendToTarget();
     }
@@ -351,8 +351,10 @@ public class WorkListDetailActivity extends CommonTitleActivity {
                 switch (type) {
                     case WorkListAdapter.TYPE_TODAY:
                         sendBroadcast(BroadcastActions.ACTION_UPDATE_TODAY_WORK_LIST);
+                        sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
                         break;
                     case WorkListAdapter.TYPE_HISTORY:
+                        sendBroadcast(BroadcastActions.ACTION_UPDATE_TODO_WORK_LIST);
                         sendBroadcast(BroadcastActions.ACTION_UPDATE_HISTORY_WORK_LIST);
                         break;
                 }
@@ -518,11 +520,11 @@ public class WorkListDetailActivity extends CommonTitleActivity {
      * 回退弹窗
      */
     private void showCancelDialog() {
-        if (!isFinishing()) {
+        if (!isFinishing() && mInfo != null) {
             if (mCancelDialog == null) {
                 mCancelDialog = new BaseDialog(this);
                 mCancelDialog.setWindow(R.style.alpha_animation, 0.0f);
-                mCancelDialog.setContentView(R.layout.dialog_loading);
+                mCancelDialog.setContentView(R.layout.dialog_cancel);
                 mTvCancelTitle = (TextView) mCancelDialog.findViewById(R.id.tv_title);
                 mCancelDialog.findViewById(R.id.btn_cancel)
                         .setOnClickListener(new View.OnClickListener() {
@@ -548,7 +550,7 @@ public class WorkListDetailActivity extends CommonTitleActivity {
             if (!TextUtils.isEmpty(mInfo.getConfirmInfo())) {
                 mTvCancelTitle.setText(mInfo.getConfirmInfo());
             }
-            mLoadingDialogHelper.show();
+            mCancelDialog.show();
         }
     }
 
